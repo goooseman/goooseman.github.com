@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Сервисы | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/siervisy/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Делаем скриншот правильно!]]></title>
+    <link href="http://goooseman.ru/2013/02/26/dielaiem-skrinshot-pravil%27no/"/>
+    <updated>2013-02-26T17:41:00+04:00</updated>
+    <id>http://goooseman.ru/2013/02/26/dielaiem-skrinshot-pravil'no</id>
+    <content type="html"><![CDATA[<p>Существует много сервисов, которые позволяют быстро сделать скриншот и выложить его в сеть. Но как же выбрать единственно нужный вам? Забегая вперед, скажу, что лично для меня идела нет, но можно допилить.</p>
+
+<!-- more -->
+
+
+<p>У всех людей цели разные, лично для меня этот сервис должен обладать следующим:</p>
+
+<ul>
+<li>Иметь нативный клиент под OS X.</li>
+<li>Копировать в буфер не ссылку на свой сайт, а прямую ссылку на изображение</li>
+<li>Уметь быстро делать снимок не только всего экрана, но и области и отдельного окна</li>
+<li>Не оставлять после себя файлов</li>
+</ul>
+
+
+<p>Итак, вот программы, которые я успел потестить.</p>
+
+<ul>
+<li><p><a href="http://getcloudapp.com/">CloudApp</a><br/>
+<img src="http://d.pr/i/kD2n+"><br/>
+Сервис хорош, но сразу перейду к минусам. А он всего лишь-то один, но очень неприятный: он копирует ссылку на сайт, а не на само изображение. Конечно этим сейчас грешат все, да и это можно исправить, но раздражает такое отношение.</p></li>
+<li><p><a href="http://tinygrab.com/">TinyGrab</a><br/>
+<img src="http://d.pr/i/yNsN+"><br/>
+Когда-то (В году эдак в 2009м) был действительно хорошим сервисом. Загружал на свой сайт скрин и давал direct link на него. Но как же его испоганили.... Это ж ужас...<br/>
+Дело в том, что теперь он копирует ссылку на свой сайт, а не на изображение. Но это не самое страшное. Даже с этого сайта просто так ссылку не вытащишь.
+ОК, благо есть аплоад на FTP. Настроил, залил, а вот ссылку он не дает. В корзину.</p></li>
+<li><p><a href="https://droplr.com/">Droplr</a><br/>
+<img src="http://d.pr/i/BXcN+"><br/>
+Да, он также <strong>не</strong> копирует direct link, но(!) если добавить в конец адреса знак "+", ссылка становится прямой. Например, вот ссылка, которая копируется в буфер:<br/>
+<code>
+http://d.pr/i/mFcE
+</code><br/>
+Она ведет на сайт Droplr. А вот так:
+<code>
+http://d.pr/i/mFcE+
+</code><br/>
+Превращается в прямую ссылку. Разве не круто?<br/>
+Теперь осталось только настроить так, чтоб в любой момент можно было сделать скрин как и всего экрана, так и области и окна, полученный скрин загрузился бы и сам удалился. Для этого мы будем использовать Automator.</p></li>
+<li><p>Открываем Automator и создаем новую службу.</p></li>
+<li>В качестве входных данных указываем "Нет входных данных" "в любой программе".</li>
+<li>Добавляем действие "Запустить shell-скрипт".</li>
+</ul>
+
+
+<p>Весь экран:<br/>
+<code>
+mkdir -p ~/Desktop/tmp/Screenshot
+screencapture ~/Desktop/tmp/Screenshot/Screen.png
+open -a Droplr ~/Desktop/tmp/Screenshot/Screen.png
+sleep 5
+rm -r ~/Desktop/tmp
+</code>
+Скриншот окна:<br/>
+<code>
+mkdir -p ~/Desktop/tmp/Screenshot
+screencapture -w ~/Desktop/tmp/Screenshot/Screen.png
+open -a Droplr ~/Desktop/tmp/Screenshot/Screen.png
+sleep 5
+rm -r ~/Desktop/tmp
+</code>
+Скриншот выбранной области:<br/>
+<code>
+mkdir -p ~/Desktop/tmp/Screenshot
+screencapture -i ~/Desktop/tmp/Screenshot/Screen.png
+open -a Droplr ~/Desktop/tmp/Screenshot/Screen.png
+sleep 5
+rm -r ~/Desktop/tmp
+</code>
+Подставив свой путь папки и изображения соответственно. sleep нужен для того, чтобы файл не удалился еще до заливки в Droplr. <br/>
+<img src="http://d.pr/i/a7MJ+"></p>
+
+<ul>
+<li>Заходим в Настройки, Клавиатура, Службы и находим наши службы. Ставим на них горячие клавиши. Я поставил cmd+shift+[2,3,4] соответственно для окна, экрана, области.<br/>
+<img src="http://d.pr/i/tui2+"></li>
+</ul>
+
+
+<p>И не забывайте ставить плюс в конце ссылки.</p>
+]]></content>
+  </entry>
+  
+</feed>

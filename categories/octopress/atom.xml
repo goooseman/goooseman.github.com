@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Octopress | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Настройка плагина Octopress для Sublime Text]]></title>
+    <link href="http://goooseman.ru/2013/02/28/nastroika-plaghina-octopress-dlia-sublime-text/"/>
+    <updated>2013-02-28T15:51:00+04:00</updated>
+    <id>http://goooseman.ru/2013/02/28/nastroika-plaghina-octopress-dlia-sublime-text</id>
+    <content type="html"><![CDATA[<p>Есть такой текстовой редактор Sublime Text, про который не писал только ленивый да домохозяйка. Описывать его прекрасные возможности я не собираюсь, а поговорю про <a href="https://github.com/blueplanet/sublime-text-2-octopress">Octopress Plugin</a> для него, а точнее как этот самый плагин заставить работать.</p>
+
+<!-- more -->
+
+
+<h2>Установка</h2>
+
+<ul>
+<li>Устанавливаем <a href="http://wbond.net/sublime_packages/package_control">Package Control</a>.</li>
+<li>Жмем Shift+Cmd+P, начинаем вводить Install, выбираем "Install Package" и ставим Octopress.</li>
+</ul>
+
+
+<p><img src="http://d.pr/i/CRvF+"></p>
+
+<h2>Настройка</h2>
+
+<p>А теперь самое веселое. В OS X если приложение запускается из GUI, то она использует другие переменные среды, то есть файл .bashrc не грузится. Есть 2 решения проблемы: запускать Sublime Text 2 из command prompt или перед каждым выполнением комманд запускать "source ~/.bashrc", как нам предлагает делать автор, создавший специальную переменную, которая задается в настройках "octopress_cmd_before_rake". Первый вариант мы отметаем, хотя и можно создать маленькое приложение в Automator, мы легкие пути не ищем. Второй пункт, при всей своей кажущейся легкости, у многих просто так не работает, о чем свидетельствует <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5">эта тема</a>, в которой так никто и не справился с этой проблемой. Но обо всем по порядку. Проблема наблюдается у пользователей OSX, которые используют rvm.</p>
+
+<ul>
+<li>Открываем Preferences->Package Settings->Octopress->Settings - User.</li>
+<li>Можно скопировать все из Preferences->Package Settings->Octopress->Settings - Default, можно и копировать только то, что нужно изменить.</li>
+<li>Задаем "octopress_path".</li>
+<li>Наконец приходим к "octopress_cmd_before_rake". Как и советует автор, вставляем "source ~/.bashrc". Нажимаем  Shift+Cmd+P и выбираем Octopress: Generate, если Вам повезет, то все пойдет как по маслу, иначе получите такую ошибку в консоли (Ctrl+`):</li>
+</ul>
+
+
+<p>```
+rake aborted!</p>
+
+<p>no such file to load -- bundler/setup</p>
+
+<p>/Volumes/DATA/Users/goooseman/octopress/Rakefile:2
+(See full trace by running task with --trace)</p>
+
+<p>(in /Volumes/DATA/Users/goooseman/octopress)
+```</p>
+
+<ul>
+<li>Проверяем свой .bashrc:<code>nano ~/.bashrc</code> мой выглядит так:</li>
+</ul>
+
+
+<p><code>
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+</code></p>
+
+<ul>
+<li>Изменяем "octopress_cmd_before_rake" на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374", сохраняем, пробуем, проблема остается.</li>
+<li>Теперь изменяем на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; gem install bundler". Пробуем, проблема остается.</li>
+<li>Изменяем на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; bundle install". Пробуем, дело должно продвинуться дальше. Но ошибка все равно может вывалиться, только теперь касательно кодировки.</li>
+<li>Убираем "&amp;&amp; bundle install". Может все и заработает, но у меня вывалилась такая ошибка:</li>
+</ul>
+
+
+<p><code>``
+/Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:73:in</code>pagination_enabled?'
+:
+invalid byte sequence in US-ASCII (ArgumentError)</p>
+
+<pre><code>from /Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:14:in `block in generate'
+
+from /Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:13:in `each'
+from /Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:13:in `generate'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/gems/jekyll-0.12.0/lib/jekyll/site.rb:190:in `block in generate'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/gems/jekyll-0.12.0/lib/jekyll/site.rb:189:in `each'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/gems/jekyll-0.12.0/lib/jekyll/site.rb:189:in `generate'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/gems/jekyll-0.12.0/lib/jekyll/site.rb:40:in `process'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/gems/jekyll-0.12.0/bin/jekyll:264:in `&lt;top (required)&gt;'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/bin/jekyll:19:in `load'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/bin/jekyll:19:in `&lt;main&gt;'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/bin/ruby_noexec_wrapper:14:in `eval'
+from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/bin/ruby_noexec_wrapper:14:in `&lt;main&gt;'
+</code></pre>
+
+<p>Configuration from /Volumes/DATA/Users/goooseman/octopress/_config.yml
+Building site: source -> public
+YAML Exception reading 2013-02-26-dielaiem-skrinshot-pravil'no.markdown: invalid byte sequence in US-ASCII
+YAML Exception reading 2013-02-26-vosstanovlieniie-otdiel'nykh-failov-iz-bekapa-itunes.markdown: invalid byte sequence in US-ASCII
+YAML Exception reading index.markdown: invalid byte sequence in US-ASCII
+YAML Exception reading index.html: invalid byte sequence in US-ASCII
+YAML Exception reading index.html: invalid byte sequence in US-ASCII
+YAML Exception reading search.html: invalid byte sequence in US-ASCII
+```</p>
+
+<ul>
+<li>Если такое вывалилось, то в "octopress_cmd_before_rake" добавляем "&amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8". Сохраняем, проверяем, должно завершаться <code>Successfully generated site: source -&gt; public</code></li>
+</ul>
+
+
+<p><img src="http://d.pr/i/LrNt+"></p>
+
+<p>P.S. <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5#issuecomment-14481400">Здесь</a> пользователь <a href="https://github.com/skarfacegc">skarfacegc</a> подсказал еще один вариант <code>"octopress_cmd_before_rake"</code> : <code>"source $HOME/.rvm/scripts/rvm &amp;&amp; export PATH=$HOME/.rvm/bin:$PATH &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374"</code></p>
+
+<h2>rbenv</h2>
+
+<p>Если Вы используете rbenv, то Ваш <code>~/.bashrc</code> должен выглядеть так:<br/>
+<code>
+PATH="$HOME/.rbenv/versions/1.9.3-p194/bin:$PATH"
+</code>
+А <code>octopress_cmd_before_rake</code> вот так: <code>source ~/.bashrc &amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8</code>.
+В этом случае устанавливать снова зависимости мне не понадобилось.</p>
+
+<h2>Другие возможные ошибки</h2>
+
+<ul>
+<li><code>git: command not found</code> <br/>
+Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали ":$PATH", который нужен для подгурзки стандартных путей.</li>
+<li><code>/Users/&lt;user&gt;/.rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems/pygments.rb-0.3.4/lib/pygments/popen.rb:377:in `header_to_json': Traceback (most recent call last): (MentosError)</code><br/>
+Проблема в подсветке кода, в одной из записей или страниц кода не правильно вставлен код. Какой именно можно найти в этой строчке: <code>ClassNotFound: no lexer for alias 'PATH=$PATH:$HOME/.rvm/bin' found</code> Лучше всего знаки ` с самим кодом отделять переводом каретки.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

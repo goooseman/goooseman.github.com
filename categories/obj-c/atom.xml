@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: obj-c | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/obj-c/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[А теперь тоже самое на Obj-C]]></title>
+    <link href="http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/"/>
+    <updated>2013-04-13T15:29:00+04:00</updated>
+    <id>http://goooseman.ru/2013/04/13/a-tiepier'-tozhie-samoie-na-obj-c</id>
+    <content type="html"><![CDATA[<p><a href="http://goooseman.ru/2013/04/13/iesli-khochiesh%27/">В прошлом посте</a> я писал про скрипт на bash, который скачивает .torrent файлы с rutracker.org, используя bash. Ради эксперимента решил реализовать такой код на Obj-C.</p>
+
+<!--more-->
+
+
+<p><div><script src='https://gist.github.com/5378021.js'></script>
+<noscript><pre><code>//  RutrackerSimpleDownload
+//  Created by Alexander Gusev on 12.04.13.
+//  Copyright (c) 2013 Alexander Gusev. All rights reserved.
+//  http://goooseman.ru
+
+
+        // Variables //
+      
+        NSString *username = @&quot;&quot;;
+        NSString *password = @&quot;&quot;;
+        NSInteger fileID = 4296614;
+        NSString *fileLocation = @&quot;/Users/goooseman/Downloads/&quot;; //should be /path/to/file/ not /path/to/file. ~ doesn&#39;t work here
+        
+        // Login Session (Getting cookies) //
+        
+        NSURL *loginUrl = [NSURL URLWithString:@&quot;http://login.rutracker.org/forum/login.php&quot;];
+        NSMutableURLRequest *loginRequest = [NSMutableURLRequest requestWithURL:loginUrl];
+        NSHTTPURLResponse *loginResponse;
+        NSError* loginError;
+        
+        NSString *post = [NSString stringWithFormat:@&quot;login_username=%@&amp;login_password=%@&amp;login=Вход&quot;, username, password];
+        NSLog(@&quot;%@&quot;, post);
+        NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        [loginRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
+        [loginRequest setTimeoutInterval:15];
+        [loginRequest setHTTPBody:postData];
+        [loginRequest setHTTPMethod:@&quot;POST&quot;];
+        [loginRequest setHTTPShouldHandleCookies:YES];
+        
+        [NSURLConnection sendSynchronousRequest:loginRequest returningResponse:&amp;loginResponse error:&amp;loginError];
+        
+
+    
+        
+        // Download file //
+        
+        NSURL *torrentUrl = [NSURL URLWithString:[NSString stringWithFormat:@&quot;http://dl.rutracker.org/forum/dl.php?t=%ld&quot;, fileID]];
+        NSLog(@&quot;%@&quot;, torrentUrl);
+        NSHTTPURLResponse *torrentResponse;
+        NSError *torrentError;
+        NSMutableURLRequest *torrentRequest = [NSMutableURLRequest requestWithURL:torrentUrl];
+        
+        NSString *torrentPost = [NSString stringWithFormat:@&quot;t=%ld&quot;, fileID];
+        NSData *torrentPostData = [torrentPost dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
+        [torrentRequest setHTTPShouldHandleCookies:YES];
+        [torrentRequest setHTTPBody:torrentPostData];
+        [torrentRequest setHTTPMethod:@&quot;POST&quot;];
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;t:%ld&quot;, fileID] forHTTPHeaderField:@&quot;header&quot;];
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;http://rutracker.org/forum/viewtopic.php?t=%ld&quot;, fileID] forHTTPHeaderField:@&quot;Referer&quot;];
+        
+        
+        NSData *torrentUrlConnection = [NSURLConnection sendSynchronousRequest:torrentRequest returningResponse:&amp;torrentResponse error:&amp;torrentError];
+        
+        [torrentUrlConnection writeToFile:[NSString stringWithFormat:@&quot;%@[rutracker.org].t%ld.torrent&quot;, fileLocation, fileID] atomically:YES];
+        </code></pre></noscript></div>
+<br/>
+Знаете, что мне не нравится? Когда логинишься на rutracker.org с другого клиента, авторизация на всех других слетает. Видимо у них одновременно может существовать только одна валидная кука. В хроме приходится заново логинится каждый раз после использования этого кода. Хорошо, что код использует системный cookie jar (который использует Safari), благодаря этому авторизация в Safari не слетает.</p>
+]]></content>
+  </entry>
+  
+</feed>

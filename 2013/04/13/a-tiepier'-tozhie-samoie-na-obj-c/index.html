@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>А теперь тоже самое на Obj-C - Ctrl + Cmd</title>
+  
+  <meta name="author" content="goooseman">
+
+  
+  <meta name="description" content="А теперь тоже самое на Obj-C В прошлом посте я писал про скрипт на bash, который скачивает .torrent файлы с rutracker.org, используя bash. Ради &hellip;">
+  
+
+  
+  
+
+  <meta property="og:url" content="http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="А теперь тоже самое на Obj-C - Ctrl + Cmd" />
+  <meta property="og:description" content="А теперь тоже самое на Obj-C В прошлом посте я писал про скрипт на bash, который скачивает .torrent файлы с rutracker.org, используя bash. Ради &hellip;" />
+
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@" />
+  <meta name="twitter:creator" content="@" />
+  <meta name="twitter:title" content="А теперь тоже самое на Obj-C - Ctrl + Cmd" />
+  <meta name="twitter:description" content="А теперь тоже самое на Obj-C В прошлом посте я писал про скрипт на bash, который скачивает .torrent файлы с rutracker.org, используя bash. Ради &hellip;" />
+
+  <meta name="twitter:domain" content="http://goooseman.ru" />
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Ctrl + Cmd" type="application/atom+xml">
+
+  <!--<link href="/javascripts/libs/bootstrap-3.0.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">-->
+<!--<link href="/javascripts/libs/bootstrap-3.0.0/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">-->
+<link href="/javascripts/libs/bootstrapthemes/readable/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+  
+
+</head>
+
+  <body   >
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header ">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Ctrl + Cmd</a>
+		</div>
+
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="dropdown active">
+					<a href="#" class="dropdown-toggle " data-toggle="dropdown">Блог <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li class="active">
+							<a href="/">Блог</a>
+						</li>
+						<li >
+							<a href="/archives">Архив записей</a>
+						</li>
+						<li >
+							<a href="/categories">Категории</a>
+						</li>
+					</ul>
+				</li>
+				<li >
+					<a href="/about">Об авторе</a>
+				</li>
+                           
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+						<span class="visible-xs">RSS</span>
+						<img class="hidden-xs" src="/images/rss.png" alt="RSS">
+					</a>
+				</li>
+				
+			</ul>
+			
+				<form class="search navbar-form navbar-right" action="/search.html" method="GET">
+					<div class="form-group">
+						<input class="form-control" type="text" name="query" placeholder="Поиск" x-webkit-speech >
+					</div>
+				</form>
+			
+		</div>
+	</div>
+</nav>
+
+
+      </header>
+      <div id="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <article itemscope itemtype="http://schema.org/Article" class="hentry panel panel-default" role="article">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        А теперь тоже самое на Obj-C
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix"><p><a href="http://goooseman.ru/2013/04/13/iesli-khochiesh%27/">В прошлом посте</a> я писал про скрипт на bash, который скачивает .torrent файлы с rutracker.org, используя bash. Ради эксперимента решил реализовать такой код на Obj-C.</p>
+
+<!--more-->
+
+
+<div><script src='https://gist.github.com/5378021.js'></script>
+<noscript><pre><code>//  RutrackerSimpleDownload
+//  Created by Alexander Gusev on 12.04.13.
+//  Copyright (c) 2013 Alexander Gusev. All rights reserved.
+//  http://goooseman.ru
+
+
+        // Variables //
+      
+        NSString *username = @&quot;&quot;;
+        NSString *password = @&quot;&quot;;
+        NSInteger fileID = 4296614;
+        NSString *fileLocation = @&quot;/Users/goooseman/Downloads/&quot;; //should be /path/to/file/ not /path/to/file. ~ doesn&#39;t work here
+        
+        // Login Session (Getting cookies) //
+        
+        NSURL *loginUrl = [NSURL URLWithString:@&quot;http://login.rutracker.org/forum/login.php&quot;];
+        NSMutableURLRequest *loginRequest = [NSMutableURLRequest requestWithURL:loginUrl];
+        NSHTTPURLResponse *loginResponse;
+        NSError* loginError;
+        
+        NSString *post = [NSString stringWithFormat:@&quot;login_username=%@&amp;login_password=%@&amp;login=Вход&quot;, username, password];
+        NSLog(@&quot;%@&quot;, post);
+        NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        [loginRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
+        [loginRequest setTimeoutInterval:15];
+        [loginRequest setHTTPBody:postData];
+        [loginRequest setHTTPMethod:@&quot;POST&quot;];
+        [loginRequest setHTTPShouldHandleCookies:YES];
+        
+        [NSURLConnection sendSynchronousRequest:loginRequest returningResponse:&amp;loginResponse error:&amp;loginError];
+        
+
+    
+        
+        // Download file //
+        
+        NSURL *torrentUrl = [NSURL URLWithString:[NSString stringWithFormat:@&quot;http://dl.rutracker.org/forum/dl.php?t=%ld&quot;, fileID]];
+        NSLog(@&quot;%@&quot;, torrentUrl);
+        NSHTTPURLResponse *torrentResponse;
+        NSError *torrentError;
+        NSMutableURLRequest *torrentRequest = [NSMutableURLRequest requestWithURL:torrentUrl];
+        
+        NSString *torrentPost = [NSString stringWithFormat:@&quot;t=%ld&quot;, fileID];
+        NSData *torrentPostData = [torrentPost dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
+        [torrentRequest setHTTPShouldHandleCookies:YES];
+        [torrentRequest setHTTPBody:torrentPostData];
+        [torrentRequest setHTTPMethod:@&quot;POST&quot;];
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;t:%ld&quot;, fileID] forHTTPHeaderField:@&quot;header&quot;];
+        [torrentRequest setValue:[NSString stringWithFormat:@&quot;http://rutracker.org/forum/viewtopic.php?t=%ld&quot;, fileID] forHTTPHeaderField:@&quot;Referer&quot;];
+        
+        
+        NSData *torrentUrlConnection = [NSURLConnection sendSynchronousRequest:torrentRequest returningResponse:&amp;torrentResponse error:&amp;torrentError];
+        
+        [torrentUrlConnection writeToFile:[NSString stringWithFormat:@&quot;%@[rutracker.org].t%ld.torrent&quot;, fileLocation, fileID] atomically:YES];
+        </code></pre></noscript></div>
+
+
+<p>Знаете, что мне не нравится? Когда логинишься на rutracker.org с другого клиента, авторизация на всех других слетает. Видимо у них одновременно может существовать только одна валидная кука. В хроме приходится заново логинится каждый раз после использования этого кода. Хорошо, что код использует системный cookie jar (который использует Safari), благодаря этому авторизация в Safari не слетает.</p>
+</div>
+
+<p class="meta text-muted">
+
+
+
+</p>
+
+      <footer>
+        <p class="meta text-muted">
+        
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/categories/os-x/'>OS X</a>, <a class='category' href='/categories/obj-c/'>obj-c</a>
+  
+</span>
+
+
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name" class="fn">goooseman</span></span></span>
+
+          
+
+
+
+
+
+
+
+
+	
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2013-04-13T15:29:00+04:00" datetime="2013-04-13T15:29:00+04:00" pubdate data-updated="true">13<span>ое</span> апреля 2013 г.</time>
+          
+          
+
+        </p>
+        
+          <div class="sharing">
+  
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/2013/04/13/iesli-khochiesh%27/" title="Previous Post: Если хочешь, чтобы дело было сделано хорошо, сделай его сам">&laquo; Если хочешь, чтобы дело было сделано хорошо, сделай его сам</a></li>
+            
+            
+            <li class="next"><a href="/2013/04/16/infoghrafika-po-moiemu-bloghu/" title="Next Post: Инфографика по статистике моего блога">Инфографика по статистике моего блога &raquo;</a></li>
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Последние записи</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/2013/06/24/kitaitsy-otvietili/">Китайцы ответили</a>
+    
+    <a class="list-group-item " href="/2013/06/20/i-ieshchie-chut%27-chut%27-v-prodolzhienii-tiemy/">И еще чуть чуть в продолжении темы</a>
+    
+    <a class="list-group-item " href="/2013/06/18/i-ieshchie-niemnogho-ob-ios-7/">И еще немного об iOS 7</a>
+    
+    <a class="list-group-item " href="/2013/06/17/ios-7/">iOS 7</a>
+    
+    <a class="list-group-item " href="/2013/06/11/novaia-opiera/">Новая Опера</a>
+    
+  </div>
+</section>
+
+
+
+
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Популярные категории</h3>
+  </div>
+  <div id="recent_posts" class="list-group">
+  	<a class='list-group-item category-list' href='/categories/Другое'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/os-x'>OS X   (8 постов)</a><a class='list-group-item category-list' href='/categories/Россия'>Россия   (8 постов)</a><a class='list-group-item category-list' href='/categories/apple'>Apple   (8 постов)</a><a class='list-group-item category-list' href='/categories/Москва'>Москва   (6 постов)</a>
+  </div>
+    
+</section>
+<script type="text/javascript">
+	$('.category-list').each(function() {
+		if ($(this).attr("href") == window.location.pathname) {
+			$(this).addClass("active");
+		}
+	});
+</script>
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2013 goooseman<br>
+</p>
+
+</div>
+</footer>
+    <script src="/javascripts/my.js"></script>
+<script src="/javascripts/libs/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'goooseman';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/';
+        var disqus_url = 'http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

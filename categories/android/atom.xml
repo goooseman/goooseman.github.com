@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Android | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/android/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Китайцы ответили]]></title>
+    <link href="http://goooseman.ru/2013/06/24/kitaitsy-otvietili/"/>
+    <updated>2013-06-24T15:07:00+04:00</updated>
+    <id>http://goooseman.ru/2013/06/24/kitaitsy-otvietili</id>
+    <content type="html"><![CDATA[<p><a href="http://goooseman.ru/2013/06/09/kitaiskoie-vriemia/">Недавно</a> я писал про славных китайских разработчиков под Android, у которых на скриншоте к приложению время стоит 12:61. Из чистого любопытства я написал им. Подумав 11 дней над вопросом, они мне ответили.<br/>
+<img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh4.ggpht.com/Avara4fVM6OOzgKCWoK6XsT2met7mAuCPC3YaO0fQ2WXE2h4IizieNjKspNzDy0Y66Rf"></p>
+
+<!--more-->
+
+
+<p></p>
+
+<p><img src="http://d.pr/i/noFY+"><br/>
+<blockquote><p>于 2013年06月09日 16:35, Александр Гусев 写道:<br/>Hi,</p></p><p><p>Sorry to reply you later.</p></p><p><p>Thanks for using our browser!</p></p><p><p>Yes, we make that purposefully!  Just mean “Constantly go beyond, Nothing is impossible Next”.</p></p><p><p>You looked really carefully and you are the first one to find that! Great!</p></p><p><p>Best,</p></p><p><p>--Next Browser Team</p></blockquote></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Китайское время]]></title>
+    <link href="http://goooseman.ru/2013/06/09/kitaiskoie-vriemia/"/>
+    <updated>2013-06-09T11:12:00+04:00</updated>
+    <id>http://goooseman.ru/2013/06/09/kitaiskoie-vriemia</id>
+    <content type="html"><![CDATA[<p>Не люблю я китайское ПО. Слишком они любят избыточную функциональность. Минимализм - страшный сон китайца. Вот, например, <a href="http://taobao.com">taobao</a>:<br/>
+<img src="http://d.pr/i/8qKI+"><br/>
+Прелесть, да? Они используют каждый квадратный сантиметр рабочей площади, чтобы разместить там, какую-нибудь небольшую панельку. А это онлайн библиотека:<br/>
+<img src="http://d.pr/i/qvJc+"><br/>
+А вот пример десктопного дизайна:</p>
+
+<div>
+   <table width="100%" height="100%" align="center" valign="center" cellpadding="0" cellspacing="0" border="0" style="background-color:white; border: 0px solid transparent;">
+   <tr><td style="border: 0">
+      <img src="http://d.pr/i/FMJL+" width="80%" height="80%" />
+   </td></tr>
+   </table>
+</div>
+
+
+<!--more-->
+
+
+<p>Бывает, что с дизайном все хорошо... Бывает, но обычно в таких случаях присутствует ну просто хренова туча настроек, большинство их которых бесполезны более чем полностью.<br/>
+И лишь единицы действительно можно назвать годными. Вот, например, <a href="https://play.google.com/store/apps/details?id=com.jiubang.browser">Next Browser</a>. Не перегружен, настроек немного, быстрый, красивый. Сказка, а не браузер. Но без "китайщины" не обошлось. Взгляните на скриншоты этого приложения из Google Play: <br/>
+<img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh4.ggpht.com/Avara4fVM6OOzgKCWoK6XsT2met7mAuCPC3YaO0fQ2WXE2h4IizieNjKspNzDy0Y66Rf"><br/>
+На них на всех время - 12:61. Если это случайность, то как оно произошло? Если это специально, то зачем? Написал письмо разрабам, посмотрим, что они ответят.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Про Android...]]></title>
+    <link href="http://goooseman.ru/2013/06/06/pro-android-dot-dot-dot/"/>
+    <updated>2013-06-06T13:35:00+04:00</updated>
+    <id>http://goooseman.ru/2013/06/06/pro-android-dot-dot-dot</id>
+    <content type="html"><![CDATA[<p>Я люблю Android. Я достаточно долго "сидел" на iOS и WP7, но Android мне нравится больше, чем те двое вместе взятые. Но вот некоторые странности меня не перестают удивлять.</p>
+
+<p>В Android есть системное приложение Google Play Services. Оно предостовляет доступ к API приложений Google сторонним разрабам. Но после его обновления до последней версии (а этого требуют многие приложения) происходит забавное: при установке apk файла (установочный файл приложения) не из Google Play нам предлагают не один установщик, а целых два:</p>
+
+<div>
+   <table width="100%" height="100%" align="center" valign="center" cellpadding="0" cellspacing="0" border="0" style="background-color:white; border: 0px solid transparent;">
+   <tr><td style="border: 0">
+      <img src="http://d.pr/i/jFWZ+" width="40%" height="40%" />
+   </td></tr>
+   </table>
+</div>
+
+
+<p>Второй как раз с иконкой того самого Google Play Services. Отличие только одно: второй как то проверяет файл перед установкой, потом передает установку тому самому первому установщику. Конечно баг не критичный, но он присутствует у всех, я его проверил на версиях Android 2.3, 4.0.4, 4.1.2, и везде он есть. Ну ОК, конечно они молодцы, что внедрили хотя бы какую-то базовую проверку файла на наличие всяких там вирусов, но почему нельзя было заменить старый установщик, а не предлагать юзеру сразу два.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: iPhone | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/iphone/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Retina или хороший маркетинговый подход]]></title>
+    <link href="http://goooseman.ru/2013/03/17/retina-ili-khoroshii-markietinghovyi-podkhod/"/>
+    <updated>2013-03-17T02:18:00+04:00</updated>
+    <id>http://goooseman.ru/2013/03/17/retina-ili-khoroshii-markietinghovyi-podkhod</id>
+    <content type="html"><![CDATA[<p>Сегодня пришло письмо от Apple, которое заставило меня не только еще раз удивиться правильному подходу сией компании к мелочам, но и поразиться той лжи, которую они написали.</p>
+
+<!--more-->
+
+
+<p>Вот, собственно говоря кусок этого письма, рекламирующего iPhone 5:<br/>
+<img src="http://d.pr/i/HGHJ+"><br/>
+Читаем первую строчку:
+<blockquote><p>Только iPhone имеет Retina дисплей.</p></blockquote><br/>
+Если придираться к мелочам, то они здесь не правы, ведь Retina экран есть и у iPod Touch, и у iPad, и у Macbook Pro. Хотя они скорее здесь сравнивают с другими телефонами, так что придираться мы не будем. Тут я всего лишь хотел еще раз сказать про то внимание к мелочам, которое присуще Apple. Как же они были правы, когда в 2010м году не просто создали новый экран, но и назвали его своим именем, да и таким коротким и запоминающимся. Поэтому они действительно могут сказать, что Retina только у них, и не важно, что у других экраны то и по лучше бывают, зато у них Retina, а не какой-нибудь SuperUltraMegaHDAMOLED.<br/>
+Идем дальше:
+<blockquote><p>Ретина дисплей начала эру экранов супервысокого разрешения.</p></blockquote>
+Да, тут они безусловно правы. Но вся соль в последней строчке:
+<blockquote><p>Увидев однажды текст и изображения на Retina экране, вы больше никогда не будете удовлетворены чем-либо другим (экраном).</p></blockquote>
+ORLY? У меня прошлогодний Sony Xperia S, у него PPI - 342. У всех iPhone - 326. А если взять, например, Sony Xperia Z с Full HD экраном, то у него PPI примерно равен 441. Да и даже если не было бы других смартфонов с хорошими экранами, то так все равно нельзя писать, ведь в будующем все равно будут экраны получше чем нынешние, а пишут, что мы больше не будем другим удовлетворены.<br/>
+И нет, я не хотел полить грязью Apple. У меня у самого сейчас Macbook, iPad, iPod Classic (да, я им до сих пор пользуюсь) и было пару айфонов, да iPod Touch. Просто такой наглостьи я от них не ожидал.<br/>
+Ах да... "При Стиве Такого Не Было111"(с)</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: web | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/web/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Инфографика по статистике моего блога]]></title>
+    <link href="http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu/"/>
+    <updated>2013-04-16T09:54:00+04:00</updated>
+    <id>http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu</id>
+    <content type="html"><![CDATA[<p>Нашел <a href="https://create.visual.ly/graphic/google-analytics/">интересный сервис</a>, который собирает интересную инфографику по Вашему сайту, опираясь на данные Google Analytics. И даже умеет ее вам раз в неделю присылать на почту.</p>
+
+<!--more-->
+
+
+<p>Вот инфографика по моему блогу:</p>
+
+<p><img src="http://d.pr/i/VUNv+"></p>
+
+<p>Правда, чтобы получить такую инфорграфику, приходится регистрироваться. Но оно того стоит: на сайте есть еще много интересной инфографики, вот например весьма спорная информация, под названием "Падение Apple":</p>
+
+<div class='visually_embed' data-category='Computers' rel='infographic'>
+            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617.jpg' alt='The Fall of Apple' />
+            <div class='visually_embed_bar'>
+                <span class='visually_embed_cycle'><a href="http://visual.ly/fall-apple/?utm_source=visually_embed"></a> </span>
+            </div>
+            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/fall-apple?utm_source=visually_embed'></a>
+            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
+            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
+        </div>
+
+
+<p>Или про глобальное потепление:</p>
+
+<div class='visually_embed' data-category='Computers' rel='infographic'>
+            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576.jpg' alt='When Sea Levels Attack!' />
+            <div class='visually_embed_bar'>
+                <span class='visually_embed_cycle'><a href="http://visual.ly/when-sea-levels-attack/?utm_source=visually_embed"></a> </span>
+            </div>
+            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/when-sea-levels-attack?utm_source=visually_embed'></a>
+            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
+            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
+        </div>
+
+]]></content>
+  </entry>
+  
+</feed>

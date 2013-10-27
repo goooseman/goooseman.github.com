@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: bash | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/bash/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Если хочешь, чтобы дело было сделано хорошо, сделай его сам]]></title>
+    <link href="http://goooseman.ru/2013/04/13/iesli-khochiesh%27/"/>
+    <updated>2013-04-13T06:41:00+04:00</updated>
+    <id>http://goooseman.ru/2013/04/13/iesli-khochiesh'</id>
+    <content type="html"><![CDATA[<p>Нужен был скрипт на баше или на python, который бы скачивал .torrent файлы с rutracker.org. Сложность задачи в том, что rutracker не дает файлы напрямую, а пишет, мол зайдите со страницы форума.</p>
+
+<p>Я нашел аж 7 скриптов, но не один из них не работал as is. Даже после косметической правки. Поэтому, опираясь на опыт других, быстро написал свою балалайку.</p>
+
+<!--more-->
+
+
+<p><div><script src='https://gist.github.com/5376630.js'></script>
+<noscript><pre><code>#!/bin/bash
+## Rutracker Downloader by goooseman.ru ##
+## Created on 13th of April 2013 ##
+
+
+## Variables ##
+USERNAME=
+PASSWORD=
+TORRENTID=$1
+
+## Variables checking ##
+if [ ! $TORRENTID ];
+  then
+  echo Please use it as &quot;scriptname.sh &lt;topicid&gt;&quot;
+	echo Topicid is the number at the end of the topic link. 
+	echo Example: link is &quot;http://rutracker.org/forum/viewtopic.php?t=4246831&quot;
+	echo Command is: ./RutrackerDownloader.sh 4246831
+	exit 1
+fi
+
+if  [ -z $USERNAME ] || [ -z $PASSWORD ];
+	then 
+	echo Please setup USERNAME and PASSWORD variables 
+	exit 1
+fi
+
+
+
+## Saving cookies ##
+if [ ! -f cookies.txt ];
+	then
+	echo
+	echo Saving cookies to cookies.txt...
+	wget --user-agent=Mozilla/5.0 --save-cookies cookies.txt --post-data &quot;login_username=$USERNAME&amp;login_password=$PASSWORD&amp;login=Вход&quot; --no-check-certificate http://login.rutracker.org/forum/login.php
+	echo Cookies saved...
+	echo 
+fi
+
+## Downloading file ##
+echo
+echo Downloading .torrent...
+wget --keep-session-cookies --load-cookies cookies.txt  --referer=&#39;http://rutracker.org/forum/viewtopic.php?t=&#39;$TORRENTID --header=&#39;Content-Type:application/x-www-form-urlencoded&#39; --header=&#39;t:&#39;$TORRENTID --post-data=&#39;t=&#39;$TORRENTID http://dl.rutracker.org/forum/dl.php?t=$TORRENTID -O [rutracker.org].t$TORRENTID.torrent
+echo .torrent saved
+echo
+
+## Removing tmp files ##
+
+if [ -f login.php ];
+	then
+	echo 
+	echo Removing login.php...
+	rm login.php*
+	echo login.php deleted
+fi
+</code></pre></noscript></div>
+
+В первый раз скрипт сохраняет куки в файл cookies.txt, который потом используется. Чтобы обойти ограничение на прямое скачивание используется referer="страница топика".
+Зачем оно надо? Для автоматизации процесса поиска новых серий в раздачах. Скоро этим займусь.</p>
+
+<p>P.S. На маке для запуска скрипта понадобится wget. Скачать его можно, например, через <a href="http://mxcl.github.io/homebrew/">Homebrew</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

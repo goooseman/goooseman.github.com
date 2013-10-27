@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Automator | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/automator/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Количество непрочитанных сообщений Skype в меню баре OS X]]></title>
+    <link href="http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x/"/>
+    <updated>2013-03-09T18:44:00+04:00</updated>
+    <id>http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x</id>
+    <content type="html"><![CDATA[<p>Skype под OS X имеет два способа нотификации: всплывающее уведомление и "badge" на иконке в доке. (<img class="right" src="http://d.pr/i/zjRC+" title="Badge" >) Но док у меня постоянно спрятан, а нотификацию можно пропустить. У Skype есть еще иконка в меню баре, так почему бы не сделать ее более информативной.</p>
+
+<!--more-->
+
+
+<p>Подумав о решении этой проблемы, у меня не появилось не единой идеи. Но загуглив, я осознал, что я не одинок. Некий <a href="https://github.com/pwc3">pwc3</a> из Бостона тоже столкнулся с этой проблемой и даже написал скрипт на ruby с использованием F-Script, добавляющий количество непрочитанных сообщений рядом с иконкой Skype. Скрипт читает кол-во сообщений с иконки Skype и добавляет счетчик слева от иконки в меню баре.<br/>
+Но чтобы скрипт работал, нужно сначала установить F-Script. Качаем его с <a href="http://www.fscript.org/">официальной страницы</a>, распаковываем, и копируем FScript.framework в /Library/Frameworks.<br/>
+Теперь сам скрипт:</p>
+
+<p><div><script src='https://gist.github.com/2728176.js'></script>
+<noscript><pre><code>#!/usr/bin/env ruby
+
+FSCRIPT_PATH = &quot;/Library/Frameworks/FScript.framework&quot;
+
+GDB = IO.popen(&quot;gdb&quot;, &quot;w&quot;)
+def gdb(cmd)
+    GDB.puts cmd
+    GDB.flush
+end
+
+updaterScript = &lt;&lt;END_OF_FSCRIPT
+SkypeMenuUpdater : NSObject
+{
+    statusBarItem
+    timer
+
+    - init
+    {
+        self := super init.
+        self ~~ nil ifTrue:
+        [
+            statusBarItem := NSStatusBar systemStatusBar statusItemWithLength:20.
+
+            timer := NSTimer scheduledTimerWithTimeInterval:1
+                                                     target:[self updateMenu]
+                                                   selector:#value
+                                                   userInfo:nil
+                                                    repeats:YES.
+        ].
+        ^ self
+    }
+
+    - updateMenu
+    {
+        statusBarItem setTitle:NSApplication sharedApplication dockTile badgeLabel.
+    }
+}.
+
+updater := (SkypeMenuUpdater alloc) init.
+END_OF_FSCRIPT
+
+updaterScript.gsub!(&quot;\n&quot;, &quot;\\n&quot;)
+
+gdb &quot;attach Skype&quot;
+gdb &quot;p (char)[[NSBundle bundleWithPath:@\&quot;#{FSCRIPT_PATH}\&quot;] load]&quot;
+gdb &quot;p (void)[[FSInterpreter interpreter] execute:@\&quot;#{updaterScript}\&quot;]&quot;
+gdb &quot;detach&quot;
+gdb &quot;quit&quot;
+
+GDB.close
+</code></pre></noscript></div>
+</p>
+
+<p>Создаем файл, кладем в него этот скрипт, сохраняем. Я обычно это делаю через nano, например <code>nano ~/skypehelper.rb</code>.<br/>
+Убеждаемся, что Skype запущен и выполняем <code>ruby наш файл</code>. Результат:<br/>
+<img src="http://d.pr/i/Uds0+"><br/>
+Но это еще не все, скрипт надо запускать строго после запуска Skype. А каждый раз запускать его в ручную - не путь Джедая. Я предлагаю создать приложение в Automator. Добавляем действие "Запустить shell-скрипт", в нем в качестве среды выбираем ruby и копируем туда весь скрипт. После <code>#!/usr/bin/env ruby</code> добавляем следующие две строчки:<br/>
+<code>
+system %{open -a Skype.app}
+sleep 5
+</code><br/>
+Сохраняем. Добавляем нашу новую программу в автозапуск или запускаем ее ручками вместо Skype.<br/>
+Окно Automator и результат в меню баре:<br/>
+<img src="http://d.pr/i/poBW+" title="" ></p>
+]]></content>
+  </entry>
+  
+</feed>

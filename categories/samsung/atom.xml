@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Samsung | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/samsung/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Пиздить то можно не только у Apple...]]></title>
+    <link href="http://goooseman.ru/2013/04/28/pizdit%27-to-mozhno-nie-tol%27ko-u-apple-dot-dot-dot/"/>
+    <updated>2013-04-28T11:24:00+04:00</updated>
+    <id>http://goooseman.ru/2013/04/28/pizdit'-to-mozhno-nie-tol'ko-u-apple-dot-dot-dot</id>
+    <content type="html"><![CDATA[<p><img src="http://d.pr/i/34iz+"><br/>
+Слева - Nokia 6300 (год выпуска: 2007), справа - Samsung GT-C3322 (год выпуска: 2011).</p>
+]]></content>
+  </entry>
+  
+</feed>

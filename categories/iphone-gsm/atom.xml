@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: iPhone GSM | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/iphone-gsm/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Синхронизация контактов Google с iPhone GSM]]></title>
+    <link href="http://goooseman.ru/2013/03/07/sinkhronizatsiia-kontaktov-google-s-iphone-gsm/"/>
+    <updated>2013-03-07T22:09:00+04:00</updated>
+    <id>http://goooseman.ru/2013/03/07/sinkhronizatsiia-kontaktov-google-s-iphone-gsm</id>
+    <content type="html"><![CDATA[<p>Моя невеста до сих пор пользуется iPhone GSM, тем самым, который первого поколения. Контакты у нее синхронизируются с гуглом. Но с 30го января 2013 года Google отключил синхронизацию через протокол Microsoft Exchange, а на 3.1.3 нет поддержки CardDAV, поэтому на телефоне исчезла поддержка синхронизации. Можно синхронизировать через компьютер, но здесь есть один небольшой нюанс.</p>
+
+<!-- more -->
+
+
+<p>Приложение Contacts.app у меня давно настроено на синхронизацию с Google таким вот образом:<br/>
+<img src="http://d.pr/i/WTiT+"> <br/>
+Получается так, что в учетной записи "На моем Mac" контактов нет, а все они в учетной записи Google. Но при синхронизации на iPhone контакты не появляются. Вообще. Хотя и учетная запись по умолчанию стоит "Google".<br/>
+Секрет в том, что есть еще один способ синхронизировать с Google: в настройках жмем на учетную запись "На моем Mac" и ставим галочку "Синхронизировать с Google". Нам предлагают ввести логин и пароль, что мы и делаем. Начинается синхронизация.<br/>
+<img src="http://d.pr/i/EOeH+"> <br/>
+При таком методе синхронизации контакты нормально синхронизируются с iPhone. Удивительно, но даже если подключить учетную запись iCloud, он и с ней не будет синхронизировать iPhone, ибо они снова же синхронизируются в своей учетной записи, а не с "На моем Mac". Как то это не удобно.</p>
+]]></content>
+  </entry>
+  
+</feed>

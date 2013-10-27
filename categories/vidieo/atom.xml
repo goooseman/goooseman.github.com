@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Видео | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/vidieo/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-10-27T15:55:50+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Есть лишние 6.500.0000$? Надоела благотворительность? Можете сделать цепочку домино из 10.000 iPhone.]]></title>
+    <link href="http://goooseman.ru/2013/05/05/iest%27-lishniie-6-dot-500-dot-0000-nadoiela-blaghotvoritiel%27nost%27-mozhietie-sdielat%27-tsiepochku-domino-iz-10-dot-000-iphone/"/>
+    <updated>2013-05-05T16:02:00+04:00</updated>
+    <id>http://goooseman.ru/2013/05/05/iest'-lishniie-6-dot-500-dot-0000-nadoiela-blaghotvoritiel'nost'-mozhietie-sdielat'-tsiepochku-domino-iz-10-dot-000-iphone</id>
+    <content type="html"><![CDATA[<div class="video-container">
+    <iframe width="640" height="360" src="http://www.youtube.com/embed/tj7al6MXu7U" frameborder="0" allowfullscreen></iframe>     
+</div>
+
+
+<p>
+На самом деле это компьютерная графика, но никто Вам не мешает повторить такое в живую.</p>
+]]></content>
+  </entry>
+  
+</feed>
