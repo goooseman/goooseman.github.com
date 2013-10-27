@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Android | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/android/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-27T16:25:50+04:00</updated>
+  <updated>2013-10-27T16:33:36+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,36 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Китайское время]]></title>
-    <link href="http://goooseman.ru/2013/06/09/kitaiskoie-vriemia/"/>
-    <updated>2013-06-09T11:12:00+04:00</updated>
-    <id>http://goooseman.ru/2013/06/09/kitaiskoie-vriemia</id>
-    <content type="html"><![CDATA[<p>Не люблю я китайское ПО. Слишком они любят избыточную функциональность. Минимализм - страшный сон китайца. Вот, например, <a href="http://taobao.com">taobao</a>:<br/>
-<img src="http://d.pr/i/8qKI+"><br/>
-Прелесть, да? Они используют каждый квадратный сантиметр рабочей площади, чтобы разместить там, какую-нибудь небольшую панельку. А это онлайн библиотека:<br/>
-<img src="http://d.pr/i/qvJc+"><br/>
-А вот пример десктопного дизайна:</p>
-
-<div>
-   <table width="100%" height="100%" align="center" valign="center" cellpadding="0" cellspacing="0" border="0" style="background-color:white; border: 0px solid transparent;">
-   <tr><td style="border: 0">
-      <img src="http://d.pr/i/FMJL+" width="80%" height="80%" />
-   </td></tr>
-   </table>
-</div>
-
-
-<!--more-->
-
-
-<p>Бывает, что с дизайном все хорошо... Бывает, но обычно в таких случаях присутствует ну просто хренова туча настроек, большинство их которых бесполезны более чем полностью.<br/>
-И лишь единицы действительно можно назвать годными. Вот, например, <a href="https://play.google.com/store/apps/details?id=com.jiubang.browser">Next Browser</a>. Не перегружен, настроек немного, быстрый, красивый. Сказка, а не браузер. Но без "китайщины" не обошлось. Взгляните на скриншоты этого приложения из Google Play: <br/>
-<img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh6.ggpht.com/J2ZQi3lfU08IxqRzdVSNT3zvDH0qgek63hhLH-x_86LPQvi_hlQtsHblGvHExvklK-k"> <img src="https://lh4.ggpht.com/Avara4fVM6OOzgKCWoK6XsT2met7mAuCPC3YaO0fQ2WXE2h4IizieNjKspNzDy0Y66Rf"><br/>
-На них на всех время - 12:61. Если это случайность, то как оно произошло? Если это специально, то зачем? Написал письмо разрабам, посмотрим, что они ответят.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Про Android...]]></title>
