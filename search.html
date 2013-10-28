@@ -117,23 +117,19 @@
       </header>
       <div id="main" class="container">
         <div id="content">
-          <h1 class="entry-title"><center>Результаты поиска:</center></h1>
-<div id="search_loading" style="margin: 50px 0">
-    <center><img src="/images/loading.gif"></center>
-</div>
-
-<script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
-<div id="search_results" style="display:none">
-<br>
-</div>
-<script>
-         $('#search_results').tapir({
-             'token': '512652033f61b019100001b4',
-             'complete' : function() { document.getElementById('search_loading').style.display="none"; }
-         });
+          <script>
+  (function() {
+    var cx = '009257675733007113974:by0zzkknbwg';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
 </script>
-
-
+<gcse:search></gcse:search>
         </div>
       </div>
     </div>
