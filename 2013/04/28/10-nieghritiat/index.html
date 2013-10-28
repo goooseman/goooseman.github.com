@@ -102,10 +102,10 @@
 				
 			</ul>
 			
-				<form class="search navbar-form navbar-right" action="http://google.com/search" method="GET">
+				<form class="search navbar-form navbar-right" id="search">
                     <input type="hidden" name="q" value="site:goooseman.ru">
                     <div class="form-group">
-                        <div class="gcse-search"></div>
+                    	<input class="form-control" type="text" id="query" placeholder="Поиск...">
                     </div>
                 </form>
 			
@@ -287,9 +287,29 @@
 
 </div>
 </footer>
-    <script src="/javascripts/my.js"></script>
+    <script src="/javascripts/jquery.browser.js"></script>
+
+<script src="/javascripts/my.js"></script>
 <script src="/javascripts/libs/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
 <script src="/javascripts/modernizr-2.0.js"></script>
+<script src="/javascripts/jquery.jfeed.js"></script>
+
+<!-- Search modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Результаты поиска</h4>
+        </div>
+        <div class="modal-body">
+        	<img src="/images/ajax-loader.gif" ></img>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!-- /Search modal -->
 
 
 <script type="text/javascript">
@@ -318,16 +338,105 @@
 
 
 <script>
-  (function() {
-    var cx = '009257675733007113974:by0zzkknbwg';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
+	$("#search").submit(function( event ) {
+  		event.preventDefault();
+  		var string = $("#query").val(); 
+  		if (string.length == 0) {
+  			$('#searchModal').modal('show');
+  			$(".modal-body").html('<div class="alert alert-danger">Пустой запрос</div>');
+  			return;
+  		}
+  		if (string.length < 4) {
+  			$('#searchModal').modal('show');
+  			$(".modal-body").html('<div class="alert alert-danger">Слишком корткий запрос</div>');
+  			return;
+  		}
+  		var html = "";
+  		$('#searchModal').modal('show');
+  		jQuery.getFeed({
+	       url: 'atom.xml',
+	       success: function(feed) {
+	       		for(var i = 0; i < feed.items.length; i++) {
+	       			
+	       			var item = feed.items[i];
+	       			if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1 || item.title.toLowerCase().indexOf(string.toLowerCase()) !== -1)  {
+	       				html += '<div class="panel panel-default"> <div class="panel-body"> <h3><a href="' + item.link + '">' + item.title + '</a></h3>';
+						
+						if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1) {
+							html += '<br /><div>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) -20 ,item.description.toLowerCase().indexOf(string.toLowerCase()) + 20) + '</div>';
+						}
+						html += '<p class="text-muted" style="float: right;"><span class="glyphicon glyphicon-calendar"></span>' + dateParse(item.updated) + '</p></div></div>'
+	       			}
+	                
+	                
+	            }
+	            if (html == "") {
+	            	html += '<div class="alert alert-warning">Ничего не найдено</div>';
+	            }
+	            $(".modal-body").html(html);
+
+	       }
+		});
+
+ 
+   });
+
+	function dateParse(date) {
+		var year = date.substring(0,4);
+		var month = date.substring(5,7);
+		var day = date.substring(8,10);
+
+		
+		
+		switch (month) {
+			case '01':
+				month = 'Января '
+				break
+			case '02':
+				month = 'Февраля '
+				break
+			case '03':
+				month = 'Марта '
+				break
+			case '04':
+				month = 'Апреля '
+				break
+			case '05':
+				month = 'Мая '
+				break
+			case '06':
+				month = 'Июня '
+				break
+			case '07':
+				month = 'Июля '
+				break
+			case '08':
+				month = 'Августа '
+				break
+			case '09':
+				month = 'Сентября '
+				break
+			case '10':
+				month = 'Октября '
+				break
+			case '11':
+				month = 'Ноября '
+				break
+			case '12':
+				month = 'Декабря '
+				break
+		}
+
+		switch (day) {
+			case '3':
+				day = day + 'ее '
+				break
+			default:
+				day = day + 'ое '
+		}
+		return day + month + year + ' г.';
+		
+	}
 </script>
   </body>
 </html>
