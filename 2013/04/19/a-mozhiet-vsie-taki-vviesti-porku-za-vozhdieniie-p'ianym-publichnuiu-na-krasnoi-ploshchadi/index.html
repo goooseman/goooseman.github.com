@@ -105,7 +105,7 @@
 				<form class="search navbar-form navbar-right" action="http://google.com/search" method="GET">
                     <input type="hidden" name="q" value="site:goooseman.ru">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="q" placeholder="Поиск...">
+                        <gcse:search></gcse:search>
                     </div>
                 </form>
 			
@@ -303,6 +303,17 @@
 
 
 
-
+<script>
+  (function() {
+    var cx = '009257675733007113974:by0zzkknbwg';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
   </body>
 </html>
