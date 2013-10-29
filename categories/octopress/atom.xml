@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Octopress | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/octopress/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:12:09+04:00</updated>
+  <updated>2013-10-29T11:18:37+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -31,7 +31,7 @@
 </ul>
 
 
-<p><img src="http://d.pr/i/CRvF+"></p>
+<p>{% img http://d.pr/i/CRvF+ %}</p>
 
 <h2>Настройка</h2>
 
@@ -108,7 +108,7 @@ YAML Exception reading search.html: invalid byte sequence in US-ASCII
 </ul>
 
 
-<p><img src="http://d.pr/i/LrNt+"></p>
+<p>{% img http://d.pr/i/LrNt+ %}</p>
 
 <p>P.S. <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5#issuecomment-14481400">Здесь</a> пользователь <a href="https://github.com/skarfacegc">skarfacegc</a> подсказал еще один вариант:
 <code>

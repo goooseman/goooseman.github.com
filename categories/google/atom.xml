@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Google | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/google/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:12:09+04:00</updated>
+  <updated>2013-10-29T11:18:37+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -19,7 +19,7 @@
     <updated>2013-03-24T15:24:00+04:00</updated>
     <id>http://goooseman.ru/2013/03/24/u-gmail-nastol'ko-moshchnaia-zashchita-ot-spama-dot-dot-dot</id>
     <content type="html"><![CDATA[<p>... что он не доверяет даже сам себе.<br/>
-<img src="http://d.pr/i/P6RW+"></p>
+{% img http://d.pr/i/P6RW+ %}</p>
 ]]></content>
   </entry>
   

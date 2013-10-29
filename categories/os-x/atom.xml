@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: OS X | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/os-x/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:12:09+04:00</updated>
+  <updated>2013-10-29T11:18:37+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -23,66 +23,7 @@
 <!--more-->
 
 
-<p><div><script src='https://gist.github.com/5378021.js'></script>
-<noscript><pre><code>//  RutrackerSimpleDownload
-//  Created by Alexander Gusev on 12.04.13.
-//  Copyright (c) 2013 Alexander Gusev. All rights reserved.
-//  http://goooseman.ru
-
-
-        // Variables //
-      
-        NSString *username = @&quot;&quot;;
-        NSString *password = @&quot;&quot;;
-        NSInteger fileID = 4296614;
-        NSString *fileLocation = @&quot;/Users/goooseman/Downloads/&quot;; //should be /path/to/file/ not /path/to/file. ~ doesn&#39;t work here
-        
-        // Login Session (Getting cookies) //
-        
-        NSURL *loginUrl = [NSURL URLWithString:@&quot;http://login.rutracker.org/forum/login.php&quot;];
-        NSMutableURLRequest *loginRequest = [NSMutableURLRequest requestWithURL:loginUrl];
-        NSHTTPURLResponse *loginResponse;
-        NSError* loginError;
-        
-        NSString *post = [NSString stringWithFormat:@&quot;login_username=%@&amp;login_password=%@&amp;login=Вход&quot;, username, password];
-        NSLog(@&quot;%@&quot;, post);
-        NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-        
-        [loginRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
-        [loginRequest setTimeoutInterval:15];
-        [loginRequest setHTTPBody:postData];
-        [loginRequest setHTTPMethod:@&quot;POST&quot;];
-        [loginRequest setHTTPShouldHandleCookies:YES];
-        
-        [NSURLConnection sendSynchronousRequest:loginRequest returningResponse:&amp;loginResponse error:&amp;loginError];
-        
-
-    
-        
-        // Download file //
-        
-        NSURL *torrentUrl = [NSURL URLWithString:[NSString stringWithFormat:@&quot;http://dl.rutracker.org/forum/dl.php?t=%ld&quot;, fileID]];
-        NSLog(@&quot;%@&quot;, torrentUrl);
-        NSHTTPURLResponse *torrentResponse;
-        NSError *torrentError;
-        NSMutableURLRequest *torrentRequest = [NSMutableURLRequest requestWithURL:torrentUrl];
-        
-        NSString *torrentPost = [NSString stringWithFormat:@&quot;t=%ld&quot;, fileID];
-        NSData *torrentPostData = [torrentPost dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-        
-        [torrentRequest setValue:[NSString stringWithFormat:@&quot;%ld&quot;,[postData length]] forHTTPHeaderField:@&quot;Content-Length&quot;];
-        [torrentRequest setHTTPShouldHandleCookies:YES];
-        [torrentRequest setHTTPBody:torrentPostData];
-        [torrentRequest setHTTPMethod:@&quot;POST&quot;];
-        [torrentRequest setValue:[NSString stringWithFormat:@&quot;t:%ld&quot;, fileID] forHTTPHeaderField:@&quot;header&quot;];
-        [torrentRequest setValue:[NSString stringWithFormat:@&quot;http://rutracker.org/forum/viewtopic.php?t=%ld&quot;, fileID] forHTTPHeaderField:@&quot;Referer&quot;];
-        
-        
-        NSData *torrentUrlConnection = [NSURLConnection sendSynchronousRequest:torrentRequest returningResponse:&amp;torrentResponse error:&amp;torrentError];
-        
-        [torrentUrlConnection writeToFile:[NSString stringWithFormat:@&quot;%@[rutracker.org].t%ld.torrent&quot;, fileLocation, fileID] atomically:YES];
-        </code></pre></noscript></div>
-<br/>
+<p>{% gist 5378021 %}<br/>
 Знаете, что мне не нравится? Когда логинишься на rutracker.org с другого клиента, авторизация на всех других слетает. Видимо у них одновременно может существовать только одна валидная кука. В хроме приходится заново логинится каждый раз после использования этого кода. Хорошо, что код использует системный cookie jar (который использует Safari), благодаря этому авторизация в Safari не слетает.</p>
 ]]></content>
   </entry>
@@ -99,63 +40,7 @@
 <!--more-->
 
 
-<p><div><script src='https://gist.github.com/5376630.js'></script>
-<noscript><pre><code>#!/bin/bash
-## Rutracker Downloader by goooseman.ru ##
-## Created on 13th of April 2013 ##
-
-
-## Variables ##
-USERNAME=
-PASSWORD=
-TORRENTID=$1
-
-## Variables checking ##
-if [ ! $TORRENTID ];
-  then
-  echo Please use it as &quot;scriptname.sh &lt;topicid&gt;&quot;
-	echo Topicid is the number at the end of the topic link. 
-	echo Example: link is &quot;http://rutracker.org/forum/viewtopic.php?t=4246831&quot;
-	echo Command is: ./RutrackerDownloader.sh 4246831
-	exit 1
-fi
-
-if  [ -z $USERNAME ] || [ -z $PASSWORD ];
-	then 
-	echo Please setup USERNAME and PASSWORD variables 
-	exit 1
-fi
-
-
-
-## Saving cookies ##
-if [ ! -f cookies.txt ];
-	then
-	echo
-	echo Saving cookies to cookies.txt...
-	wget --user-agent=Mozilla/5.0 --save-cookies cookies.txt --post-data &quot;login_username=$USERNAME&amp;login_password=$PASSWORD&amp;login=Вход&quot; --no-check-certificate http://login.rutracker.org/forum/login.php
-	echo Cookies saved...
-	echo 
-fi
-
-## Downloading file ##
-echo
-echo Downloading .torrent...
-wget --keep-session-cookies --load-cookies cookies.txt  --referer=&#39;http://rutracker.org/forum/viewtopic.php?t=&#39;$TORRENTID --header=&#39;Content-Type:application/x-www-form-urlencoded&#39; --header=&#39;t:&#39;$TORRENTID --post-data=&#39;t=&#39;$TORRENTID http://dl.rutracker.org/forum/dl.php?t=$TORRENTID -O [rutracker.org].t$TORRENTID.torrent
-echo .torrent saved
-echo
-
-## Removing tmp files ##
-
-if [ -f login.php ];
-	then
-	echo 
-	echo Removing login.php...
-	rm login.php*
-	echo login.php deleted
-fi
-</code></pre></noscript></div>
-
+<p>{% gist 5376630 %}
 В первый раз скрипт сохраняет куки в файл cookies.txt, который потом используется. Чтобы обойти ограничение на прямое скачивание используется referer="страница топика".
 Зачем оно надо? Для автоматизации процесса поиска новых серий в раздачах. Скоро этим займусь.</p>
 
@@ -168,7 +53,7 @@ fi
     <link href="http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x/"/>
     <updated>2013-03-09T18:44:00+04:00</updated>
     <id>http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x</id>
-    <content type="html"><![CDATA[<p>Skype под OS X имеет два способа нотификации: всплывающее уведомление и "badge" на иконке в доке. (<img class="right" src="http://d.pr/i/zjRC+" title="Badge" >) Но док у меня постоянно спрятан, а нотификацию можно пропустить. У Skype есть еще иконка в меню баре, так почему бы не сделать ее более информативной.</p>
+    <content type="html"><![CDATA[<p>Skype под OS X имеет два способа нотификации: всплывающее уведомление и "badge" на иконке в доке. ({% img right http://d.pr/i/zjRC+ Badge %}) Но док у меня постоянно спрятан, а нотификацию можно пропустить. У Skype есть еще иконка в меню баре, так почему бы не сделать ее более информативной.</p>
 
 <!--more-->
 
@@ -177,63 +62,11 @@ fi
 Но чтобы скрипт работал, нужно сначала установить F-Script. Качаем его с <a href="http://www.fscript.org/">официальной страницы</a>, распаковываем, и копируем FScript.framework в /Library/Frameworks.<br/>
 Теперь сам скрипт:</p>
 
-<p><div><script src='https://gist.github.com/2728176.js'></script>
-<noscript><pre><code>#!/usr/bin/env ruby
-
-FSCRIPT_PATH = &quot;/Library/Frameworks/FScript.framework&quot;
-
-GDB = IO.popen(&quot;gdb&quot;, &quot;w&quot;)
-def gdb(cmd)
-    GDB.puts cmd
-    GDB.flush
-end
-
-updaterScript = &lt;&lt;END_OF_FSCRIPT
-SkypeMenuUpdater : NSObject
-{
-    statusBarItem
-    timer
-
-    - init
-    {
-        self := super init.
-        self ~~ nil ifTrue:
-        [
-            statusBarItem := NSStatusBar systemStatusBar statusItemWithLength:20.
-
-            timer := NSTimer scheduledTimerWithTimeInterval:1
-                                                     target:[self updateMenu]
-                                                   selector:#value
-                                                   userInfo:nil
-                                                    repeats:YES.
-        ].
-        ^ self
-    }
-
-    - updateMenu
-    {
-        statusBarItem setTitle:NSApplication sharedApplication dockTile badgeLabel.
-    }
-}.
-
-updater := (SkypeMenuUpdater alloc) init.
-END_OF_FSCRIPT
-
-updaterScript.gsub!(&quot;\n&quot;, &quot;\\n&quot;)
-
-gdb &quot;attach Skype&quot;
-gdb &quot;p (char)[[NSBundle bundleWithPath:@\&quot;#{FSCRIPT_PATH}\&quot;] load]&quot;
-gdb &quot;p (void)[[FSInterpreter interpreter] execute:@\&quot;#{updaterScript}\&quot;]&quot;
-gdb &quot;detach&quot;
-gdb &quot;quit&quot;
-
-GDB.close
-</code></pre></noscript></div>
-</p>
+<p>{% gist 2728176 %}</p>
 
 <p>Создаем файл, кладем в него этот скрипт, сохраняем. Я обычно это делаю через nano, например <code>nano ~/skypehelper.rb</code>.<br/>
 Убеждаемся, что Skype запущен и выполняем <code>ruby наш файл</code>. Результат:<br/>
-<img src="http://d.pr/i/Uds0+"><br/>
+{% img http://d.pr/i/Uds0+ %}<br/>
 Но это еще не все, скрипт надо запускать строго после запуска Skype. А каждый раз запускать его в ручную - не путь Джедая. Я предлагаю создать приложение в Automator. Добавляем действие "Запустить shell-скрипт", в нем в качестве среды выбираем ruby и копируем туда весь скрипт. После <code>#!/usr/bin/env ruby</code> добавляем следующие две строчки:<br/>
 <code>
 system %{open -a Skype.app}
@@ -241,7 +74,7 @@ sleep 5
 </code><br/>
 Сохраняем. Добавляем нашу новую программу в автозапуск или запускаем ее ручками вместо Skype.<br/>
 Окно Automator и результат в меню баре:<br/>
-<img src="http://d.pr/i/poBW+" title="" ></p>
+{% img http://d.pr/i/poBW+  %}</p>
 ]]></content>
   </entry>
   
@@ -256,10 +89,10 @@ sleep 5
 
 
 <p>Приложение Contacts.app у меня давно настроено на синхронизацию с Google таким вот образом:<br/>
-<img src="http://d.pr/i/WTiT+"> <br/>
+{% img http://d.pr/i/WTiT+ %} <br/>
 Получается так, что в учетной записи "На моем Mac" контактов нет, а все они в учетной записи Google. Но при синхронизации на iPhone контакты не появляются. Вообще. Хотя и учетная запись по умолчанию стоит "Google".<br/>
 Секрет в том, что есть еще один способ синхронизировать с Google: в настройках жмем на учетную запись "На моем Mac" и ставим галочку "Синхронизировать с Google". Нам предлагают ввести логин и пароль, что мы и делаем. Начинается синхронизация.<br/>
-<img src="http://d.pr/i/EOeH+"> <br/>
+{% img http://d.pr/i/EOeH+ %} <br/>
 При таком методе синхронизации контакты нормально синхронизируются с iPhone. Удивительно, но даже если подключить учетную запись iCloud, он и с ней не будет синхронизировать iPhone, ибо они снова же синхронизируются в своей учетной записи, а не с "На моем Mac". Как то это не удобно.</p>
 ]]></content>
   </entry>
@@ -277,29 +110,29 @@ sleep 5
 <h3>TotalTerminal</h3>
 
 <p>Разработчик известного всем <a href="http://totalfinder.binaryage.com/">TotalFinder</a> уже давно выпустил очень удобную утилиту под OSX. Называется она <a href="http://totalterminal.binaryage.com/">TotalTerminal</a>. Те, кто долго сидел на линуксом, может быть знают такую утилиту, как guake (или его альтернативы под другие среды рабочего стола). Все что делала эта утилита, так вызывала полупрозрачное окно терминала сверху по шорткату, как во многих играх (Имя guake произошло от quake).<br/>
-<img src="http://guake.org/screenshots/2?format=raw" title="Guake" ><br/>
+{% img  http://guake.org/screenshots/2?format=raw Guake %}<br/>
 TotalTerminal делает то же самое, но под OSX. Состоит оно из плагина и из .app, которое просто запускает Терминал, подгружая свой плагин.<br/>
-<img src="http://d.pr/i/7GSW+"><br/>
+{% img http://d.pr/i/7GSW+ %}<br/>
 Поэтому после установки советую положить TotalTerminal.app в автозагрузку. Настройки TotalTerminal находятся в настройках самого терминала.<br/>
-<img src="http://d.pr/i/Oupq+"><br/>
+{% img http://d.pr/i/Oupq+ %}<br/>
 Я поставил шорткат на shift+§, мне лично так очень удобно. Еще я в настройках поменял местоположение вслыающего окна. Оно у меня справа, ибо так удобней в него делать drag'n'drop.<br/>
 Чтобы убрать иконку из дока, открываем Finder, переходим в Applications/Utilities, находим Ваш Terminal.app (Не TotalTerminal, а просто Terminal, который Терминал). Жмем правой кнопкой, показать содержимое пакета, Contents, там открываем Info.plist, да хоть в TextEdit, но лучше в чем-нибудь, что работает с .plist, да в том же XCode. Находим строчку <code>Application is agent (UIElement)</code> и придаем ей значение <code>True</code>. <br/>
-<img src="http://d.pr/i/Ko3X+">  <br/>
+{% img http://d.pr/i/Ko3X+ %}  <br/>
 Завершаем Terminal, запускаем TotalTerminal. Иконка исчезла! Вот только как теперь вызывать окно настроек, если надо? Разворачиваем окно TotalTerminal и жмем системный шорткат настроек <code>cmd+,</code> (cmd+запятая). Новую вкладку можно открыть системным шорткатом <code>cmd+t</code>. <br/>
 Хотите поменять тему? Просто удалите стандартную тему Visor и TotalTerminal примет тему, которая выставлена в настройках.<br/>
 На данный момент Терминал выглядит вот так:<br/>
-<img src="http://d.pr/i/CR5K+"></p>
+{% img http://d.pr/i/CR5K+ %}</p>
 
 <h3>Другие твики</h3>
 
 <p>Bash пусть и не zsh, но все же достаточно гибко настраивается. Я лишь предложу включить цвета и настроить приветствие. Приветствие - это то, с чего начинается каждая строка.<br/>
-<img src="http://d.pr/i/8ob3+" title="Стандартное приветствие" ><br/>
+{% img http://d.pr/i/8ob3+ Стандартное приветствие %}<br/>
 Для этого нам надо изменать файл .bash_profile, лежащий в корне вашей домашней директории. Легче всего это сделать в том же самом терминале простой коммандой <code>nano ~/.bash_profile</code>. Открывается текстовой редактор, в конец файла дописываем: <br/>
 <code>export CLICOLOR=1</code> - активируем цвета. <br/>
 <code>export PS1="[\A] \u\[@\]\h:\w\$ "</code> Добавляем время в приветствие.<br/>
-<img src="http://d.pr/i/G01z+"><br/>
+{% img http://d.pr/i/G01z+ %}<br/>
 Жмем Ctrl+O, чтобы сохранить, Ctrl+X, чтобы выйти. Чтобы изменения сразу вошли в силу выполняем <code>source ~/.bash_profile</code>, в противном случае они войдут в силу после перезапуска терминала. <br/>
-<img src="http://d.pr/i/gcwy+" title="Конечный результат" >
+{% img http://d.pr/i/gcwy+ Конечный результат %}
 Теперь при выводе, например, команды ls, все выводится в разных цветах. Цвета настраиваются в Настроки (Терминала)->Настройки->Текст->Цвета ANSI.</p>
 ]]></content>
   </entry>

@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Мобильный рынок | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/mobil'nyi-rynok/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:12:09+04:00</updated>
+  <updated>2013-10-29T11:18:37+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -18,7 +18,7 @@
     <link href="http://goooseman.ru/2013/04/08/piervyi-nastoiashchii-rossiiskii-smartfon-orly/"/>
     <updated>2013-04-08T12:50:00+04:00</updated>
     <id>http://goooseman.ru/2013/04/08/piervyi-nastoiashchii-rossiiskii-smartfon-orly</id>
-    <content type="html"><![CDATA[<p><img src="http://habrastorage.org/storage2/d0a/e3e/1fc/d0ae3e1fc81ee254e8884d80e5800cd0.jpg" title="&#34;Та самая картинка, которая гуляет по всем постам о новом смартфоне&#34;" alt="&#34;Та самая картинка, которая гуляет по всем постам о новом смартфоне&#34;">
+    <content type="html"><![CDATA[<p>{% img http://habrastorage.org/storage2/d0a/e3e/1fc/d0ae3e1fc81ee254e8884d80e5800cd0.jpg "Та самая картинка, которая гуляет по всем постам о новом смартфоне" %}
 Некий Сергей Зонин, являющийся директором одного контрактного производителя электроники, <a href="http://zorins.livejournal.com/51597.html">объявил в своем ЖЖ</a> об окончании начального этапа разработки нового российского смартфона и о выпуске опытной партии. Информации почти никакой, но уже сейчас вся затея вызывают сомнения.</p>
 
 <!--more-->

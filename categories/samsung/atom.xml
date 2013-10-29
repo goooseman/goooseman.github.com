@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Samsung | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/samsung/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:12:09+04:00</updated>
+  <updated>2013-10-29T11:18:37+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -18,7 +18,7 @@
     <link href="http://goooseman.ru/2013/04/28/pizdit%27-to-mozhno-nie-tol%27ko-u-apple-dot-dot-dot/"/>
     <updated>2013-04-28T11:24:00+04:00</updated>
     <id>http://goooseman.ru/2013/04/28/pizdit'-to-mozhno-nie-tol'ko-u-apple-dot-dot-dot</id>
-    <content type="html"><![CDATA[<p><img src="http://d.pr/i/34iz+"><br/>
+    <content type="html"><![CDATA[<p>{% img http://d.pr/i/34iz+ %}<br/>
 Слева - Nokia 6300 (год выпуска: 2007), справа - Samsung GT-C3322 (год выпуска: 2011).</p>
 ]]></content>
   </entry>
