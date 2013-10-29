@@ -279,13 +279,13 @@
     <h3 class="panel-title">Популярные категории</h3>
   </div>
   <div id="recent_posts" class="list-group">
-  	<a class='list-group-item category-list' href='/categories/drughoie'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/os-x'>OS X   (9 постов)</a><a class='list-group-item category-list' href='/categories/rossiia'>Россия   (8 постов)</a><a class='list-group-item category-list' href='/categories/apple'>Apple   (8 постов)</a><a class='list-group-item category-list' href='/categories/moskva'>Москва   (6 постов)</a>
+  	<a class='list-group-item category-list' href='/categories/drughoie/'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/os-x/'>OS X   (9 постов)</a><a class='list-group-item category-list' href='/categories/rossiia/'>Россия   (8 постов)</a><a class='list-group-item category-list' href='/categories/apple/'>Apple   (8 постов)</a><a class='list-group-item category-list' href='/categories/moskva/'>Москва   (6 постов)</a>
   </div>
     
 </section>
 <script type="text/javascript">
 	$('.category-list').each(function() {
-		if ($(this).attr("href") + '/' == window.location.pathname) {
+		if ($(this).attr("href") == window.location.pathname) {
 			$(this).addClass("active");
 		}
 	});
