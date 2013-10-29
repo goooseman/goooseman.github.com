@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: bash | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/bash/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:22:52+04:00</updated>
+  <updated>2013-10-29T11:45:05+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -25,7 +25,63 @@
 <!--more-->
 
 
-<p>{% gist 5376630 %}
+<p><div><script src='https://gist.github.com/5376630.js'></script>
+<noscript><pre><code>#!/bin/bash
+## Rutracker Downloader by goooseman.ru ##
+## Created on 13th of April 2013 ##
+
+
+## Variables ##
+USERNAME=
+PASSWORD=
+TORRENTID=$1
+
+## Variables checking ##
+if [ ! $TORRENTID ];
+  then
+  echo Please use it as &quot;scriptname.sh &lt;topicid&gt;&quot;
+	echo Topicid is the number at the end of the topic link. 
+	echo Example: link is &quot;http://rutracker.org/forum/viewtopic.php?t=4246831&quot;
+	echo Command is: ./RutrackerDownloader.sh 4246831
+	exit 1
+fi
+
+if  [ -z $USERNAME ] || [ -z $PASSWORD ];
+	then 
+	echo Please setup USERNAME and PASSWORD variables 
+	exit 1
+fi
+
+
+
+## Saving cookies ##
+if [ ! -f cookies.txt ];
+	then
+	echo
+	echo Saving cookies to cookies.txt...
+	wget --user-agent=Mozilla/5.0 --save-cookies cookies.txt --post-data &quot;login_username=$USERNAME&amp;login_password=$PASSWORD&amp;login=Вход&quot; --no-check-certificate http://login.rutracker.org/forum/login.php
+	echo Cookies saved...
+	echo 
+fi
+
+## Downloading file ##
+echo
+echo Downloading .torrent...
+wget --keep-session-cookies --load-cookies cookies.txt  --referer=&#39;http://rutracker.org/forum/viewtopic.php?t=&#39;$TORRENTID --header=&#39;Content-Type:application/x-www-form-urlencoded&#39; --header=&#39;t:&#39;$TORRENTID --post-data=&#39;t=&#39;$TORRENTID http://dl.rutracker.org/forum/dl.php?t=$TORRENTID -O [rutracker.org].t$TORRENTID.torrent
+echo .torrent saved
+echo
+
+## Removing tmp files ##
+
+if [ -f login.php ];
+	then
+	echo 
+	echo Removing login.php...
+	rm login.php*
+	echo login.php deleted
+fi
+</code></pre></noscript></div>
+
 В первый раз скрипт сохраняет куки в файл cookies.txt, который потом используется. Чтобы обойти ограничение на прямое скачивание используется referer="страница топика".
 Зачем оно надо? Для автоматизации процесса поиска новых серий в раздачах. Скоро этим займусь.</p>
 

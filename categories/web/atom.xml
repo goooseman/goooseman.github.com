@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: web | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/web/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:22:52+04:00</updated>
+  <updated>2013-10-29T11:45:05+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -25,7 +25,7 @@
 
 <p>Вот инфографика по моему блогу:</p>
 
-<p>{% img http://d.pr/i/VUNv+ %}</p>
+<p><img src="http://d.pr/i/VUNv+"></p>
 
 <p>Правда, чтобы получить такую инфорграфику, приходится регистрироваться. Но оно того стоит: на сайте есть еще много интересной инфографики, вот например весьма спорная информация, под названием "Падение Apple":</p>
 

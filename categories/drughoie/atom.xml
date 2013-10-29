@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Другое | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/drughoie/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:22:52+04:00</updated>
+  <updated>2013-10-29T11:45:05+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -68,7 +68,7 @@
     <updated>2013-04-23T10:46:00+04:00</updated>
     <id>http://goooseman.ru/2013/04/23/ruki-nado-otryvat'-takim-dizainieram-dot-dot-dot</id>
     <content type="html"><![CDATA[<p>Недавно по всей Москве появилась реклама от МТС следующего содержания:<br/>
-{% img http://d.pr/i/GbFP+ %}</p>
+<img src="http://d.pr/i/GbFP+"></p>
 
 <!--more-->
 
@@ -76,8 +76,8 @@
 <p>В чем проблема? Есть два типа кнопок выбора чего-либо:</p>
 
 <ul>
-<li>{% img http://www.scip.be/ImagesVisualStyles/Button.CheckBox.CheckedNormal_Blue.png %} Checkbox button</li>
-<li>{% img http://www.scip.be/ImagesVisualStyles/Button.RadioButton.CheckedNormal_Blue.png %} Radio button</li>
+<li><img src="http://www.scip.be/ImagesVisualStyles/Button.CheckBox.CheckedNormal_Blue.png"> Checkbox button</li>
+<li><img src="http://www.scip.be/ImagesVisualStyles/Button.RadioButton.CheckedNormal_Blue.png"> Radio button</li>
 </ul>
 
 

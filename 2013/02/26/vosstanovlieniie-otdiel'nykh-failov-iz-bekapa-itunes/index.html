@@ -198,13 +198,67 @@
 <img src="http://f.cl.ly/items/2Q30242R1d16131r3j1s/4.png"><br/>
 Но после распаковки:<br/>
 <img src="http://f.cl.ly/items/2r0a1L0z0m2D1a2R103I/6.png"><br/>
-Одно хорошо: русские имена распаковываются нормально. Но, в чем смысл такой распаковки без путей, я понять не могу. К счастью, все не сложно исправить. Вот пример имени файла:<br/>
-<code>Library_Application Support_Documents_Ирония любви.band_Media_Audio Recorder#15</code><br/>
-То есть надо вместо &#8220;_&#8221; подставить &#8220;/&#8221;, и правильно их скопировать. В этом нам поможет маленький скрипт на Python. Приступаем:</p></li>
-<li>Запускаем Automator, выбираем приложение. (Можно и службу, но зачем создавать лишнюю службу для одноразового действия?) Назвать можно iBackUpBotHelper.</li>
-<li>Добавляем &#8220;Утилиты=>Запустить shell-скрипт&#8221;. В качестве shell выбираем /usr/bin/python, а ввод передаем как аргументы.</li>
-<li><p>Добавляем скриптик:</p></li>
-<li><p>Сохраняем и перетягиваем файлы на новое приложение.</p></li>
+Одно хорошо: русские имена распаковываются нормально. Но, в чем смысл такой распаковки без путей, я понять не могу. К счастью, все не сложно исправить. Вот пример имени файла:</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Library_Application Support_Documents_Ирония любви.band_Media_Audio Recorder#15</span></code></pre></td></tr></table></div></figure>
+
+
+<p>То есть надо вместо &#8220;_&#8221; подставить &#8220;/&#8221;, и правильно их скопировать. В этом нам поможет маленький скрипт на Python. Приступаем:<br/>
+1. Запускаем Automator, выбираем приложение. (Можно и службу, но зачем создавать лишнюю службу для одноразового действия?) Назвать можно iBackUpBotHelper.
+2. Добавляем &#8220;Утилиты=>Запустить shell-скрипт&#8221;. В качестве shell выбираем /usr/bin/python, а ввод передаем как аргументы.
+3. Добавляем скриптик:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import sys
+</span><span class='line'>import shutil
+</span><span class='line'>import os
+</span><span class='line'>
+</span><span class='line'>for f in sys.argv[1:]:
+</span><span class='line'>  arr = f.split('_')
+</span><span class='line'>  l = []
+</span><span class='line'>  i = 0
+</span><span class='line'>  for element in arr:
+</span><span class='line'>      l.append(arr[i]+"/")
+</span><span class='line'>      i = i + 1
+</span><span class='line'>  dest = ''.join(l)
+</span><span class='line'>  del(l[-1])
+</span><span class='line'>  fol = ''.join(l)
+</span><span class='line'>  dest = dest[:-1]
+</span><span class='line'>  fol = fol[:-1]
+</span><span class='line'>  mkdir = "mkdir -p \"" + fol + "\""
+</span><span class='line'>  print mkdir
+</span><span class='line'>  os.system(mkdir)
+</span><span class='line'>  cp = "cp \"" + f + "\" \"" + dest + "\""
+</span><span class='line'>  print cp
+</span><span class='line'>  os.system(cp)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Сохраняем и перетягиваем файлы на новое приложение.</li>
 </ul>
 
 
