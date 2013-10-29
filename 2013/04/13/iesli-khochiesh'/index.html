@@ -316,7 +316,7 @@ fi
 </section>
 <script type="text/javascript">
 	$('.category-list').each(function() {
-		if ($(this).attr("href") == window.location.pathname) {
+		if ($(this).attr("href") + '/' == window.location.pathname) {
 			$(this).addClass("active");
 		}
 	});
