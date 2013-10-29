@@ -1,4 +1,5 @@
 User-agent: *
-Disallow: 
+Disallow: /archives/
+Disallow: /categories/
 
 Sitemap: http://goooseman.ru/sitemap.xml 
