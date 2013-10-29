@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Octopress | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/octopress/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T11:10:27+04:00</updated>
+  <updated>2013-10-29T11:12:09+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -111,11 +111,9 @@ YAML Exception reading search.html: invalid byte sequence in US-ASCII
 <p><img src="http://d.pr/i/LrNt+"></p>
 
 <p>P.S. <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5#issuecomment-14481400">Здесь</a> пользователь <a href="https://github.com/skarfacegc">skarfacegc</a> подсказал еще один вариант:
-```</p>
-
-<p>"octopress_cmd_before_rake" : "source $HOME/.rvm/scripts/rvm &amp;&amp; export PATH=$HOME/.rvm/bin:$PATH &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374"</p>
-
-<p>```</p>
+<code>
+"octopress_cmd_before_rake" : "source $HOME/.rvm/scripts/rvm &amp;&amp; export PATH=$HOME/.rvm/bin:$PATH &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374"
+</code></p>
 
 <h2>rbenv</h2>
 
@@ -131,10 +129,10 @@ PATH="$HOME/.rbenv/versions/1.9.3-p194/bin:$PATH"
 <ul>
 <li><code>git: command not found</code> <br/>
 Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали ":$PATH", который нужен для подгурзки стандартных путей.</li>
-<li><code>
+<li><p><code>
 /Users/&lt;user&gt;/.rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems/pygments.rb-0.3.4/lib/pygments/popen.rb:377:in `header_to_json': Traceback (most recent call last): (MentosError)
 </code><br/>
-Проблема в подсветке кода, в одной из записей или страниц кода не правильно вставлен код. Какой именно можно найти в этой строчке: <code>ClassNotFound: no lexer for alias 'PATH=$PATH:$HOME/.rvm/bin' found</code> Лучше всего знаки ` с самим кодом отделять переводом каретки.</li>
+Проблема в подсветке кода, в одной из записей или страниц кода не правильно вставлен код. Какой именно можно найти в этой строчке: <code>ClassNotFound: no lexer for alias 'PATH=$PATH:$HOME/.rvm/bin' found</code> Лучше всего знаки ` с самим кодом отделять переводом каретки.</p></li>
 </ul>
 
 ]]></content>
