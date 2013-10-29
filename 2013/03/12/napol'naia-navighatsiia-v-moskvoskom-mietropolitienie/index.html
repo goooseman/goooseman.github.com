@@ -360,7 +360,7 @@
 	       				html += '<div class="panel panel-default search-panel"> <div class="panel-body"> <div class="entry-title"><h3><a href="' + item.link + '">' + item.title + '</a></h3></div>';
 						
 						if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1) {
-							html += '<br /><div>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) -30 ,item.description.toLowerCase().indexOf(string.toLowerCase())) + '<strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()),item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length) + '</strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length,item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length + 30) + '</div>';
+							html += '<hr /><div>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) -30 ,item.description.toLowerCase().indexOf(string.toLowerCase())) + '<strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()),item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length) + '</strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length,item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length + 30) + '</div>';
 						}
 						html += '<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span>' + dateParse(item.updated) + '</p></div></div>'
 	       			}
