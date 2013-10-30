@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Sublime Text 2 | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/sublime-text-2/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T19:16:41+04:00</updated>
+  <updated>2013-10-30T11:27:22+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -27,31 +27,31 @@
 
 <ul>
 <li>Устанавливаем <a href="http://wbond.net/sublime_packages/package_control">Package Control</a>.</li>
-<li>Жмем Shift+Cmd+P, начинаем вводить Install, выбираем "Install Package" и ставим Octopress.</li>
+<li>Жмем Shift+Cmd+P, начинаем вводить Install, выбираем &ldquo;Install Package&rdquo; и ставим Octopress.</li>
 </ul>
 
 
-<p><img src="http://d.pr/i/CRvF+"></p>
+<p><img class="<a" src="href="http://d.pr/i/CRvF+">http://d.pr/i/CRvF+</a>"></p>
 
 <h2>Настройка</h2>
 
-<p>А теперь самое веселое. В OS X если приложение запускается из GUI, то она использует другие переменные среды, то есть файл .bashrc не грузится. Есть 2 решения проблемы: запускать Sublime Text 2 из command prompt или перед каждым выполнением комманд запускать "source ~/.bashrc", как нам предлагает делать автор, создавший специальную переменную, которая задается в настройках "octopress_cmd_before_rake". Первый вариант мы отметаем, хотя и можно создать маленькое приложение в Automator, мы легкие пути не ищем. Второй пункт, при всей своей кажущейся легкости, у многих просто так не работает, о чем свидетельствует <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5">эта тема</a>, в которой так никто и не справился с этой проблемой. Но обо всем по порядку. Проблема наблюдается у пользователей OSX, которые используют rvm.</p>
+<p>А теперь самое веселое. В OS X если приложение запускается из GUI, то она использует другие переменные среды, то есть файл .bashrc не грузится. Есть 2 решения проблемы: запускать Sublime Text 2 из command prompt или перед каждым выполнением комманд запускать &ldquo;source ~/.bashrc&rdquo;, как нам предлагает делать автор, создавший специальную переменную, которая задается в настройках &ldquo;octopress_cmd_before_rake&rdquo;. Первый вариант мы отметаем, хотя и можно создать маленькое приложение в Automator, мы легкие пути не ищем. Второй пункт, при всей своей кажущейся легкости, у многих просто так не работает, о чем свидетельствует <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5">эта тема</a>, в которой так никто и не справился с этой проблемой. Но обо всем по порядку. Проблема наблюдается у пользователей OSX, которые используют rvm.</p>
 
 <ul>
-<li>Открываем Preferences->Package Settings->Octopress->Settings - User.</li>
-<li>Можно скопировать все из Preferences->Package Settings->Octopress->Settings - Default, можно и копировать только то, что нужно изменить.</li>
-<li>Задаем "octopress_path".</li>
-<li>Наконец приходим к "octopress_cmd_before_rake". Как и советует автор, вставляем "source ~/.bashrc". Нажимаем  Shift+Cmd+P и выбираем Octopress: Generate, если Вам повезет, то все пойдет как по маслу, иначе получите такую ошибку в консоли (Ctrl+`):</li>
+<li>Открываем Preferences->Package Settings->Octopress->Settings &ndash; User.</li>
+<li>Можно скопировать все из Preferences->Package Settings->Octopress->Settings &ndash; Default, можно и копировать только то, что нужно изменить.</li>
+<li>Задаем &ldquo;octopress_path&rdquo;.</li>
+<li>Наконец приходим к &ldquo;octopress_cmd_before_rake&rdquo;. Как и советует автор, вставляем &ldquo;source ~/.bashrc&rdquo;. Нажимаем  Shift+Cmd+P и выбираем Octopress: Generate, если Вам повезет, то все пойдет как по маслу, иначе получите такую ошибку в консоли (Ctrl+`):</li>
 </ul>
 
 
 <p>```
 rake aborted!</p>
 
-<p>no such file to load -- bundler/setup</p>
+<p>no such file to load &mdash; bundler/setup</p>
 
 <p>/Volumes/DATA/Users/goooseman/octopress/Rakefile:2
-(See full trace by running task with --trace)</p>
+(See full trace by running task with &mdash;trace)</p>
 
 <p>(in /Volumes/DATA/Users/goooseman/octopress)
 ```</p>
@@ -66,15 +66,15 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 </code></p>
 
 <ul>
-<li>Изменяем "octopress_cmd_before_rake" на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374", сохраняем, пробуем, проблема остается.</li>
-<li>Теперь изменяем на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; gem install bundler". Пробуем, проблема остается.</li>
-<li>Изменяем на "source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; bundle install". Пробуем, дело должно продвинуться дальше. Но ошибка все равно может вывалиться, только теперь касательно кодировки.</li>
-<li>Убираем "&amp;&amp; bundle install". Может все и заработает, но у меня вывалилась такая ошибка:</li>
+<li>Изменяем &ldquo;octopress_cmd_before_rake&rdquo; на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374&rdquo;, сохраняем, пробуем, проблема остается.</li>
+<li>Теперь изменяем на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; gem install bundler&rdquo;. Пробуем, проблема остается.</li>
+<li>Изменяем на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; bundle install&rdquo;. Пробуем, дело должно продвинуться дальше. Но ошибка все равно может вывалиться, только теперь касательно кодировки.</li>
+<li>Убираем &ldquo;&amp;&amp; bundle install&rdquo;. Может все и заработает, но у меня вывалилась такая ошибка:</li>
 </ul>
 
 
 <p><code>``
-/Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:73:in</code>pagination_enabled?'
+/Volumes/DATA/Users/goooseman/octopress/plugins/pagination.rb:73:in</code>pagination_enabled?&lsquo;
 :
 invalid byte sequence in US-ASCII (ArgumentError)</p>
 
@@ -94,7 +94,7 @@ from /Users/goooseman/.rvm/gems/ruby-1.9.3-p374/bin/ruby_noexec_wrapper:14:in `&
 </code></pre>
 
 <p>Configuration from /Volumes/DATA/Users/goooseman/octopress/_config.yml
-Building site: source -> public
+Building site: source &ndash;> public
 YAML Exception reading 2013-02-26-dielaiem-skrinshot-pravil'no.markdown: invalid byte sequence in US-ASCII
 YAML Exception reading 2013-02-26-vosstanovlieniie-otdiel'nykh-failov-iz-bekapa-itunes.markdown: invalid byte sequence in US-ASCII
 YAML Exception reading index.markdown: invalid byte sequence in US-ASCII
@@ -104,11 +104,11 @@ YAML Exception reading search.html: invalid byte sequence in US-ASCII
 ```</p>
 
 <ul>
-<li>Если такое вывалилось, то в "octopress_cmd_before_rake" добавляем "&amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8". Сохраняем, проверяем, должно завершаться <code>Successfully generated site: source -&gt; public</code></li>
+<li>Если такое вывалилось, то в &ldquo;octopress_cmd_before_rake&rdquo; добавляем &ldquo;&amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8&rdquo;. Сохраняем, проверяем, должно завершаться <code>Successfully generated site: source -&gt; public</code></li>
 </ul>
 
 
-<p><img src="http://d.pr/i/LrNt+"></p>
+<p><img class="<a" src="href="http://d.pr/i/LrNt+">http://d.pr/i/LrNt+</a>"></p>
 
 <p>P.S. <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5#issuecomment-14481400">Здесь</a> пользователь <a href="https://github.com/skarfacegc">skarfacegc</a> подсказал еще один вариант:
 <code>
@@ -128,7 +128,7 @@ PATH="$HOME/.rbenv/versions/1.9.3-p194/bin:$PATH"
 
 <ul>
 <li><code>git: command not found</code> <br/>
-Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали ":$PATH", который нужен для подгурзки стандартных путей.</li>
+Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали &ldquo;:$PATH&rdquo;, который нужен для подгурзки стандартных путей.</li>
 <li><p><code>
 /Users/&lt;user&gt;/.rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems/pygments.rb-0.3.4/lib/pygments/popen.rb:377:in `header_to_json': Traceback (most recent call last): (MentosError)
 </code><br/>

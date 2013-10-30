@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Android | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/android/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T19:16:41+04:00</updated>
+  <updated>2013-10-30T11:27:22+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -18,7 +18,7 @@
     <link href="http://goooseman.ru/2013/06/06/pro-android-dot-dot-dot/"/>
     <updated>2013-06-06T13:35:00+04:00</updated>
     <id>http://goooseman.ru/2013/06/06/pro-android-dot-dot-dot</id>
-    <content type="html"><![CDATA[<p>Я люблю Android. Я достаточно долго "сидел" на iOS и WP7, но Android мне нравится больше, чем те двое вместе взятые. Но вот некоторые странности меня не перестают удивлять.</p>
+    <content type="html"><![CDATA[<p>Я люблю Android. Я достаточно долго &ldquo;сидел&rdquo; на iOS и WP7, но Android мне нравится больше, чем те двое вместе взятые. Но вот некоторые странности меня не перестают удивлять.</p>
 
 <p>В Android есть системное приложение Google Play Services. Оно предостовляет доступ к API приложений Google сторонним разрабам. Но после его обновления до последней версии (а этого требуют многие приложения) происходит забавное: при установке apk файла (установочный файл приложения) не из Google Play нам предлагают не один установщик, а целых два:</p>
 

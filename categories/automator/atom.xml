@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Automator | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/automator/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T19:16:41+04:00</updated>
+  <updated>2013-10-30T11:27:22+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -18,7 +18,7 @@
     <link href="http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x/"/>
     <updated>2013-03-09T18:44:00+04:00</updated>
     <id>http://goooseman.ru/2013/03/09/kolichiestvo-nieprochitannykh-soobshchienii-skype-v-mieniu-barie-os-x</id>
-    <content type="html"><![CDATA[<p>Skype под OS X имеет два способа нотификации: всплывающее уведомление и "badge" на иконке в доке. (<img class="right" src="http://d.pr/i/zjRC+" title="Badge" >) Но док у меня постоянно спрятан, а нотификацию можно пропустить. У Skype есть еще иконка в меню баре, так почему бы не сделать ее более информативной.</p>
+    <content type="html"><![CDATA[<p>Skype под OS X имеет два способа нотификации: всплывающее уведомление и &ldquo;badge&rdquo; на иконке в доке. (<img class="right <a" src="href="http://d.pr/i/zjRC+">http://d.pr/i/zjRC+</a>" title="Badge" >) Но док у меня постоянно спрятан, а нотификацию можно пропустить. У Skype есть еще иконка в меню баре, так почему бы не сделать ее более информативной.</p>
 
 <!--more-->
 
@@ -83,15 +83,15 @@ GDB.close
 
 <p>Создаем файл, кладем в него этот скрипт, сохраняем. Я обычно это делаю через nano, например <code>nano ~/skypehelper.rb</code>.<br/>
 Убеждаемся, что Skype запущен и выполняем <code>ruby наш файл</code>. Результат:<br/>
-<img src="http://d.pr/i/Uds0+"><br/>
-Но это еще не все, скрипт надо запускать строго после запуска Skype. А каждый раз запускать его в ручную - не путь Джедая. Я предлагаю создать приложение в Automator. Добавляем действие "Запустить shell-скрипт", в нем в качестве среды выбираем ruby и копируем туда весь скрипт. После <code>#!/usr/bin/env ruby</code> добавляем следующие две строчки:<br/>
+<img class="<a" src="href="http://d.pr/i/Uds0+">http://d.pr/i/Uds0+</a>"><br/>
+Но это еще не все, скрипт надо запускать строго после запуска Skype. А каждый раз запускать его в ручную &ndash; не путь Джедая. Я предлагаю создать приложение в Automator. Добавляем действие &ldquo;Запустить shell-скрипт&rdquo;, в нем в качестве среды выбираем ruby и копируем туда весь скрипт. После <code>#!/usr/bin/env ruby</code> добавляем следующие две строчки:<br/>
 <code>
 system %{open -a Skype.app}
 sleep 5
 </code><br/>
 Сохраняем. Добавляем нашу новую программу в автозапуск или запускаем ее ручками вместо Skype.<br/>
 Окно Automator и результат в меню баре:<br/>
-<img src="http://d.pr/i/poBW+" title="" ></p>
+<img class="<a" src="href="http://d.pr/i/poBW+">http://d.pr/i/poBW+</a>" title="" ></p>
 ]]></content>
   </entry>
   

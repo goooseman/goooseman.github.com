@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Другое | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/drughoie/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-29T19:16:41+04:00</updated>
+  <updated>2013-10-30T11:27:22+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -37,7 +37,7 @@
     <link href="http://goooseman.ru/2013/05/05/dien%27-narodnogho-iedinstva/"/>
     <updated>2013-05-05T13:21:00+04:00</updated>
     <id>http://goooseman.ru/2013/05/05/dien'-narodnogho-iedinstva</id>
-    <content type="html"><![CDATA[<p>Восемь лет назад у нас на календарях появился такой праздник, как "День Народного Единства".<br/>
+    <content type="html"><![CDATA[<p>Восемь лет назад у нас на календарях появился такой праздник, как &ldquo;День Народного Единства&rdquo;.<br/>
 Итак, теперь мы 4 ноября празднуем изгнание поляков с земли Русской. Но в нашей истории есть и немало других немаловажных дат. Почему наши власти выбрали именно это событие, чтобы ежегодно отмечать его?</p>
 
 <!--more-->
@@ -58,7 +58,7 @@
 
 <h3>Причина по важнее</h3>
 
-<p>Дело в том, что, когда существовал Советский Союз, в стране было два главных праздника: День труда и День Великой Октябрьской социалистической революции. Второй приходился на 7 ноября, и народ уже привык <del>бухать</del> расслабляться в это время. В 1996 году его переименовали в "День согласия и примирения". День согласия и примирения с чем? С Великой Октябрьской Революцией? В один момент, кто-то подумал, что хватит уж отмечать эту дату. Но рефлекс бухать, выработанный недолгой историей СССР, уже не отнимешь у народа, и умным людям дали задание придумать что-то. Так и появился у нас этот светлый праздник. А Минин и Пожарский здесь не при чем, просто прогнали поляков они в нужное время.</p>
+<p>Дело в том, что, когда существовал Советский Союз, в стране было два главных праздника: День труда и День Великой Октябрьской социалистической революции. Второй приходился на 7 ноября, и народ уже привык <del>бухать</del> расслабляться в это время. В 1996 году его переименовали в &ldquo;День согласия и примирения&rdquo;. День согласия и примирения с чем? С Великой Октябрьской Революцией? В один момент, кто-то подумал, что хватит уж отмечать эту дату. Но рефлекс бухать, выработанный недолгой историей СССР, уже не отнимешь у народа, и умным людям дали задание придумать что-то. Так и появился у нас этот светлый праздник. А Минин и Пожарский здесь не при чем, просто прогнали поляков они в нужное время.</p>
 ]]></content>
   </entry>
   
@@ -68,7 +68,7 @@
     <updated>2013-04-23T10:46:00+04:00</updated>
     <id>http://goooseman.ru/2013/04/23/ruki-nado-otryvat'-takim-dizainieram-dot-dot-dot</id>
     <content type="html"><![CDATA[<p>Недавно по всей Москве появилась реклама от МТС следующего содержания:<br/>
-<img src="http://d.pr/i/GbFP+"></p>
+<img class="<a" src="href="http://d.pr/i/GbFP+">http://d.pr/i/GbFP+</a>"></p>
 
 <!--more-->
 
@@ -76,14 +76,14 @@
 <p>В чем проблема? Есть два типа кнопок выбора чего-либо:</p>
 
 <ul>
-<li><img src="http://www.scip.be/ImagesVisualStyles/Button.CheckBox.CheckedNormal_Blue.png"> Checkbox button</li>
-<li><img src="http://www.scip.be/ImagesVisualStyles/Button.RadioButton.CheckedNormal_Blue.png"> Radio button</li>
+<li><img class="<a" src="href="http://www.scip.be/ImagesVisualStyles/Button.CheckBox.CheckedNormal_Blue.png">http://www.scip.be/ImagesVisualStyles/Button.CheckBox.CheckedNormal_Blue.png</a>"> Checkbox button</li>
+<li><img class="<a" src="href="http://www.scip.be/ImagesVisualStyles/Button.RadioButton.CheckedNormal_Blue.png">http://www.scip.be/ImagesVisualStyles/Button.RadioButton.CheckedNormal_Blue.png</a>"> Radio button</li>
 </ul>
 
 
-<p>Отличие radio от checkbox в том, что radio button допускает выбор только одного пункта из нескольких, а checkbox - любого количества пунктов (если не заданы дополнительные параметры).</p>
+<p>Отличие radio от checkbox в том, что radio button допускает выбор только одного пункта из нескольких, а checkbox &ndash; любого количества пунктов (если не заданы дополнительные параметры).</p>
 
-<p>Можно предположить, что дизайнеры не знают разницы между ними. Предположили. Но это же не ООО "СельХозМебель", это же МТС! А МТС, как известно технологическая компания с большим штатом сотрудников. И я не понимаю, почему никто в такой компании не заметил такую оплошность.</p>
+<p>Можно предположить, что дизайнеры не знают разницы между ними. Предположили. Но это же не ООО &ldquo;СельХозМебель&rdquo;, это же МТС! А МТС, как известно технологическая компания с большим штатом сотрудников. И я не понимаю, почему никто в такой компании не заметил такую оплошность.</p>
 
 <p>Хотя, может быть, только я замечаю такие вот мелочи? И, может быть, только меня они раздражают?</p>
 ]]></content>
@@ -94,7 +94,7 @@
     <link href="http://goooseman.ru/2013/04/19/a-mozhiet-vsie-taki-vviesti-porku-za-vozhdieniie-p%27ianym-publichnuiu-na-krasnoi-ploshchadi/"/>
     <updated>2013-04-19T09:34:00+04:00</updated>
     <id>http://goooseman.ru/2013/04/19/a-mozhiet-vsie-taki-vviesti-porku-za-vozhdieniie-p'ianym-publichnuiu-na-krasnoi-ploshchadi</id>
-    <content type="html"><![CDATA[<p>Ну вот на хрена ночью на Садовом по встречке ехать? Ну пробок же нет! Да даже будучи в гавно пьяным, как ему такая мысль пришла? В итоге: трое на смерть, виновник в тяжелом. Авария произошла на мосту над Цветным бульваром - Олимпийским проспектом. Одна из машин, пробила ограждение, остановившись `на краю моста.</p>
+    <content type="html"><![CDATA[<p>Ну вот на хрена ночью на Садовом по встречке ехать? Ну пробок же нет! Да даже будучи в гавно пьяным, как ему такая мысль пришла? В итоге: трое на смерть, виновник в тяжелом. Авария произошла на мосту над Цветным бульваром &ndash; Олимпийским проспектом. Одна из машин, пробила ограждение, остановившись `на краю моста.</p>
 
 <div class="video-container">     
 <object width='640' height='468'><param name='movie' value='http://www.m24.ru/v/17037'></param><param name='wmode' value='transparent'></param><param name='allowScriptAccess' value='always'></param><param name='allowFullScreen' value='true'></param><embed src='http://www.m24.ru/v/17037' type='application/x-shockwave-flash' wmode='window' width='640' height='468' allowFullScreen='true' allowScriptAccess='always'></embed></object>

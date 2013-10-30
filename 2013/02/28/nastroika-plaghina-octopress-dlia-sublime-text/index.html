@@ -146,7 +146,7 @@
 
 <ul>
 <li>Устанавливаем <a href="http://wbond.net/sublime_packages/package_control">Package Control</a>.</li>
-<li>Жмем Shift+Cmd+P, начинаем вводить Install, выбираем &#8220;Install Package&#8221; и ставим Octopress.</li>
+<li>Жмем Shift+Cmd+P, начинаем вводить Install, выбираем &ldquo;Install Package&rdquo; и ставим Octopress.</li>
 </ul>
 
 
@@ -154,13 +154,13 @@
 
 <h2>Настройка</h2>
 
-<p>А теперь самое веселое. В OS X если приложение запускается из GUI, то она использует другие переменные среды, то есть файл .bashrc не грузится. Есть 2 решения проблемы: запускать Sublime Text 2 из command prompt или перед каждым выполнением комманд запускать &#8220;source ~/.bashrc&#8221;, как нам предлагает делать автор, создавший специальную переменную, которая задается в настройках &#8220;octopress_cmd_before_rake&#8221;. Первый вариант мы отметаем, хотя и можно создать маленькое приложение в Automator, мы легкие пути не ищем. Второй пункт, при всей своей кажущейся легкости, у многих просто так не работает, о чем свидетельствует <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5">эта тема</a>, в которой так никто и не справился с этой проблемой. Но обо всем по порядку. Проблема наблюдается у пользователей OSX, которые используют rvm.</p>
+<p>А теперь самое веселое. В OS X если приложение запускается из GUI, то она использует другие переменные среды, то есть файл .bashrc не грузится. Есть 2 решения проблемы: запускать Sublime Text 2 из command prompt или перед каждым выполнением комманд запускать &ldquo;source ~/.bashrc&rdquo;, как нам предлагает делать автор, создавший специальную переменную, которая задается в настройках &ldquo;octopress_cmd_before_rake&rdquo;. Первый вариант мы отметаем, хотя и можно создать маленькое приложение в Automator, мы легкие пути не ищем. Второй пункт, при всей своей кажущейся легкости, у многих просто так не работает, о чем свидетельствует <a href="https://github.com/blueplanet/sublime-text-2-octopress/issues/5">эта тема</a>, в которой так никто и не справился с этой проблемой. Но обо всем по порядку. Проблема наблюдается у пользователей OSX, которые используют rvm.</p>
 
 <ul>
-<li>Открываем Preferences->Package Settings->Octopress->Settings - User.</li>
-<li>Можно скопировать все из Preferences->Package Settings->Octopress->Settings - Default, можно и копировать только то, что нужно изменить.</li>
-<li>Задаем &#8220;octopress_path&#8221;.</li>
-<li>Наконец приходим к &#8220;octopress_cmd_before_rake&#8221;. Как и советует автор, вставляем &#8220;source ~/.bashrc&#8221;. Нажимаем  Shift+Cmd+P и выбираем Octopress: Generate, если Вам повезет, то все пойдет как по маслу, иначе получите такую ошибку в консоли (Ctrl+`):</li>
+<li>Открываем Preferences->Package Settings->Octopress->Settings &ndash; User.</li>
+<li>Можно скопировать все из Preferences->Package Settings->Octopress->Settings &ndash; Default, можно и копировать только то, что нужно изменить.</li>
+<li>Задаем &ldquo;octopress_path&rdquo;.</li>
+<li>Наконец приходим к &ldquo;octopress_cmd_before_rake&rdquo;. Как и советует автор, вставляем &ldquo;source ~/.bashrc&rdquo;. Нажимаем  Shift+Cmd+P и выбираем Octopress: Generate, если Вам повезет, то все пойдет как по маслу, иначе получите такую ошибку в консоли (Ctrl+`):</li>
 </ul>
 
 
@@ -194,10 +194,10 @@
 
 
 <ul>
-<li>Изменяем &#8220;octopress_cmd_before_rake&#8221; на &#8220;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374&#8221;, сохраняем, пробуем, проблема остается.</li>
-<li>Теперь изменяем на &#8220;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; gem install bundler&#8221;. Пробуем, проблема остается.</li>
-<li>Изменяем на &#8220;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; bundle install&#8221;. Пробуем, дело должно продвинуться дальше. Но ошибка все равно может вывалиться, только теперь касательно кодировки.</li>
-<li>Убираем &#8220;&amp;&amp; bundle install&#8221;. Может все и заработает, но у меня вывалилась такая ошибка:</li>
+<li>Изменяем &ldquo;octopress_cmd_before_rake&rdquo; на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374&rdquo;, сохраняем, пробуем, проблема остается.</li>
+<li>Теперь изменяем на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; gem install bundler&rdquo;. Пробуем, проблема остается.</li>
+<li>Изменяем на &ldquo;source ~/.bashrc &amp;&amp; export GEM_HOME=~/.rvm/gems/ruby-1.9.3-p374 &amp;&amp; bundle install&rdquo;. Пробуем, дело должно продвинуться дальше. Но ошибка все равно может вывалиться, только теперь касательно кодировки.</li>
+<li>Убираем &ldquo;&amp;&amp; bundle install&rdquo;. Может все и заработает, но у меня вывалилась такая ошибка:</li>
 </ul>
 
 
@@ -254,7 +254,7 @@
 
 
 <ul>
-<li>Если такое вывалилось, то в &#8220;octopress_cmd_before_rake&#8221; добавляем &#8220;&amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8&#8221;. Сохраняем, проверяем, должно завершаться <code>Successfully generated site: source -&gt; public</code></li>
+<li>Если такое вывалилось, то в &ldquo;octopress_cmd_before_rake&rdquo; добавляем &ldquo;&amp;&amp; export LANG=en_US.UTF-8 &amp;&amp; export LC_ALL=en_US.UTF-8&rdquo;. Сохраняем, проверяем, должно завершаться <code>Successfully generated site: source -&gt; public</code></li>
 </ul>
 
 
@@ -281,7 +281,7 @@
 
 <ul>
 <li><code>git: command not found</code> <br/>
-Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали &#8220;:$PATH&#8221;, который нужен для подгурзки стандартных путей.</li>
+Если вы используете ~/.bashrc, то в конце значения параметра PATH вы не указали &ldquo;:$PATH&rdquo;, который нужен для подгурзки стандартных путей.</li>
 <li></li>
 </ul>
 
