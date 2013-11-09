@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-11-09T21:34:31+04:00</updated>
+  <updated>2013-11-10T00:55:15+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Знак рубля]]></title>
+    <link href="http://goooseman.ru/2013/11/09/znak-rublia/"/>
+    <updated>2013-11-09T21:36:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/znak-rublia</id>
+    <content type="html"><![CDATA[<p>Во вторник Банк России предложил людям проголосовать за символ Рубля. Вот предложенные варианты:<br/>
+<img class="center" src="http://d.pr/i/ihvL+"><br/>
+Вы серьёзно? Все эти варианты были предложены еще 6 лет назад. Это раз.<br/>
+Первый вариант будет ужасен в жирном начертании. Это два.<br/>
+Последние три априори ужасны. Они пытались сделать буквы У, выходящей из Р, а получил английская R.<br/>
+Второй неплох, к тому же он уже давно используется многими, и уже появляется в некоторых шрифтах (недавно даже в <a href="http://fontawesome.io/">Font Awasome</a> появился).<br/>
+Ну так зачем давать выбор, когда он настолько очевиден?<br/>
+С другой стороны, хорошо, что они вообще об этом вспомнили, вон у Украинской гривны <a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB_%D0%B3%D1%80%D0%B8%D0%B2%D0%BD%D1%8B">давно</a> уже есть свой символ:<br/>
+<img class="center" src="http://d.pr/i/U7bH+" width="66" height="98"><br/>
+Кстати, через годик после принятия символа рубля, он должен появится в кодировке Unicode, то есть скоро будем набирать прямо на айФоне знак <i class="fa fa-rub fa-2x"></i>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Винтики в MacBook]]></title>
