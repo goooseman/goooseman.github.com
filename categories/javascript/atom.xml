@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: javascript | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2013-11-09T21:33:09+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Использование fabric.js как инструмент для кропа изображений]]></title>
+    <link href="http://goooseman.ru/2013/11/09/ispol%27zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii/"/>
+    <updated>2013-11-09T14:27:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/ispol'zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii</id>
+    <content type="html"><![CDATA[<p>Задача: сделать инструмент, с помощью которого юзер может обрезать свое изображение по определнной маске.<br/>
+Например, есть вот такая рамка:<br/>
+<img class="center <a" src="href="http://d.pr/i/E3LK+">http://d.pr/i/E3LK+</a>"><br/>
+Юзер может перетягивать свое изображение под этой маской, менять его размер и по нажатии на кнопку, все, что внутри фигуры сохраняется в .png файл.</p>
+
+<!-- more -->
+
+
+<p>Я буду использовать библиотеку для работы с html5 canvas fabric.js. Ничего более простого я придумать не смог.<br/>
+Маска должна быть в .svg, <a href="http://d.pr/f/HxLv">вот</a>, например, моя.<br/>
+Создаем два canvas: один статичный (маска то не изменяемая), второй нет (на нем будет фото). Pointer-events мы используем для того, что статичный canvas будет находится над другим (фото должно быть под маской), но pointer-events должны быть только у нижнего.<br/>
+``` html</p>
+
+<div class="photo-canvas">
+    <canvas id="photo-canvas"></canvas>
+</div>
+
+
+<div class="photo-canvas" style="pointer-events: none;">
+    <canvas id="static-photo-canvas"></canvas>
+</div>
+
+
+<p><code>  
+</code> css
+.photo-canvas {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+}
+<code>  
+Подключаем fabric.js и пишем js:  
+</code> javascript
+// Создаем холсты
+photoCanvas = new fabric.Canvas(&lsquo;photo-canvas&rsquo;);
+staticPhotoCanvas = new fabric.StaticCanvas(&lsquo;static-photo-canvas&rsquo;);</p>
+
+<p>// Задаем их размеры
+photoCanvas.setHeight($(&lsquo;.photo-canvas&rsquo;).height());
+photoCanvas.setWidth($(&lsquo;.photo-canvas&rsquo;).width());
+staticPhotoCanvas.setHeight($(&lsquo;.photo-canvas&rsquo;).height());
+staticPhotoCanvas.setWidth($(&lsquo;.photo-canvas&rsquo;).width());</p>
+
+<p>// Загружаем маску на статичный холст и устанавливаем ее по центру холста
+fabric.loadSVGFromURL(&lsquo;/assets/first.svg&rsquo;, function(objects, options) {</p>
+
+<pre><code>var mask = fabric.util.groupSVGElements(objects, options);
+staticPhotoCanvas.add(mask);
+mask.center().setCoords();
+staticPhotoCanvas.renderAll();
+</code></pre>
+
+<p>});</p>
+
+<p>// Загружаем изображение на динамический холст, задаем высота и устанавливаем ее по центру
+fabric.Image.fromURL(&lsquo;/assets/Cat.jpg&rsquo;, function(img) {</p>
+
+<pre><code>img.scaleToHeight(500);
+photoCanvas.add(img);
+img.center().setCoords();
+photoCanvas.renderAll();
+</code></pre>
+
+<p>});
+<code>  
+Мы добавили нашу маску на статичный canvas, и изображение - на динамический. Теперь код кнопки "Обрезать":  
+</code> javascript
+$(&lsquo;#crop-button&rsquo;).click(function(event) {</p>
+
+<pre><code>// Обрезаем холст
+photoCanvas.clipTo = function (ctx) {
+     staticPhotoCanvas.item(0).render(ctx);
+};
+photoCanvas.renderAll();
+
+// Сохраняем .png файл в переменную
+var dataUrl = photoCanvas.toDataURL('png'); 
+</code></pre>
+
+<p>});
+```<br/>
+То есть мы обрезали наш canvas с фотографией по контору векторной маски и сохранили его в png файл, который хранится в переменной dataUrl.<br/>
+Результат работ:<br/>
+<img class="center <a" src="href="http://d.pr/i/LiuH+">http://d.pr/i/LiuH+</a>"><br/>
+P.S. Если нужно создать canvas в модальном окне Bootstrap 3, то лучше создавать холст на событии &lsquo;shown.bs.modal&rsquo;. Иначе он не будет принимать pointer events.</p>
+]]></content>
+  </entry>
+  
+</feed>

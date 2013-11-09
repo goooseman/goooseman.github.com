@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-30T11:27:22+04:00</updated>
+  <updated>2013-11-09T21:33:09+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -14,13 +14,163 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Винтики в MacBook]]></title>
+    <link href="http://goooseman.ru/2013/11/09/vintiki-v-macbook/"/>
+    <updated>2013-11-09T14:55:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/vintiki-v-macbook</id>
+    <content type="html"><![CDATA[<p>Бывают ярые фанатики Apple. Я к таким не отношусь. Я люблю Apple, но еще я люблю придираться к мелочам.<br/>
+Apple официально разрешает самому пользователю менять (без потери гарантии) в своём MacBook две вещи: HDD да память. Ну тогда на кой хрен они делают на HDD винтики (которые закрепляют HDD в самом лотке) под отвертку T4 (шестиконечная звезда)? Полюбуйтесь:<br/>
+<img class="center" src="http://d.pr/i/fpC3+"><br/>
+Вы конечно можете вынуть HDD без специальной отвертки, но вот нормально закрепить новый &ndash; ни ни. Весь парадокс в том, что лично в моем MacBook нет больше не единого специфичного винтика, то есть я могу разобрать его полностью обычной крестовой отверткой, а вот тупо поменять HDD &ndash; нет.<br/>
+Я понимаю, если бы Apple сама бы занималась дистрибуцией HDD с уже вкрученными болтами, но такого нет. Так зачем писать user replaceable, но так мешать домохозяйке, которая хочет побольше памяти?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Использование fabric.js как инструмент для кропа изображений]]></title>
+    <link href="http://goooseman.ru/2013/11/09/ispol%27zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii/"/>
+    <updated>2013-11-09T14:27:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/ispol&#8217;zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii</id>
+    <content type="html"><![CDATA[<p>Задача: сделать инструмент, с помощью которого юзер может обрезать свое изображение по определнной маске.<br/>
+Например, есть вот такая рамка:<br/>
+<img class="center" src="http://d.pr/i/E3LK+"><br/>
+Юзер может перетягивать свое изображение под этой маской, менять его размер и по нажатии на кнопку, все, что внутри фигуры сохраняется в .png файл.</p>
+
+<!-- more -->
+
+
+<p>Я буду использовать библиотеку для работы с html5 canvas fabric.js. Ничего более простого я придумать не смог.<br/>
+Маска должна быть в .svg, <a href="http://d.pr/f/HxLv">вот</a>, например, моя.<br/>
+Создаем два canvas: один статичный (маска то не изменяемая), второй нет (на нем будет фото). Pointer-events мы используем для того, что статичный canvas будет находится над другим (фото должно быть под маской), но pointer-events должны быть только у нижнего.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;photo-canvas&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">&quot;photo-canvas&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;photo-canvas&quot;</span> <span class="na">style=</span><span class="s">&quot;pointer-events: none;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">&quot;static-photo-canvas&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.photo-canvas</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span> <span class="m">500px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span> <span class="m">500px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+Подключаем fabric.js и пишем js:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Создаем холсты</span>
+</span><span class='line'><span class="nx">photoCanvas</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">fabric</span><span class="p">.</span><span class="nx">Canvas</span><span class="p">(</span><span class="s1">&#39;photo-canvas&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">staticPhotoCanvas</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">fabric</span><span class="p">.</span><span class="nx">StaticCanvas</span><span class="p">(</span><span class="s1">&#39;static-photo-canvas&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Задаем их размеры</span>
+</span><span class='line'><span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">setHeight</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.photo-canvas&#39;</span><span class="p">).</span><span class="nx">height</span><span class="p">());</span>
+</span><span class='line'><span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">setWidth</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.photo-canvas&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">());</span>
+</span><span class='line'><span class="nx">staticPhotoCanvas</span><span class="p">.</span><span class="nx">setHeight</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.photo-canvas&#39;</span><span class="p">).</span><span class="nx">height</span><span class="p">());</span>
+</span><span class='line'><span class="nx">staticPhotoCanvas</span><span class="p">.</span><span class="nx">setWidth</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.photo-canvas&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Загружаем маску на статичный холст и устанавливаем ее по центру холста</span>
+</span><span class='line'><span class="nx">fabric</span><span class="p">.</span><span class="nx">loadSVGFromURL</span><span class="p">(</span><span class="s1">&#39;/assets/first.svg&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">objects</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">mask</span> <span class="o">=</span> <span class="nx">fabric</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">groupSVGElements</span><span class="p">(</span><span class="nx">objects</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">staticPhotoCanvas</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">mask</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">mask</span><span class="p">.</span><span class="nx">center</span><span class="p">().</span><span class="nx">setCoords</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">staticPhotoCanvas</span><span class="p">.</span><span class="nx">renderAll</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Загружаем изображение на динамический холст, задаем высота и устанавливаем ее по центру</span>
+</span><span class='line'><span class="nx">fabric</span><span class="p">.</span><span class="nx">Image</span><span class="p">.</span><span class="nx">fromURL</span><span class="p">(</span><span class="s1">&#39;/assets/Cat.jpg&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">img</span><span class="p">.</span><span class="nx">scaleToHeight</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">img</span><span class="p">.</span><span class="nx">center</span><span class="p">().</span><span class="nx">setCoords</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">renderAll</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+Мы добавили нашу маску на статичный canvas, и изображение &ndash; на динамический. Теперь код кнопки &ldquo;Обрезать&rdquo;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#crop-button&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Обрезаем холст</span>
+</span><span class='line'>  <span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">clipTo</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>           <span class="nx">staticPhotoCanvas</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="nx">ctx</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>  <span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">renderAll</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Сохраняем .png файл в переменную</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">dataUrl</span> <span class="o">=</span> <span class="nx">photoCanvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+То есть мы обрезали наш canvas с фотографией по контору векторной маски и сохранили его в png файл, который хранится в переменной dataUrl.<br/>
+Результат работ:<br/>
+<img class="center" src="http://d.pr/i/LiuH+"><br/>
+P.S. Если нужно создать canvas в модальном окне Bootstrap 3, то лучше создавать холст на событии &lsquo;shown.bs.modal&rsquo;. Иначе он не будет принимать pointer events.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[CandyBox 2]]></title>
     <link href="http://goooseman.ru/2013/10/29/candybox-2/"/>
     <updated>2013-10-29T18:32:00+04:00</updated>
     <id>http://goooseman.ru/2013/10/29/candybox-2</id>
     <content type="html"><![CDATA[<p>Где-то в начале года я узнал о такой прекрасной игре, как CandyBox.<br/>
 Игра сделана на JavaScript, вся графика &ndash; ASCII, но затягивает с удивительной скоростью. Прошел, понравилось, попробовал HardMode. Забил. Забыл.<br/>
-<img src="http://d.pr/i/ovx9+"><br/>
+<img class="center" src="http://d.pr/i/ovx9+"><br/>
 И на прошлой неделе вышла <a href="http://candybox2.net/">вторая версия</a>. В ней наконец-то сделали autosave и менее линейную модель. Всем, кто видел первую часть играть обязательно. Я прошел за 3 дня. И снова забыл. (хотя обещают Arena мод, и сами участники могут создавать уровни).</p>
 ]]></content>
   </entry>

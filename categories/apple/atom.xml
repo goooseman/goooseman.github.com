@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Apple | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/apple/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-10-30T11:27:22+04:00</updated>
+  <updated>2013-11-09T21:33:09+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Винтики в MacBook]]></title>
+    <link href="http://goooseman.ru/2013/11/09/vintiki-v-macbook/"/>
+    <updated>2013-11-09T14:55:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/vintiki-v-macbook</id>
+    <content type="html"><![CDATA[<p>Бывают ярые фанатики Apple. Я к таким не отношусь. Я люблю Apple, но еще я люблю придираться к мелочам.<br/>
+Apple официально разрешает самому пользователю менять (без потери гарантии) в своём MacBook две вещи: HDD да память. Ну тогда на кой хрен они делают на HDD винтики (которые закрепляют HDD в самом лотке) под отвертку T4 (шестиконечная звезда)? Полюбуйтесь:<br/>
+<img class="center <a" src="href="http://d.pr/i/fpC3+">http://d.pr/i/fpC3+</a>"><br/>
+Вы конечно можете вынуть HDD без специальной отвертки, но вот нормально закрепить новый &ndash; ни ни. Весь парадокс в том, что лично в моем MacBook нет больше не единого специфичного винтика, то есть я могу разобрать его полностью обычной крестовой отверткой, а вот тупо поменять HDD &ndash; нет.<br/>
+Я понимаю, если бы Apple сама бы занималась дистрибуцией HDD с уже вкрученными болтами, но такого нет. Так зачем писать user replaceable, но так мешать домохозяйке, которая хочет побольше памяти?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[И еще чуть чуть в продолжении темы]]></title>
@@ -154,16 +167,6 @@
 
 <p>
 На самом деле это компьютерная графика, но никто Вам не мешает повторить такое в живую.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Пиздить то можно не только у Apple...]]></title>
-    <link href="http://goooseman.ru/2013/04/28/pizdit%27-to-mozhno-nie-tol%27ko-u-apple-dot-dot-dot/"/>
-    <updated>2013-04-28T11:24:00+04:00</updated>
-    <id>http://goooseman.ru/2013/04/28/pizdit'-to-mozhno-nie-tol'ko-u-apple-dot-dot-dot</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://d.pr/i/34iz+">http://d.pr/i/34iz+</a>"><br/>
-Слева &ndash; Nokia 6300 (год выпуска: 2007), справа &ndash; Samsung GT-C3322 (год выпуска: 2011).</p>
 ]]></content>
   </entry>
   
