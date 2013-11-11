@@ -2242,7 +2242,7 @@ $(&#39;#myTab li:eq(2) a&#39;).tab(&#39;show&#39;) // Select third tab (0-indexe
 						if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1) {
 							html += '<hr /><div>...' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) -30 ,item.description.toLowerCase().indexOf(string.toLowerCase())) + '<strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()),item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length) + '</strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length,item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length + 30) + '...</div>';
 						}
-						html += '<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span>' + dateParse(item.updated) + '</p></div></div>'
+						html += '<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span> ' + dateParse(item.updated) + '</p></div></div>'
 	       			}
 	                
 	                
@@ -2256,7 +2256,7 @@ $(&#39;#myTab li:eq(2) a&#39;).tab(&#39;show&#39;) // Select third tab (0-indexe
 		});
 
  
-   });
+ 	});
 
 	function dateParse(date) {
 		var year = date.substring(0,4);
