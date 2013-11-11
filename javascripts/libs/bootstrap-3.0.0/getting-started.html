@@ -1085,6 +1085,7 @@ img { max-width: none; }</code></pre>
 <script>
 	$("#search").submit(function( event ) {
   		event.preventDefault();
+  		$(".modal-body").html('<img src="/images/ajax-loader.gif" id="search-loading"></img>');
   		var string = $("#query").val(); 
   		if (string.length == 0) {
   			$('#searchModal').modal('show');
