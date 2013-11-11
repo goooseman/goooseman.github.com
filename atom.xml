@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-11-11T11:38:37+04:00</updated>
+  <updated>2013-11-11T11:59:25+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Новый Safari и Yandex.Maps 2.1β]]></title>
+    <link href="http://goooseman.ru/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b/"/>
+    <updated>2013-11-11T11:45:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b</id>
+    <content type="html"><![CDATA[<p>Я разрабатываю один проект и долго не мог понять, почему при загрузке сайта в Safari (Mavericks) я получаю сообщение &ldquo;A problem occured with this webpage so it was reloaded&rdquo; (&ldquo;При работе с этой веб-страницей произошел сбой, поэтому она была перезагружена&rdquo;), и вылетает crash log Safari.<br/>
+<img class="center" src="http://d.pr/i/YU0p+"><br/>
+При повторной перезагрузке я получаю сообщение &ldquo;A problem repeatedly occured with &hellip;&rdquo; (&ldquo;Повторилась проблема с &hellip;&rdquo;).<br/>
+<img class="center" src="http://d.pr/i/JPRF+"><br/>
+Самое интересное, что если открыть консоль, то ничего не падает.<br/>
+<img class="center" src="http://d.pr/i/rCSv+"><br/>
+Как Вы могли уже догадаться из скриншотов, проблема на моём сайте оказалась в использовании на нем бета версии Яндекс.Карт за порядковым номером 2.1. Надеюсь, к релизу пофиксят.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Знак рубля]]></title>
