@@ -131,6 +131,97 @@
       </p>
     
     
+      <h1 itemprop="name" class="entry-title"><a href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Ошибка Capistrano Bundle: Not Found</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p><img class="center" src="http://d.pr/i/Ftgm+"><br/>
+Для деплоя своих проектов на Rails я использую третью версию Capistrano. На серверах я использую rvm для установки ruby и на локалке использую следующий набор гемов:</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rails&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-bundler&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rvm&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+И тут два дня назад деплой ломается одновременно на обоих моих проектах. На попытке сделать <code>assets:precompile</code> вылетает такая ошибка:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DEBUG [6c391f27] Command: cd /var/www/apps/aliya/releases/20140108194955 && ( RAILS_ENV=production bundle exec rake assets:precompile )
+</span><span class='line'>DEBUG [6c391f27]  bash: bundle: command not found
+</span><span class='line'>cap aborted!
+</span><span class='line'>rake stdout: Nothing written
+</span><span class='line'>rake stderr: Nothing written
+</span><span class='line'>
+</span><span class='line'>Tasks: TOP => deploy:assets:precompile
+</span><span class='line'>(See full trace by running task with --trace)</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Читать дальше</a>
+    </footer>
+  
+
+<p class="meta text-muted">
+
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/categories/capistrano/'>Capistrano</a>, <a class='category' href='/categories/rails/'>Rails</a>, <a class='category' href='/categories/ruby/'>Ruby</a>, <a class='category' href='/categories/rvm/'>rvm</a>
+  
+</span>
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-01-08T23:48:00+04:00" datetime="2014-01-08T23:48:00+04:00" pubdate data-updated="true">8<span>ое</span> января 2014 г.</time>
+
+</p>
+
+        </article>
+      
+      
+        <article class="post panel panel-default">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+
+        
+      </p>
+    
+    
       <h1 itemprop="name" class="entry-title"><a href="/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b/">Новый Safari и Yandex.Maps 2.1β</a></h1>
     
   </header>
@@ -630,70 +721,6 @@ Apple официально разрешает самому пользовате�
 
         </article>
       
-      
-        <article class="post panel panel-default">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-
-        
-      </p>
-    
-    
-      <h1 itemprop="name" class="entry-title"><a href="/2013/06/06/pro-android-dot-dot-dot/">Про Android&#8230;</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Я люблю Android. Я достаточно долго &ldquo;сидел&rdquo; на iOS и WP7, но Android мне нравится больше, чем те двое вместе взятые. Но вот некоторые странности меня не перестают удивлять.</p>
-
-<p>В Android есть системное приложение Google Play Services. Оно предостовляет доступ к API приложений Google сторонним разрабам. Но после его обновления до последней версии (а этого требуют многие приложения) происходит забавное: при установке apk файла (установочный файл приложения) не из Google Play нам предлагают не один установщик, а целых два:</p>
-
-<div>
-   <table width="100%" height="100%" align="center" valign="center" cellpadding="0" cellspacing="0" border="0" style="background-color:white; border: 0px solid transparent;">
-   <tr><td style="border: 0">
-      <img src="http://d.pr/i/jFWZ+" width="40%" height="40%" />
-   </td></tr>
-   </table>
-</div>
-
-
-<p>Второй как раз с иконкой того самого Google Play Services. Отличие только одно: второй как то проверяет файл перед установкой, потом передает установку тому самому первому установщику. Конечно баг не критичный, но он присутствует у всех, я его проверил на версиях Android 2.3, 4.0.4, 4.1.2, и везде он есть. Ну ОК, конечно они молодцы, что внедрили хотя бы какую-то базовую проверку файла на наличие всяких там вирусов, но почему нельзя было заменить старый установщик, а не предлагать юзеру сразу два.</p>
-</div>
-  
-  
-
-<p class="meta text-muted">
-
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/categories/android/'>Android</a>
-  
-</span>
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2013-06-06T13:35:00+04:00" datetime="2013-06-06T13:35:00+04:00" pubdate data-updated="true">6<span>ое</span> июня 2013 г.</time>
-
-</p>
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -717,6 +744,8 @@ Apple официально разрешает самому пользовате�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Ошибка Capistrano Bundle: Not Found</a>
+    
     <a class="list-group-item " href="/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b/">Новый Safari и Yandex.Maps 2.1β</a>
     
     <a class="list-group-item " href="/2013/11/09/znak-rublia/">Знак рубля</a>
@@ -724,8 +753,6 @@ Apple официально разрешает самому пользовате�
     <a class="list-group-item " href="/2013/11/09/vintiki-v-macbook/">Винтики в MacBook</a>
     
     <a class="list-group-item " href="/2013/11/09/ispol%27zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii/">Использование fabric.js как инструмент для кропа изображений</a>
-    
-    <a class="list-group-item " href="/2013/10/29/candybox-2/">CandyBox 2</a>
     
   </div>
 </section>
@@ -759,7 +786,7 @@ Apple официально разрешает самому пользовате�
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright 2013 &copy; goooseman<br>
+  Copyright 2014 &copy; goooseman<br>
 </p>
 
 </div>

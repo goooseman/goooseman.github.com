@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2013-12-21T23:12:46+04:00</updated>
+  <updated>2014-01-09T00:16:06+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ошибка Capistrano bundle: not found]]></title>
+    <link href="http://goooseman.ru/2014/01/08/oshchibka-capistrano-bundle-not-found/"/>
+    <updated>2014-01-08T23:48:00+04:00</updated>
+    <id>http://goooseman.ru/2014/01/08/oshchibka-capistrano-bundle-not-found</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://d.pr/i/Ftgm+"><br/>
+Для деплоя своих проектов на Rails я использую третью версию Capistrano. На серверах я использую rvm для установки ruby и на локалке использую следующий набор гемов:</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rails&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-bundler&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rvm&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+И тут два дня назад деплой ломается одновременно на обоих моих проектах. На попытке сделать <code>assets:precompile</code> вылетает такая ошибка:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DEBUG [6c391f27] Command: cd /var/www/apps/aliya/releases/20140108194955 && ( RAILS_ENV=production bundle exec rake assets:precompile )
+</span><span class='line'>DEBUG [6c391f27]  bash: bundle: command not found
+</span><span class='line'>cap aborted!
+</span><span class='line'>rake stdout: Nothing written
+</span><span class='line'>rake stderr: Nothing written
+</span><span class='line'>
+</span><span class='line'>Tasks: TOP => deploy:assets:precompile
+</span><span class='line'>(See full trace by running task with --trace)</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>Я связал это с выходом новой версии ruby (2.1) и решил прописать в <code>deploy.rb</code> нужную версию:</p>
+
+<figure class='code'><figcaption><span>deploy.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:rvm_type</span><span class="p">,</span> <span class="ss">:user</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rvm_ruby_version</span><span class="p">,</span> <span class="s1">&#39;2.0.0-p353&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+Но это не помогло. Тогда я прописал в тот же файл значение переменной $PATH. Для этого заходим по SSH на сервер, выполняем <code>echo $PATH</code> и прописываем его на локалке:</p>
+
+<figure class='code'><figcaption><span>deploy.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:default_env</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">:PATH</span> <span class="o">=&gt;</span> <span class="s1">&#39;/home/deployer/.rvm/gems/ruby-2.0.0-p353/bin:/home/deployer/.rvm/gems/ruby-2.0.0-p353@global/bin:/home/deployer/.rvm/rubies/ruby-2.0.0-p353/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/deployer/.rvm/bin&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+Бинго! Всё работает как раньше.</p>
+
+<p>P.S. Самое интересное, что если прописать $PATH, но не указывать версию ruby, то все равно получаем ошибку, но уже раньше, на <code>bundle install</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cap aborted!
+</span><span class='line'>bundle stdout: Nothing written
+</span><span class='line'>bundle stderr: Nothing written
+</span><span class='line'>
+</span><span class='line'>Tasks: TOP => deploy:updated => bundler:install
+</span><span class='line'>(See full trace by running task with --trace)
+</span><span class='line'>DEBUG [c90cd2c7]  /home/deployer/.rvm/scripts/set: line 19: exec: bundle: not found</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Новый Safari и Yandex.Maps 2.1β]]></title>
