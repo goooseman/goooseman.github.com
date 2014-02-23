@@ -9,16 +9,20 @@
   <meta name="author" content="goooseman">
 
   
-  <meta name="description" content="Category: Поддержка">
+  <meta name="description" content="Категория: Поддержка">
   
 
   
   
 
   <meta property="og:url" content="http://goooseman.rucategories/poddierzhka/" />
-  <meta property="og:type" content="website" />
+
+  <meta property="og:type" content="blog" />
+
   <meta property="og:title" content="Категория: Поддержка - Ctrl + Cmd" />
-  <meta property="og:description" content="Category: Поддержка" />
+  <meta property="og:description" content="Категория: Поддержка" />
+
+  <meta property="og:image" content="http://goooseman.ru/images/cover.jpg" />
 
 
 
@@ -30,7 +34,9 @@
   <meta name="twitter:site" content="@g000seman" />
   <meta name="twitter:creator" content="@g000seman" />
   <meta name="twitter:title" content="Категория: Поддержка - Ctrl + Cmd" />
-  <meta name="twitter:description" content="Category: Поддержка" />
+  <meta name="twitter:description" content="Категория: Поддержка" />
+
+  <meta name="twitter:image:src" content="http://goooseman.ru/images/cover.jpg" />
 
   <meta name="twitter:domain" content="http://goooseman.ru" />
 
@@ -53,8 +59,20 @@
 
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+  <script src="/javascripts/jquery.turbolinks.js"></script>
   
 
+  
+
+
+  <script src="/javascripts/jquery.browser.js"></script>
+
+  <script src="/javascripts/my.js"></script>
+  <script src="/javascripts/libs/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/jquery.jfeed.js"></script>
+
+  <script src="/javascripts/turbolinks.js"></script>
 </head>
 
   <body   >
@@ -99,20 +117,23 @@
 						<li >
 							<a href="/aliya-soap">Aliya Soap</a>
 						</li>
+						<li >
+							<a href="/lbella">lBella</a>
+						</li>
 					</ul>
 				</li>
 
                            
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><span class="icon-rus-habrahbr social" style="font-size: 30px; padding: 2px; background: #80A1B0;" onclick="window.open('http://habrahabr.ru/users/goooseman/')" title="Хабрахабр"></span></li>
-				<li><span class="icon-rus-vk-02 social" style="background: #587EA3;" onclick="window.open('http://vk.com/gooseman')" title="Вконтакте"></span></li>
-				<li><span class="icon-facebook social" style="background: #3B5998;" onclick="window.open('https://www.facebook.com/Goooseman')" title="Facebook"></span></li>
+				<li><a class="social-a" href="http://habrahabr.ru/users/goooseman/" title="Хабрахабр"><span class="icon-rus-habrahbr social" style="font-size: 30px; padding: 2px; background: #80A1B0;" ></span></a></li>
+				<li><a class="social-a" href="http://vk.com/gooseman" title="Вконтакте"><span class="icon-rus-vk-02 social" style="background: #587EA3;"></span></a></li>
+				<li><a class="social-a" href="https://www.facebook.com/Goooseman" title="Facebook"><span class="icon-facebook social" style="background: #3B5998;"></span></a></li>
 				
-				<li><span class="icon-github-01 social" style="background: #444444;" onclick="window.open('https://github.com/goooseman')" title="GitHub"></span></li>
-				<li><span class="icon-last_fm social" style="background: #D51C23;" onclick="window.open('http://www.lastfm.ru/user/TE0I0TEJIb')" title="Last.fm"></span></li>
-				<li><a href="https://plus.google.com/100347174775578881245?rel=author" title="Google+" style="display: inline; padding: 0; margin: 0;"><span class="icon-google__x2B_ social" style="background: #D74A38;"></span></a></li>
-				<li><span class="icon-rss social" style="background: #FF7F00;" onclick="window.open('/atom.xml');" title="RSS"></span></li>
+				<li><a class="social-a" href="https://github.com/goooseman" title="GitHub"><span class="icon-github-01 social" style="background: #444444;"></span></a</li>
+				<li><a class="social-a" href="http://www.lastfm.ru/user/TE0I0TEJIb" title="Last.fm"><span class="icon-last_fm social" style="background: #D51C23;"></span></a</li>
+				<li><a class="social-a" href="https://plus.google.com/100347174775578881245?rel=author" title="Google+" style=""><span class="icon-google__x2B_ social" style="background: #D74A38;"></span></a></li>
+				<li><a class="social-a" href="/atom.xml" title="RSS"><span class="icon-rss social" style="background: #FF7F00;"></span></a></li>
 				
 				
 			</ul>
@@ -171,7 +192,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-01-12T01:38:00+04:00" datetime="2014-01-12T01:38:00+04:00" pubdate data-updated="true">12<span>ое</span> января 2014 г.</time>
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-01-12T01:38:00+04:00" datetime="2014-01-12T01:38:00+04:00" pubdate data-updated="true">12<span>-ое</span> января 2014 г.</time>
   
 </p>
 
@@ -210,6 +231,17 @@
 
 
 
+<section class="googleplus googleplus-hidden panel panel-default">
+  <div class="panel-body">
+    <h1>
+      <a href="https://plus.google.com/100347174775578881245?rel=author">
+        <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+        Google+
+      </a>
+    </h1>
+  </div>
+</section>
+
 
 <section class="panel panel-default">
   <div class="panel-heading">
@@ -242,13 +274,7 @@
 
 </div>
 </footer>
-    <script src="/javascripts/jquery.browser.js"></script>
-
-<script src="/javascripts/my.js"></script>
-<script src="/javascripts/libs/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
-<script src="/javascripts/modernizr-2.0.js"></script>
-<script src="/javascripts/jquery.jfeed.js"></script>
-
+    
 <!-- Search modal -->
 <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -287,47 +313,44 @@
 
 
 
-<script type="text/javascript">
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-39308566-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
+    ga('create', 'UA-39308566-1', 'goooseman.ru');
+    ga('send', 'pageview');
 
 </script>
 
-<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-(function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-        try {
-            w.yaCounter22881640 = new Ya.Metrika({id:22881640,
-                    webvisor:true,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true});
-        } catch(e) { }
-    });
+$(document).ready(function () {
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter22881640 = new Ya.Metrika({id:22881640,
+                        webvisor:true,
+                        clickmap:true,
+                        trackLinks:true,
+                        accurateTrackBounce:true});
+            } catch(e) { }
+        });
 
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
 
-    if (w.opera == "[object Opera]") {
-        d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
-})(document, window, "yandex_metrika_callbacks");
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+});
 </script>
-<noscript><div><img src="//mc.yandex.ru/watch/22881640" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
+
 <script>
 	$("#search").submit(function( event ) {
   		event.preventDefault();
@@ -422,10 +445,10 @@
 
 		switch (day) {
 			case '3':
-				day = day + 'ее '
+				day = day + '-ее '
 				break
 			default:
-				day = day + 'ое '
+				day = day + '-ое '
 		}
 		return day + month + year + ' г.';
 		
