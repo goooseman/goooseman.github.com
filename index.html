@@ -49,7 +49,39 @@
 
   
   <link rel="canonical" href="http://goooseman.ru/">
-  <link href="/favicon.png" type="image/png" rel="icon">
+  
+  <link rel="icon" sizes="16x16 32x32 48x48 64x64" href="favicon.ico">
+  <!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
+
+  <!-- The below are optional but encouraged -->
+
+
+  <!-- The below are optional -->
+
+  <!-- IE 10 Metro tile icon (Metro equivalent of apple-touch-icon): -->
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png">
+  <!-- Opera Speed Dial icon -->
+  <link rel="icon" sizes="195x195" href="favicon-195.png">
+  <!-- IE 11 live tiles: -->
+  <meta name="msapplication-square70x70logo" content="favicon-70.png" />
+  <meta name="msapplication-square150x150logo" content="favicon-150.png" />
+  <meta name="msapplication-square310x310logo" content="favicon-310.png" />
+  <!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144-precomposed">
+  <!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72-precomposed.png">
+  <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57-precomposed.png">
+
   <link href="/atom.xml" rel="alternate" title="Ctrl + Cmd" type="application/atom+xml">
 
   <!--<link href="/javascripts/libs/bootstrap-3.0.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">-->
@@ -158,6 +190,73 @@
   <div class="page-content col-md-9">
     <div class="blog-index">
       
+      
+      
+        <article class="post panel panel-default">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+
+        
+      </p>
+    
+    
+      <h1 itemprop="name" class="entry-title"><a href="/2014/02/28/trudnosti-favicon/">Трудности Favicon</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p><img class="center" src="http://95.85.35.239/ftp/20140228170321.png" title="Трудности favicon" alt="Трудности favicon">
+Готовясь к <a href="http://academy.1c-bitrix.ru/konkurs/">студенческой олимпиаде по web-разработке</a>, я понял, что надо уделить внимание мелочам. Вот, например, favicon. Что может быть проще? Положил favicon.ico в корень и радуешься жизни. <a href="https://github.com/audreyr/favicon-cheat-sheet">А вот и не все так просто.</a></p>
+
+<ul>
+<li>Во-первых, в идеале favicon.ico должен содержать иконки следующих размеров: 16х16, 24x24, 32x32, 48x48, 64x64.</li>
+<li>Во-вторых, еще бы не помешали иконки в .png следующих размеров (для живых тайлов в IE11): 70x70, 150x150, 310x310.</li>
+<li>В-третих, еще бы нужна иконка в .png размеров 195x195 для Opera Speed Dial.</li>
+<li>Наконец, <a href="http://mathiasbynens.be/notes/touch-icons#sizes">иконки для iOS и Android</a> нужны следующих размеров (для поддрежки как и iOS ≤ 6, так и iOS ≥ 7): 57х57, 72x72, 76x76, 114x114, 120x120, 144x144, 152x152.</li>
+</ul>
+
+
+<p>Конечно, это все необязательно, но уж точно хуже не будет. Но как генирировать такое кол-во иконок?</p>
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/2014/02/28/trudnosti-favicon/">Читать дальше</a>
+    </footer>
+  
+
+<p class="meta text-muted">
+
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/categories/web/'>Web</a>, <a class='category' href='/categories/intierniet/'>Интернет</a>
+  
+</span>
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-02-28T11:55:00+04:00" datetime="2014-02-28T11:55:00+04:00" pubdate data-updated="true">28<span>-ое</span> февраля 2014 г.</time>
+
+</p>
+
+        </article>
       
       
         <article class="post panel panel-default">
@@ -509,7 +608,7 @@ Apple официально разрешает самому пользовате�
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/categories/fabric-dot-js/'>fabric.js</a>, <a class='category' href='/categories/javascript/'>javascript</a>
+    <a class='category' href='/categories/javascript/'>Javascript</a>, <a class='category' href='/categories/fabric-dot-js/'>fabric.js</a>
   
 </span>
 
@@ -699,66 +798,6 @@ Apple официально разрешает самому пользовате�
 
         </article>
       
-      
-        <article class="post panel panel-default">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-
-        
-      </p>
-    
-    
-      <h1 itemprop="name" class="entry-title"><a href="/2013/06/17/ios-7/">iOS 7</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>С WWDC прошло уже 2 недели, но до сих пор бурления говна на счет новой iOS не утихают. Все спорят о том, удалась она или нет. Все показывают свое остроумие, придумывая &ldquo;смешные&rdquo; картинки с Джонни. Лебедев лишь прошелся по мелочам, так и не сказав свое мнение в общем.</p>
-
-<p><img class="center" src="http://d.pr/i/NKFI+"></p>
-
-<p>Но есть аспекты, о которых, на мой взгляд мало кто задумывается.</p>
-
-</div>
-  
-  
-    <footer>
-      <a class="btn btn-default" rel="full-article" href="/2013/06/17/ios-7/">Читать дальше</a>
-    </footer>
-  
-
-<p class="meta text-muted">
-
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/categories/apple/'>Apple</a>, <a class='category' href='/categories/ios/'>iOS</a>
-  
-</span>
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2013-06-17T10:59:00+04:00" datetime="2013-06-17T10:59:00+04:00" pubdate data-updated="true">17<span>-ое</span> июня 2013 г.</time>
-
-</p>
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -782,6 +821,8 @@ Apple официально разрешает самому пользовате�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/2014/02/28/trudnosti-favicon/">Трудности Favicon</a>
+    
     <a class="list-group-item " href="/2014/01/12/luchshaia-tiekhpoddierzhka/">Лучшая техподдержка</a>
     
     <a class="list-group-item " href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Ошибка Capistrano Bundle: Not Found</a>
@@ -789,8 +830,6 @@ Apple официально разрешает самому пользовате�
     <a class="list-group-item " href="/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b/">Новый Safari и Yandex.Maps 2.1β</a>
     
     <a class="list-group-item " href="/2013/11/09/znak-rublia/">Знак рубля</a>
-    
-    <a class="list-group-item " href="/2013/11/09/vintiki-v-macbook/">Винтики в MacBook</a>
     
   </div>
 </section>

@@ -128,15 +128,15 @@
     </url>
     <url>
         <loc>http://goooseman.ru/2013/04/13/iesli-khochiesh%27/</loc>
-        <lastmod>2014-02-23T17:48:26+04:00</lastmod>
+        <lastmod>2014-02-28T14:24:29+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/2013/04/13/a-tiepier%27-tozhie-samoie-na-obj-c/</loc>
-        <lastmod>2014-02-23T17:48:26+04:00</lastmod>
+        <lastmod>2014-02-28T14:24:59+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu/</loc>
-        <lastmod>2014-02-23T17:48:26+04:00</lastmod>
+        <lastmod>2014-02-28T11:58:32+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/2013/04/16/novosti-iz-mira-apple/</loc>
@@ -238,7 +238,7 @@
         <loc>
             http://goooseman.ru/2013/11/09/ispol%27zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii/
         </loc>
-        <lastmod>2014-02-23T17:48:26+04:00</lastmod>
+        <lastmod>2014-02-28T14:22:46+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/2013/11/09/vintiki-v-macbook/</loc>
@@ -261,6 +261,10 @@
         <lastmod>2014-02-23T17:48:26+04:00</lastmod>
     </url>
     <url>
+        <loc>http://goooseman.ru/2014/02/28/trudnosti-favicon/</loc>
+        <lastmod>2014-02-28T17:07:54+04:00</lastmod>
+    </url>
+    <url>
         <loc>http://goooseman.ru/about/</loc>
         <lastmod>2014-02-23T17:48:53+04:00</lastmod>
     </url>
@@ -270,7 +274,7 @@
     </url>
     <url>
         <loc>http://goooseman.ru/archives/</loc>
-        <lastmod>2014-02-23T17:54:34+04:00</lastmod>
+        <lastmod>2014-02-28T17:07:54+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/categories/</loc>
@@ -286,7 +290,7 @@
     </url>
     <url>
         <loc>http://goooseman.ru/</loc>
-        <lastmod>2014-01-12T01:45:53+04:00</lastmod>
+        <lastmod>2014-02-28T17:07:54+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/javascripts/libs/bootstrap-3.0.0/components.html</loc>
@@ -306,7 +310,7 @@
     </url>
     <url>
         <loc>http://goooseman.ru/javascripts/libs/bootstrap-3.0.0/</loc>
-        <lastmod>2014-01-12T01:45:53+04:00</lastmod>
+        <lastmod>2014-02-28T17:07:54+04:00</lastmod>
     </url>
     <url>
         <loc>http://goooseman.ru/javascripts/libs/bootstrap-3.0.0/javascript.html</loc>

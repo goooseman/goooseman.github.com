@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Web | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/web/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-02-23T22:01:31+04:00</updated>
+  <updated>2014-02-28T17:08:40+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,144 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Трудности favicon]]></title>
+    <link href="http://goooseman.ru/2014/02/28/trudnosti-favicon/"/>
+    <updated>2014-02-28T11:55:00+04:00</updated>
+    <id>http://goooseman.ru/2014/02/28/trudnosti-favicon</id>
+    <content type="html"><![CDATA[<p><img class="center <a" src="href="http://95.85.35.239/ftp/20140228170321.png">http://95.85.35.239/ftp/20140228170321.png</a>" title="&lsquo;Трудности favicon&rsquo; &lsquo;Трудности favicon&rsquo;" >
+Готовясь к <a href="http://academy.1c-bitrix.ru/konkurs/">студенческой олимпиаде по web-разработке</a>, я понял, что надо уделить внимание мелочам. Вот, например, favicon. Что может быть проще? Положил favicon.ico в корень и радуешься жизни. <a href="https://github.com/audreyr/favicon-cheat-sheet">А вот и не все так просто.</a></p>
+
+<ul>
+<li>Во-первых, в идеале favicon.ico должен содержать иконки следующих размеров: 16х16, 24x24, 32x32, 48x48, 64x64.</li>
+<li>Во-вторых, еще бы не помешали иконки в .png следующих размеров (для живых тайлов в IE11): 70x70, 150x150, 310x310.</li>
+<li>В-третих, еще бы нужна иконка в .png размеров 195x195 для Opera Speed Dial.</li>
+<li>Наконец, <a href="http://mathiasbynens.be/notes/touch-icons#sizes">иконки для iOS и Android</a> нужны следующих размеров (для поддрежки как и iOS ≤ 6, так и iOS ≥ 7): 57х57, 72x72, 76x76, 114x114, 120x120, 144x144, 152x152.</li>
+</ul>
+
+
+<p>Конечно, это все необязательно, но уж точно хуже не будет. Но как генирировать такое кол-во иконок?</p>
+
+<!--more-->
+
+
+<h1>PSD шаблон?</h1>
+
+<p>Сначала я нашёл <a href="https://github.com/jonrandahl/H5BP-Multi-Layer-FavIcons">.psd шаблон</a>, который автоматически генерит иконки нужных размеров. Но он не рассчитан под новые размеры, которые рекоммендует Apple после выхода iOS 7 (76x76, 120x120, 152x152). Не беда! <a href="https://github.com/goooseman/H5BP-Multi-Layer-FavIcons-iOS7">Форкнул, отредактировал, закоммитил, запушил</a>. Теперь с <del>блекджеком</del> поддержкой iOS 7. Но все же как то это не удобно: фотошоп, да и .ico файл сам не генерит. Слижком много движений руками.</p>
+
+<h1>Скрипт?</h1>
+
+<p>Нашёл скрипт <a href="https://github.com/emarref/webicon">webicon.sh</a>, который генерит .png разного размера, затех из них делает .ico и показывает html код, который надо вставить в шапку страницы. Но меня он тоже не устроил. <a href="https://github.com/goooseman/webicon">Форкнул</a>, изменил. В отличиее от первоначального варианта, моя версия скрипта:</p>
+
+<ul>
+<li>Оптимизирует каждый сгенерированный .png коммандой <code>optipng</code> (<strong>новая зависимость</strong>)</li>
+<li>Иконки для iOS (и Android) получают название в соответствии с шаблоном: apple-touch-icon-РАЗМЕРхРАЗМЕР-precomposed.png</li>
+<li>Иконки для iOS (и Android) делаются непрозрачными (прозрачный заменяется на белый)</li>
+<li>favicon.ico может быть прозрачной</li>
+<li>favicon.ico включает в себя следующие размеры: 16х16, 24x24, 32x32, 48x48, 64x64</li>
+<li>Те .png, которые необходимы только для генерации .ico, удаляются</li>
+<li>Добавлена генерация .png размеро 195х195 для поддержки Opera Speed Dial</li>
+<li>Отредактирован вывод html (улучшена поддрежка iOS, добавлена поддержка Opera Speed Dial)</li>
+<li>Добавлено изображение для теста</li>
+</ul>
+
+
+<p>Теперь скрипт генерит следующие файлы:</p>
+
+<ul>
+<li>apple-touch-icon-57x57-precomposed.png</li>
+<li>apple-touch-icon-72x72-precomposed.png</li>
+<li>apple-touch-icon-76x76-precomposed.png</li>
+<li>apple-touch-icon-114x114-precomposed.png</li>
+<li>apple-touch-icon-120x120-precomposed.png</li>
+<li>apple-touch-icon-144x144-precomposed.png</li>
+<li>apple-touch-icon-152x152-precomposed.png</li>
+<li>favicon-70.png</li>
+<li>favicon-150.png</li>
+<li>favicon-195.png</li>
+<li>favicon-310.png</li>
+<li>favicon.ico</li>
+</ul>
+
+
+<p>После генерации скрипт показывает следующий код, который нужно вставить в <code>&lt;head&gt;</code> сайта:</p>
+
+<p>``` html
+<link rel="icon" sizes="16x16 32x32 48x48 64x64" href="favicon.ico"></p>
+
+<!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
+
+
+
+
+<!-- The below are optional but encouraged -->
+
+
+
+
+<!-- The below are optional -->
+
+
+
+
+<!-- IE 10 Metro tile icon (Metro equivalent of apple-touch-icon): -->
+
+
+<p><meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png"></p>
+
+<!-- Opera Speed Dial icon -->
+
+
+<p><link rel="icon" sizes="195x195" href="favicon-195.png"></p>
+
+<!-- IE 11 live tiles: -->
+
+
+<p><meta name="msapplication-square70x70logo" content="favicon-70.png" />
+<meta name="msapplication-square150x150logo" content="favicon-150.png" />
+<meta name="msapplication-square310x310logo" content="favicon-310.png" /></p>
+
+<!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152-precomposed.png"></p>
+
+<!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144-precomposed"></p>
+
+<!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120-precomposed.png"></p>
+
+<!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114-precomposed.png"></p>
+
+<!-- For the iPad mini and the first- and second-generation iPad on iOS ≥ 7: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76-precomposed.png"></p>
+
+<!-- For the iPad mini and the first- and second-generation iPad on iOS ≤ 6: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72-precomposed.png"></p>
+
+<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+
+
+<p><link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57-precomposed.png">
+```</p>
+
+<p><a href="https://github.com/goooseman/webicon">Скачать скрипт</a>. Перед использованием необходимо установить <a href="http://www.imagemagick.org/">imagemagick</a> и <a href="http://optipng.sourceforge.net/">optipng</a>. На маке легче всего это сделать через <a href="http://brew.sh/">homebrew</a>. Сам скрипт лучше всего его положить в папку, которая включена в $PATH, чтобы с легкостью запускать его просто коммандой <code>webicon.sh</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CandyBox 2]]></title>
@@ -22,6 +160,48 @@
 Игра сделана на JavaScript, вся графика &ndash; ASCII, но затягивает с удивительной скоростью. Прошел, понравилось, попробовал HardMode. Забил. Забыл.<br/>
 <img class="center <a" src="href="http://d.pr/i/ovx9+">http://d.pr/i/ovx9+</a>"><br/>
 И на прошлой неделе вышла <a href="http://candybox2.net/">вторая версия</a>. В ней наконец-то сделали autosave и менее линейную модель. Всем, кто видел первую часть играть обязательно. Я прошел за 3 дня. И снова забыл. (хотя обещают Arena мод, и сами участники могут создавать уровни).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Инфографика по статистике моего блога]]></title>
+    <link href="http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu/"/>
+    <updated>2013-04-16T09:54:00+04:00</updated>
+    <id>http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu</id>
+    <content type="html"><![CDATA[<p>Нашел <a href="https://create.visual.ly/graphic/google-analytics/">интересный сервис</a>, который собирает интересную инфографику по Вашему сайту, опираясь на данные Google Analytics. И даже умеет ее вам раз в неделю присылать на почту.</p>
+
+<!--more-->
+
+
+<p>Вот инфографика по моему блогу:</p>
+
+<p><img class="<a" src="href="http://d.pr/i/VUNv+">http://d.pr/i/VUNv+</a>"></p>
+
+<p>Правда, чтобы получить такую инфорграфику, приходится регистрироваться. Но оно того стоит: на сайте есть еще много интересной инфографики, вот например весьма спорная информация, под названием &ldquo;Падение Apple&rdquo;:</p>
+
+<div class='visually_embed' data-category='Computers' rel='infographic'>
+            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617.jpg' alt='The Fall of Apple' />
+            <div class='visually_embed_bar'>
+                <span class='visually_embed_cycle'><a href="http://visual.ly/fall-apple/?utm_source=visually_embed"></a> </span>
+            </div>
+            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/fall-apple?utm_source=visually_embed'></a>
+            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
+            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
+        </div>
+
+
+<p>Или про глобальное потепление:</p>
+
+<div class='visually_embed' data-category='Computers' rel='infographic'>
+            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576.jpg' alt='When Sea Levels Attack!' />
+            <div class='visually_embed_bar'>
+                <span class='visually_embed_cycle'><a href="http://visual.ly/when-sea-levels-attack/?utm_source=visually_embed"></a> </span>
+            </div>
+            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/when-sea-levels-attack?utm_source=visually_embed'></a>
+            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
+            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
+        </div>
+
 ]]></content>
   </entry>
   
