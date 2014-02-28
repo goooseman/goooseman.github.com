@@ -16,7 +16,7 @@ var opts = {
   top: '300px', // Top position relative to parent in px
   left: 'auto' // Left position relative to parent in px
 };
-
+var spinner = new Spinner(opts);
 
 $('document').ready(function () {
 	// Open external links in new window
@@ -42,7 +42,7 @@ document.addEventListener('page:fetch', function() {
 
 
     var target = document.getElementById('wrap');
-	var spinner = new Spinner(opts).spin(target);
+	  spinner.spin(target);
 
 
 });
@@ -65,7 +65,7 @@ document.addEventListener('page:load', function() {
        
 document.addEventListener('page:restore', function () {
     $('#main').removeClass('fadeOutDown');
-
+    spinner.stop();
 });
 
 $(document).ready(function () {
