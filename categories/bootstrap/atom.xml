@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Категория: Bootstrap | Ctrl + Cmd]]></title>
+  <link href="http://goooseman.ru/categories/bootstrap/atom.xml" rel="self"/>
+  <link href="http://goooseman.ru/"/>
+  <updated>2014-03-05T00:19:34+04:00</updated>
+  <id>http://goooseman.ru/</id>
+  <author>
+    <name><![CDATA[goooseman]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Controller carousel, required by directive ngTransclude, can't be found!]]></title>
+    <link href="http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/"/>
+    <updated>2014-03-04T23:47:00+04:00</updated>
+    <id>http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui</id>
+    <content type="html"><![CDATA[<p><img class="center <a" src="href="http://95.85.35.239/ftp/Screen_Shot_20140304_at_23.53.19.png">http://95.85.35.239/ftp/Screen_Shot_20140304_at_23.53.19.png</a>" title="&lsquo;Controller carousel, required by directive ngTransclude, can&rsquo;t be found!&rsquo; &lsquo;Controller carousel, required by directive ngTransclude, can&rsquo;t be found!&rsquo;" ></p>
+
+<p>Недавно подключил к проекту <a href="http://angular-ui.github.io/bootstrap/">AngularJS Bootstrap-UI</a> и сразу обнажурил баг: на страницах, где используется carousel (класс для слайдшоу в Bootstrap), выскакивает следующая ошибка:<br/>
+<code>
+Controller 'carousel', required by directive 'ngTransclude', can't be found!
+</code></p>
+
+<!-- more -->
+
+
+<p>Полный лог:</p>
+
+<p><code>
+Error: [$compile:ctreq] Controller 'carousel', required by directive 'ngTransclude', can't be found!
+http://errors.angularjs.org/1.2.13/$compile/ctreq?p0=carousel&amp;p1=ngTransclude
+at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:146612
+at g (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:169688)
+at v (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:171431)
+at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:174956
+at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:180992
+at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195902
+at u.$eval (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:200165)
+at u.$digest (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:198869) &lt;div ng-class="{
+'active': leaving || (active &amp;amp;&amp;amp; !entering),
+'prev': (next || active) &amp;amp;&amp;amp; direction=='prev',
+'next': (next || active) &amp;amp;&amp;amp; direction=='next',
+'right': direction=='prev',
+'left': direction=='next'
+}" class="left carousel-control item text-center ng-isolate-scope" ng-transclude="" href="#carousel-example-generic" data-slide="prev"&gt;
+</code></p>
+
+<p>Погуглив, обнаружил, что я <a href="http://stackoverflow.com/questions/20137900/controller-carousel-required-by-directive-ngtransclude-cant-be-found">не единственный, кто встретил этот баг</a>, вот только единственное решение, которое там предложили &ndash; отключить <code>ui.bootstrap</code>.</p>
+
+<p>Баг находится в директиве <code>carousel</code> контроллера <code>ui.bootstrap.carousel</code>. Можно конечно его удалить из исходников, но я предлагаю способ лучше: переинициализировать этот модуль в нашем javascript файле:</p>
+
+<p>``` javascript application.js
+angular.module(&lsquo;ui.bootstrap.carousel&rsquo;, [&lsquo;ui.bootstrap.transition&rsquo;])</p>
+
+<pre><code>.controller('CarouselController', ['$scope', '$timeout', '$transition', '$q', function ($scope, $timeout, $transition, $q) {
+}]).directive('carousel', [function() {
+    return {
+
+    }
+</code></pre>
+
+<p>}]);
+```</p>
+
+<p>Причина бага? Я её, честно говоря, не вижу. Директива должна вызываться только от аттрибута или элемента &lsquo;carousel&rsquo;, но по непонятной причине вызывается и от класса с таким именем.</p>
+]]></content>
+  </entry>
+  
+</feed>

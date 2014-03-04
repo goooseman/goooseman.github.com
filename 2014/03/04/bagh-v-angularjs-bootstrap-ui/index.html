@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Controller carousel, required by directive ngTransclude, can't be found! - Ctrl + Cmd</title>
+  
+  <meta name="author" content="goooseman">
+
+  
+  <meta name="description" content="Controller carousel, required by directive ngTransclude, can't be found!">
+  <meta name="keywords" content="AngularJS, bootstrap, bootstrap-ui, bug, fix, error, ошибка">
+
+  
+  
+
+  <meta property="og:url" content="http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/" />
+
+  <meta property="og:type" content="article" />
+
+  <meta property="og:title" content="Controller carousel, required by directive ngTransclude, can't be found! - Ctrl + Cmd" />
+  <meta property="og:description" content="Controller carousel, required by directive ngTransclude, can't be found!" />
+
+  <meta property="og:image" content="http://goooseman.ru/images/cover.jpg" />
+
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@g000seman" />
+  <meta name="twitter:creator" content="@g000seman" />
+  <meta name="twitter:title" content="Controller carousel, required by directive ngTransclude, can't be found! - Ctrl + Cmd" />
+  <meta name="twitter:description" content="Controller carousel, required by directive ngTransclude, can't be found!" />
+
+  <meta name="twitter:image:src" content="http://goooseman.ru/images/cover.jpg" />
+
+  <meta name="twitter:domain" content="http://goooseman.ru" />
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/">
+  
+  <link rel="icon" sizes="16x16 32x32 48x48 64x64" href="favicon.ico">
+  <!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
+
+  <!-- The below are optional but encouraged -->
+
+
+  <!-- The below are optional -->
+
+  <!-- IE 10 Metro tile icon (Metro equivalent of apple-touch-icon): -->
+  <meta name="msapplication-TileColor" content="#FFFFFF">
+  <meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png">
+  <!-- Opera Speed Dial icon -->
+  <link rel="icon" sizes="195x195" href="favicon-195.png">
+  <!-- IE 11 live tiles: -->
+  <meta name="msapplication-square70x70logo" content="favicon-70.png" />
+  <meta name="msapplication-square150x150logo" content="favicon-150.png" />
+  <meta name="msapplication-square310x310logo" content="favicon-310.png" />
+  <!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144-precomposed">
+  <!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72-precomposed.png">
+  <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57-precomposed.png">
+
+  <link href="/atom.xml" rel="alternate" title="Ctrl + Cmd" type="application/atom+xml">
+
+  <!--<link href="/javascripts/libs/bootstrap-3.0.0/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">-->
+<!--<link href="/javascripts/libs/bootstrap-3.0.0/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">-->
+<link href="/javascripts/libs/bootstrapthemes/readable/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+  <script src="/javascripts/jquery.turbolinks.js"></script>
+  
+
+  
+
+
+  <script src="/javascripts/jquery.browser.js"></script>
+  <script src="/javascripts/spin.min.js"></script>
+  <script src="/javascripts/my.js"></script>
+  <script src="/javascripts/libs/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/jquery.jfeed.js"></script>
+
+  <script src="/javascripts/turbolinks.js"></script>
+</head>
+
+  <body   >
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header ">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">Ctrl + Cmd</a>
+		</div>
+
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="dropdown ">
+					<a href="#" class="dropdown-toggle " data-toggle="dropdown">Блог <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li >
+							<a href="/">Блог</a>
+						</li>
+						<li >
+							<a href="/archives">Архив записей</a>
+						</li>
+						<li >
+							<a href="/categories">Категории</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown ">
+					<a href="#" class="dropdown-toggle " data-toggle="dropdown">Мои проекты <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li >
+							<a href="/rutracker-updater">RuTracker Updater</a>
+						</li>
+						<li >
+							<a href="/gooosemanandalina">Гусман и Алина</a>
+						</li>
+						<li >
+							<a href="/aliya-soap">Aliya Soap</a>
+						</li>
+						<li >
+							<a href="/lbella">lBella</a>
+						</li>
+					</ul>
+				</li>
+
+                           
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="social-a" href="http://habrahabr.ru/users/goooseman/" title="Хабрахабр"><span class="icon-rus-habrahbr social" style="font-size: 30px; padding: 2px; background: #80A1B0;" ></span></a></li>
+				<li><a class="social-a" href="http://vk.com/gooseman" title="Вконтакте"><span class="icon-rus-vk-02 social" style="background: #587EA3;"></span></a></li>
+				<li><a class="social-a" href="https://www.facebook.com/Goooseman" title="Facebook"><span class="icon-facebook social" style="background: #3B5998;"></span></a></li>
+				
+				<li><a class="social-a" href="https://github.com/goooseman" title="GitHub"><span class="icon-github-01 social" style="background: #444444;"></span></a</li>
+				<li><a class="social-a" href="http://www.lastfm.ru/user/TE0I0TEJIb" title="Last.fm"><span class="icon-last_fm social" style="background: #D51C23;"></span></a</li>
+				<li><a class="social-a" href="https://plus.google.com/100347174775578881245?rel=author" title="Google+" style=""><span class="icon-google__x2B_ social" style="background: #D74A38;"></span></a></li>
+				<li><a class="social-a" href="mailto:inbox@goooseman.ru" titile="Написать мне письмо"><span class="icon-mail social" style="background: #444"></span></a></li>
+				<li><a class="social-a" href="/atom.xml" title="RSS"><span class="icon-rss social" style="background: #FF7F00;"></span></a></li>
+				
+				
+			</ul>
+			
+				<form class="search navbar-form navbar-right" id="search">
+                    <input type="hidden" name="q" value="site:goooseman.ru">
+                    <div class="form-group">
+                    	<input class="form-control" type="text" id="query" placeholder="Поиск...">
+                    </div>
+                </form>
+			
+		</div>
+	</div>
+</nav>
+
+
+      </header>
+      <div id="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <article itemscope itemtype="http://schema.org/Article" class="hentry panel panel-default" role="article">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        Controller Carousel, Required by Directive ngTransclude, Can't Be Found!
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix"><p><img class="center" src="http://95.85.35.239/ftp/Screen_Shot_20140304_at_23.53.19.png" title="t be found!" alt="Controller carousel, required by directive ngTransclude, can"></p>
+
+<p>Недавно подключил к проекту <a href="http://angular-ui.github.io/bootstrap/">AngularJS Bootstrap-UI</a> и сразу обнажурил баг: на страницах, где используется carousel (класс для слайдшоу в Bootstrap), выскакивает следующая ошибка:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Controller 'carousel', required by directive 'ngTransclude', can't be found! </span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<!-- more -->
+
+
+<p>Полный лог:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Error: [$compile:ctreq] Controller 'carousel', required by directive 'ngTransclude', can't be found!
+</span><span class='line'>http://errors.angularjs.org/1.2.13/$compile/ctreq?p0=carousel&p1=ngTransclude
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:146612
+</span><span class='line'>at g (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:169688)
+</span><span class='line'>at v (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:171431)
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:174956
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:180992
+</span><span class='line'>at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+</span><span class='line'>at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195902
+</span><span class='line'>at u.$eval (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:200165)
+</span><span class='line'>at u.$digest (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:198869) &lt;div ng-class="{
+</span><span class='line'>'active': leaving || (active &amp;&amp; !entering),
+</span><span class='line'>'prev': (next || active) &amp;&amp; direction=='prev',
+</span><span class='line'>'next': (next || active) &amp;&amp; direction=='next',
+</span><span class='line'>'right': direction=='prev',
+</span><span class='line'>'left': direction=='next'
+</span><span class='line'>}" class="left carousel-control item text-center ng-isolate-scope" ng-transclude="" href="#carousel-example-generic" data-slide="prev"&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Погуглив, обнаружил, что я <a href="http://stackoverflow.com/questions/20137900/controller-carousel-required-by-directive-ngtransclude-cant-be-found">не единственный, кто встретил этот баг</a>, вот только единственное решение, которое там предложили &ndash; отключить <code>ui.bootstrap</code>.</p>
+
+<p>Баг находится в директиве <code>carousel</code> контроллера <code>ui.bootstrap.carousel</code>. Можно конечно его удалить из исходников, но я предлагаю способ лучше: переинициализировать этот модуль в нашем javascript файле:</p>
+
+<figure class='code'><figcaption><span>application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ui.bootstrap.carousel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ui.bootstrap.transition&#39;</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;CarouselController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;$transition&#39;</span><span class="p">,</span> <span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$timeout</span><span class="p">,</span> <span class="nx">$transition</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">}]).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;carousel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Причина бага? Я её, честно говоря, не вижу. Директива должна вызываться только от аттрибута или элемента &lsquo;carousel&rsquo;, но по непонятной причине вызывается и от класса с таким именем.</p>
+</div>
+
+<p class="meta text-muted">
+
+
+
+</p>
+
+      <footer>
+        <p class="meta text-muted">
+        
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/categories/angularjs/'>AngularJS</a>, <a class='category' href='/categories/bootstrap/'>Bootstrap</a>
+  
+</span>
+
+
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name" class="fn">goooseman</span></span></span>
+
+          
+
+
+
+
+
+
+
+
+	
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-03-04T23:47:00+04:00" datetime="2014-03-04T23:47:00+04:00" pubdate data-updated="true">4<span>-ое</span> марта 2014 г.</time>
+          
+          
+
+        </p>
+        
+          <div class="sharing">
+            <!-- AddThis Button BEGIN -->
+            <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+              <a class="addthis_button_tumblr"></a>
+              <a class="addthis_button_vk"></a>
+              <a class="addthis_button_facebook"></a>
+              <a class="addthis_button_livejournal"></a>
+              <a class="addthis_button_twitter"></a>
+              <a class="addthis_button_odnoklassniki_ru"></a>
+              <a class="addthis_button_google_plusone_share"></a>
+              <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+            </div>
+        <!-- AddThis Button END -->
+
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/2014/02/28/nie-vykhodi-iz-komnaty-dot-dot-dot/" title="Previous Post: Не выходи из комнаты...">&laquo; Не выходи из комнаты...</a></li>
+            
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+      <section>
+        <h1>Комментарии</h1>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Последние записи</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item active" href="/2014/03/04/bagh-v-angularjs-bootstrap-ui/">Controller Carousel, Required by Directive ngTransclude, Can't Be Found!</a>
+    
+    <a class="list-group-item " href="/2014/02/28/nie-vykhodi-iz-komnaty-dot-dot-dot/">Не выходи из комнаты...</a>
+    
+    <a class="list-group-item " href="/2014/02/28/trudnosti-favicon/">Трудности Favicon</a>
+    
+    <a class="list-group-item " href="/2014/01/12/luchshaia-tiekhpoddierzhka/">Лучшая техподдержка</a>
+    
+    <a class="list-group-item " href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Ошибка Capistrano Bundle: Not Found</a>
+    
+  </div>
+</section>
+
+
+
+<section class="googleplus googleplus-hidden panel panel-default">
+  <div class="panel-body">
+    <h1>
+      <a href="https://plus.google.com/100347174775578881245?rel=author">
+        <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+        Google+
+      </a>
+    </h1>
+  </div>
+</section>
+
+
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Популярные категории</h3>
+  </div>
+  <div id="recent_posts" class="list-group">
+  	<a class='list-group-item category-list' href='/categories/drughoie/'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/apple/'>Apple   (10 постов)</a><a class='list-group-item category-list' href='/categories/os-x/'>OS X   (9 постов)</a><a class='list-group-item category-list' href='/categories/rossiia/'>Россия   (9 постов)</a><a class='list-group-item category-list' href='/categories/moskva/'>Москва   (6 постов)</a>
+  </div>
+    
+</section>
+<script type="text/javascript">
+	$('.category-list').each(function() {
+		if ($(this).attr("href") == window.location.pathname) {
+			$(this).addClass("active");
+		}
+	});
+</script>
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright 2014 &copy; goooseman<br>
+</p>
+
+</div>
+</footer>
+    
+<!-- Search modal -->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Результаты поиска</h4>
+        </div>
+        <div class="modal-body">
+        	<img src="/images/ajax-loader.gif" id="search-loading"></img>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!-- /Search modal -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'goooseman';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/';
+        var disqus_url = 'http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39308566-1', 'goooseman.ru');
+    ga('send', 'pageview');
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter22881640 = new Ya.Metrika({id:22881640,
+                        webvisor:true,
+                        clickmap:true,
+                        trackLinks:true,
+                        accurateTrackBounce:true});
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+});
+</script>
+
+<script>
+	$("#search").submit(function( event ) {
+  		event.preventDefault();
+  		$(".modal-body").html('<img src="/images/ajax-loader.gif" id="search-loading"></img>');
+  		var string = $("#query").val(); 
+  		if (string.length == 0) {
+  			$('#searchModal').modal('show');
+  			$(".modal-body").html('<div class="alert alert-danger">Пустой запрос</div>');
+  			return;
+  		}
+  		if (string.length < 4) {
+  			$('#searchModal').modal('show');
+  			$(".modal-body").html('<div class="alert alert-danger">Слишком корткий запрос</div>');
+  			return;
+  		}
+  		var html = "";
+  		$('#searchModal').modal('show');
+  		jQuery.getFeed({
+	       url: '/atom.xml',
+	       success: function(feed) {
+	       		for(var i = 0; i < feed.items.length; i++) {
+	       			
+	       			var item = feed.items[i];
+	       			item.description = item.description.replace(/\<.*?>/g, '');
+	       			if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1 || item.title.toLowerCase().indexOf(string.toLowerCase()) !== -1)  {
+	       				html += '<div class="panel panel-default search-panel"> <div class="panel-body"> <div class="entry-title"><h3><a href="' + item.link + '">' + item.title + '</a></h3></div>';
+						
+						if (item.description.toLowerCase().indexOf(string.toLowerCase()) !== -1) {
+							html += '<hr /><div>...' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) -30 ,item.description.toLowerCase().indexOf(string.toLowerCase())) + '<strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()),item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length) + '</strong>' + item.description.substring(item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length,item.description.toLowerCase().indexOf(string.toLowerCase()) + string.length + 30) + '...</div>';
+						}
+						html += '<p class="text-muted"><span class="glyphicon glyphicon-calendar"></span> ' + dateParse(item.updated) + '</p></div></div>'
+	       			}
+	                
+	                
+	            }
+	            if (html == "") {
+	            	html += '<div class="alert alert-warning">Ничего не найдено</div>';
+	            }
+	            $(".modal-body").html(html);
+
+	       }
+		});
+
+ 
+ 	});
+
+	function dateParse(date) {
+		var year = date.substring(0,4);
+		var month = date.substring(5,7);
+		var day = date.substring(8,10);
+
+		
+		
+		switch (month) {
+			case '01':
+				month = 'Января '
+				break
+			case '02':
+				month = 'Февраля '
+				break
+			case '03':
+				month = 'Марта '
+				break
+			case '04':
+				month = 'Апреля '
+				break
+			case '05':
+				month = 'Мая '
+				break
+			case '06':
+				month = 'Июня '
+				break
+			case '07':
+				month = 'Июля '
+				break
+			case '08':
+				month = 'Августа '
+				break
+			case '09':
+				month = 'Сентября '
+				break
+			case '10':
+				month = 'Октября '
+				break
+			case '11':
+				month = 'Ноября '
+				break
+			case '12':
+				month = 'Декабря '
+				break
+		}
+
+		switch (day) {
+			case '3':
+				day = day + '-ее '
+				break
+			default:
+				day = day + '-ое '
+		}
+		return day + month + year + ' г.';
+		
+	}
+</script>
+  </body>
+</html>

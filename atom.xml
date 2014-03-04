@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-02-28T17:26:38+04:00</updated>
+  <updated>2014-03-05T00:19:34+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Controller carousel, required by directive ngTransclude, can't be found!]]></title>
+    <link href="http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/"/>
+    <updated>2014-03-04T23:47:00+04:00</updated>
+    <id>http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://95.85.35.239/ftp/Screen_Shot_20140304_at_23.53.19.png" title="t be found!" alt="Controller carousel, required by directive ngTransclude, can"></p>
+
+<p>Недавно подключил к проекту <a href="http://angular-ui.github.io/bootstrap/">AngularJS Bootstrap-UI</a> и сразу обнажурил баг: на страницах, где используется carousel (класс для слайдшоу в Bootstrap), выскакивает следующая ошибка:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Controller 'carousel', required by directive 'ngTransclude', can't be found! </span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<!-- more -->
+
+
+<p>Полный лог:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Error: [$compile:ctreq] Controller 'carousel', required by directive 'ngTransclude', can't be found!
+</span><span class='line'>http://errors.angularjs.org/1.2.13/$compile/ctreq?p0=carousel&p1=ngTransclude
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:146612
+</span><span class='line'>at g (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:169688)
+</span><span class='line'>at v (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:171431)
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:174956
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:180992
+</span><span class='line'>at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+</span><span class='line'>at u (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195225)
+</span><span class='line'>at http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:195902
+</span><span class='line'>at u.$eval (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:200165)
+</span><span class='line'>at u.$digest (http://aliya-soap.ru/assets/application-177047d459241e8020f5604db9c970de.js.pagespeed.jm.eNxPlzr5Jo.js:1:198869) &lt;div ng-class="{
+</span><span class='line'>'active': leaving || (active &amp;&amp; !entering),
+</span><span class='line'>'prev': (next || active) &amp;&amp; direction=='prev',
+</span><span class='line'>'next': (next || active) &amp;&amp; direction=='next',
+</span><span class='line'>'right': direction=='prev',
+</span><span class='line'>'left': direction=='next'
+</span><span class='line'>}" class="left carousel-control item text-center ng-isolate-scope" ng-transclude="" href="#carousel-example-generic" data-slide="prev"&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Погуглив, обнаружил, что я <a href="http://stackoverflow.com/questions/20137900/controller-carousel-required-by-directive-ngtransclude-cant-be-found">не единственный, кто встретил этот баг</a>, вот только единственное решение, которое там предложили &ndash; отключить <code>ui.bootstrap</code>.</p>
+
+<p>Баг находится в директиве <code>carousel</code> контроллера <code>ui.bootstrap.carousel</code>. Можно конечно его удалить из исходников, но я предлагаю способ лучше: переинициализировать этот модуль в нашем javascript файле:</p>
+
+<figure class='code'><figcaption><span>application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;ui.bootstrap.carousel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ui.bootstrap.transition&#39;</span><span class="p">])</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="s1">&#39;CarouselController&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;$scope&#39;</span><span class="p">,</span> <span class="s1">&#39;$timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;$transition&#39;</span><span class="p">,</span> <span class="s1">&#39;$q&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$timeout</span><span class="p">,</span> <span class="nx">$transition</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">}]).</span><span class="nx">directive</span><span class="p">(</span><span class="s1">&#39;carousel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="p">}]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Причина бага? Я её, честно говоря, не вижу. Директива должна вызываться только от аттрибута или элемента &lsquo;carousel&rsquo;, но по непонятной причине вызывается и от класса с таким именем.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Не выходи из комнаты...]]></title>
