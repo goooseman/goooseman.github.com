@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T00:19:34+04:00</updated>
+  <updated>2014-03-05T00:20:30+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Controller carousel, required by directive ngTransclude, can't be found!]]></title>
+    <title type="html"><![CDATA[Баг в AngularJS Bootsrap-UI]]></title>
     <link href="http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui/"/>
     <updated>2014-03-04T23:47:00+04:00</updated>
     <id>http://goooseman.ru/2014/03/04/bagh-v-angularjs-bootstrap-ui</id>
