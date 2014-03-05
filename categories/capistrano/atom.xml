@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Capistrano | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/capistrano/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T10:40:28+04:00</updated>
+  <updated>2014-03-05T15:01:03+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,930 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deploy приложения на RoR 4 с помощью Capistrano 3]]></title>
+    <link href="http://goooseman.ru/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3/"/>
+    <updated>2014-03-05T13:57:00+04:00</updated>
+    <id>http://goooseman.ru/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3</id>
+    <content type="html"><![CDATA[<p class="text-muted" markdown='1'>
+    Кросспост <a href="http://habrahabr.ru/post/213269/">моей записи на хабре</a>
+</p>
+
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg">http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg</a>" title="&lsquo;Capistrano&rsquo; &lsquo;Capistrano&rsquo;" ></p>
+
+<p>Представьте: Вы — веб-разработчик, который только недавно освоил Ruby on
+Rails. И тут Ваш первый проект подходит к стадии, когда его нужно
+выложить в интернет.
+Вы, конечно, можете залить его на Heroku, но тамошние цены немного
+кусаются. Остается только купить VPS, настроить его и выложить проект
+туда.
+«Что может быть проще? Найду какой-нибудь гайд, да следаю всё по нему» —
+подумаете Вы. Вот только гайдов, которые не просто выкладывают команды,
+но и объясняющие, что эти команды делают, — единицы, да и те используют
+уже устаревшую вторую версию Capistrano.</p>
+
+<p>Поэтому я решил написать свой гайд, в котором постараюсь подробно
+рассмотреть:</p>
+
+<ul>
+<li>Первичную настройку сервера</li>
+<li>Установку и настройку nginx (с модулем PageSpeed), postgresql, redis</li>
+<li>Установку rvm, rails</li>
+<li>Настройку гема foreman для управления процессами Вашего приложения</li>
+<li>Настройку сервера Unicorn</li>
+<li>Настройку гема Capistrano (v3.1) для автоматизации деплоя</li>
+</ul>
+
+
+<p>Я надеюсь, что этот гайд будет полезен не только новичкам, но и
+разработчикам со стажем.</p>
+
+<!--more-->
+
+
+<h4>Первичная настройка сервера</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/2d0/6b4/21c/2d06b421c7b265808e7d2c24f4624065.jpg">http://habrastorage.org/getpro/habr/post_images/2d0/6b4/21c/2d06b421c7b265808e7d2c24f4624065.jpg</a>" title="&lsquo;Первичная настройка сервера&rsquo; &lsquo;Первичная настройка сервера&rsquo;" ></p>
+
+<p>Вы купили свой первый VPS, установили ОС (я использую ubuntu 12.04 LTS и
+все команды буду выкладывать именно под неё), зашли по SSH. Что делать
+дальше?</p>
+
+<p>Первым делом сменим пароль для пользователя root коммандой <code>passwd</code></p>
+
+<p>Создадим нового пользователя: <code>adduser deployer</code></p>
+
+<p>Разрешим ему пользоваться коммандой sudo: <code>visudo</code></p>
+
+<p>и дописываем: <code>deployer ALL=(ALL:ALL) ALL</code></p>
+
+<p>Изменим настройки ssh сервера (запретим логин под root, доступ по
+доменному имени и разрешим логин только под нашим новым пользователем).
+Добавляем в файл &lsquo;/etc/ssh/sshd_config&rsquo;: <br/>
+<code>
+PermitRootLogin no UseDNS no AllowUsers deployer
+</code></p>
+
+<p>Перезапустим ssh сервер коммандой: <code>reload ssh</code></p>
+
+<p>Чтобы не вводить каждый раз пароль при подключении по ssh, нам надо
+скопировать ssh ключ с Вашей машины на сервер. Самый простой способ
+сделать это — выполнить на локальной машине <code>ssh-copy-id deployer@123.123.123.123</code></p>
+
+<p>(На маке требуется установка ssh-copy-id, сделать можно через brew, на
+Windows не знаю автоматизированного средства для копирования ключей, но
+в интернете есть много интересного на эту тему).</p>
+
+<p>Так же, пока уж мы под рутом, можно создать SWAP файл, если у Вас мало
+RAM. Делается это так: <code>dd if=/dev/zero of=/swapfile bs=1024 count=512k mkswap /swapfile swapon /swapfile</code></p>
+
+<p>Далее в файле &lsquo;/etc/fstab&rsquo; добавляем строчку: <code>/swapfile none swap sw 0 0</code></p>
+
+<p>И далее выполняем: <code>echo 0 &gt; /proc/sys/vm/swappiness sudo chown root:root /swapfile sudo chmod 0600 /swapfile</code></p>
+
+<p>Можно перезагрузиться и проверить наличие SWAP файла коммандой <code>swapon -s</code></p>
+
+<h4>Установка и настройка nginx</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/541/7a6/785/5417a67857580be18180dbb0d30a1384.png">http://habrastorage.org/getpro/habr/post_images/541/7a6/785/5417a67857580be18180dbb0d30a1384.png</a>" title="&lsquo;nginx&rsquo; &lsquo;nginx&rsquo;" ></p>
+
+<p>На этот раз логинемся под нашим новым пользователем коммандой <code>ssh deployer@123.123.123.123</code> (на локальном компьютере).</p>
+
+<p>Лично я использую модуль PageSpeed, поэтому nginx собираю сам. Но
+сначала нам надо обновить репозитории, обновить систему, и скачать
+необходимые для успешной сборки пакеты:</p>
+
+<p><code>bash
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get install build-essential zlib1g-dev libpcre3 libpcre3-dev unzip
+</code></p>
+
+<p>Теперь собираем:</p>
+
+<p><code>bash
+wget https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.1-beta.zip
+unzip v1.7.30.1-beta.zip
+cd ngx_pagespeed-1.7.30.1-beta
+wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
+tar -xzvf 1.7.30.1.tar.gz
+wget http://nginx.org/download/nginx-1.4.4.tar.gz
+tar -xzvf nginx-1.4.4.tar.gz
+cd nginx-1.4.4
+./configure --add-module=$HOME/ngx_pagespeed-1.7.30.1-beta
+make
+sudo checkinstall
+</code></p>
+
+<p>Для управления nginx напишем <a href="http://upstart.ubuntu.com/">upstart</a>
+скрипт. Создаём файл &lsquo;/etc/init/nginx.conf&rsquo; со следующим содержимым:</p>
+
+<p>``` bash etc/init/nginx.conf
+description &ldquo;nginx http daemon&rdquo;
+author &ldquo;George Shammas <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x67;&#x65;&#x6f;&#x72;&#x67;&#x79;&#111;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x65;&#111;&#x72;&#x67;&#121;&#x6f;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;</p>
+
+<p>start on (filesystem and net-device-up IFACE=lo)
+stop on runlevel [!2345]</p>
+
+<p>env DAEMON=/usr/local/nginx/sbin/nginx
+env PID=/var/run/nginx.pid</p>
+
+<p>expect fork
+respawn
+respawn limit 10 5</p>
+
+<h1>oom never</h1>
+
+<p>pre-start script</p>
+
+<pre><code>    $DAEMON -t
+    if [ $? -ne 0 ]
+            then exit $?
+    fi
+</code></pre>
+
+<p>end script</p>
+
+<p>exec $DAEMON
+```</p>
+
+<p>Теперь вы можете выполнять <code>sudo start/stop/restart/status nginx</code></p>
+
+<p>Наш nginx.conf лежит по адресу &lsquo;/usr/local/nginx/conf/nginx.conf&rsquo;, но
+пока мы его трогать не будем. Мы его зальем автоматически при первом
+деплое приложения.</p>
+
+<p>Для наших веб приложений мы создадим нового пользователя и новую группу,
+добавим себя в эту группу, и создадим папку:</p>
+
+<p><code>bash
+sudo useradd -s /sbin/nologin -r nginx
+sudo groupadd web
+sudo usermod -a -G web nginx
+sudo usermod -a -G web deployer
+sudo mkdir /var/www
+sudo chgrp -R web /var/www
+sudo chmod -R 775 /var/www
+</code></p>
+
+<p>Для того, чтобы мы смогли писать в папку придется разлогиниться и зайти
+снова под нашим пользователем.</p>
+
+<h4>Установка и настройка PostgreSQL</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/c46/490/b80/c46490b8070528ded4adc5ddd2d2e480.png">http://habrastorage.org/getpro/habr/post_images/c46/490/b80/c46490b8070528ded4adc5ddd2d2e480.png</a>" title="&lsquo;PostgreSQL&rsquo; &lsquo;PostgreSQL&rsquo;" ></p>
+
+<p>В репозиториях ubuntu лежит устаревшая версия, так что мы добавим
+сторонний репо. В файл &lsquo;/etc/apt/sources.list.d/pgdg.list&rsquo; добавим: <code> deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main</code></p>
+
+<p>Затем добавляем ключ репозитория и устанавливаем PostgreSQL:</p>
+
+<p><code>bash
+wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3
+</code></p>
+
+<p>И создаем нового пользователя:</p>
+
+<p>``` bash
+sudo -u postgres psql</p>
+
+<p>create user deployer with password &lsquo;ваш пароль&rsquo;;
+alter role deployer superuser createrole createdb replication;</p>
+
+<p>\q
+```</p>
+
+<p>Чтобы иметь доступ с локального компьютера в файле
+&lsquo;/etc/postgresql/9.3/main/postgresql.conf&rsquo; изменим параметр
+<code>listen_addresses = 'localhost'</code>на <code>listen_addresses = '*'</code>и добавим в
+файл &lsquo;/etc/postgresql/9.3/main/pg_hba.conf&rsquo; строчку</p>
+
+<p><code>
+host all deployer ваш.внешний.ip.адрес 255.255.255.0 md5
+</code></p>
+
+<p>Перезагружаем postgresql коммандой <code>sudo service postgresql restart</code></p>
+
+<h4>Установка и настройка Redis</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/f4e/5dc/854/f4e5dc8543844123d64fb68139951e31.png">http://habrastorage.org/getpro/habr/post_images/f4e/5dc/854/f4e5dc8543844123d64fb68139951e31.png</a>" title="&lsquo;Redis&rsquo; &lsquo;Redis&rsquo;" ></p>
+
+<p>Если Вы используте gem <a href="https://github.com/resque/resque">resque</a>, то
+Вам нужно установить Redis. Ибо в репозитории устаревшая версия, я его
+собираю из исходников, к тому же это занимает немного времени: <br/>
+<code>bash
+sudo apt-get install tcl8.5
+wget http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+make
+make test
+sudo cp src/redis-server /usr/local/bin
+sudo cp src/redis-cli /usr/local/bin
+</code></p>
+
+<p>Redis по умолчанию не защищен паролем и открыт всем, поэтому поставим
+пароль: в файле &lsquo;redis.conf&rsquo; добавляем параметр <code>requirepass</code>с нашим
+паролем. Redis легко брутфорсится, поэтому я делаю пароль не менее 100
+символов. Также, чтобы потом не вылетало ошибок, меняем параметр <code>dir</code>на
+<code>/var/www/other</code>, предварительно создав такую папку (
+<code>mkdir /var/www/other</code>).
+Копируем наш конфиг командой <code>sudo cp redis.conf /etc/redis/redis.conf</code></p>
+
+<p>Создаем upstart скрипт по адресу &lsquo;/etc/init/redis-server.conf&rsquo; со
+следующим содержанием:</p>
+
+<p>``` bash /etc/init/redis-server.conf</p>
+
+<h1>!upstart</h1>
+
+<p>description &ldquo;Redis Server&rdquo;</p>
+
+<p>env USER=deployer</p>
+
+<p>start on runlevel [2345]
+stop on runlevel [016]</p>
+
+<p>respawn
+exec start-stop-daemon &mdash;start &mdash;make-pidfile &mdash;pidfile /var/run/redis-server.pid &mdash;chuid $USER &mdash;exec /usr/local/bin/redis-server /etc/redis/redis.conf >> /var/www/log/redis.log 2>&amp;1
+```</p>
+
+<p>Теперь мы можем управлять Redisом коммандами <code>sudo start/stop/restart/status redis-server</code>, предварительно создав папку для логов ( <code>mkdir /var/www/log</code>).</p>
+
+<h4>Установка RVM, Ruby, Rails, Bundler</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/fd7/5bf/168/fd75bf168d048c419cf083bad58c8e51.png">http://habrastorage.org/getpro/habr/post_images/fd7/5bf/168/fd75bf168d048c419cf083bad58c8e51.png</a>" title="&lsquo;Ruby on Rails&rsquo; &lsquo;Ruby on Rails&rsquo;" ></p>
+
+<p>Тут совсем ничего сложного:</p>
+
+<p>``` bash
+sudo apt-get install git curl python-software-properties</p>
+
+<p>sudo add-apt-repository ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install nodejs</p>
+
+<p>curl -L get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm
+rvm requirements</p>
+
+<p>rvm install 2.0.0
+rvm use 2.0.0 &mdash;default
+gem install rails &mdash;no-ri &mdash;no-rdoc
+gem install bundler
+```</p>
+
+<h4>Создаем репозиторий на GitHub/BitBucket</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/3d1/b5c/563/3d1b5c56357a4371884a9d1b1a94ac13.png">http://habrastorage.org/getpro/habr/post_images/3d1/b5c/563/3d1b5c56357a4371884a9d1b1a94ac13.png</a>" title="&lsquo;Git&rsquo; &lsquo;Git&rsquo;" ></p>
+
+<p>Мы будем использовать git на удаленном сервере для деплоя нашего
+приложения. Можно и настроить git сервер на нашем VPS, но зачем, если
+есть удобные бесплатные решения. Итак, создаем репозиторий на
+GitHub/BitBucket (у BitBucket приватные репозитории бесплатны), но не
+спешим заливать туда наш проект, сначала отредактируем .gitignore файл
+(он находится в корне приложения), чтобы в репо не попала никакая
+конфидициальная информация (особенно это важно, если репо публичный), да
+и заодно лишние файлы нам там не нужны:</p>
+
+<p><code>
+/config/database.yml # доступ к базе данным
+/Procfile # про него я еще расскажу
+/config/deploy/ # файлы Capistrano
+/shared/ # файлы, которых нет в репозитории, но они будут скопированы на сервер при первом деплое приложения
+/public/system/ # если установлен Paperclip
+</code></p>
+
+<p>Теперь можно сделать первый коммит и запушить проект в git.</p>
+
+<p><code>
+git init git remote add origin #АДРЕС РЕПО git add -A git commit -m 'first commit' git push -u origin --all
+</code></p>
+
+<p>Также нам надо добавить ключ нашего сервера в админку Github/BitBucket,
+это обязательное условие, т.к. из репозитория изменения будут
+загружаться на сервер. Как это сделать можно узнать в Helpе сервиса.</p>
+
+<h4>gem foreman</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/26d/932/db9/26d932db99bae73a60f9cdfdb865dcb4.jpg">http://habrastorage.org/getpro/habr/post_images/26d/932/db9/26d932db99bae73a60f9cdfdb865dcb4.jpg</a>" title="&lsquo;Доктор Форман из сериала Доктор Хаус&rsquo; &lsquo;Доктор Форман из сериала Доктор Хаус&rsquo;" ></p>
+
+<p><a href="https://github.com/ddollar/foreman">foreman</a> — гем для управления
+процессами приложения. На локальной машине он позволяет запускать сразу
+все процессы, указанные в Procfile, одной коммандой <code>foreman start</code> и показывает их вывод.</p>
+
+<p>На сервере командой <code>foreman export upstart</code> он создает upstart скрипт для легкого управления приложением с помощью
+команд start/stop/restart. Но об этом потом. Пока просто установим его,
+создадим Procfile в корне приложения, и наполним его для локального
+использования. У меня он выглядит так.</p>
+
+<p><code>
+web: rails s
+job1: bundle exec rake resque:work PIDFILE=./tmp/pids/resque2.pid QUEUES=send_email
+job2: bundle exec rake resque:work PIDFILE=./tmp/pids/resque2.pid QUEUES=send_email
+</code></p>
+
+<p>Production конфигурацию мы напишем потом, когда речь зайдет о
+Capistrano.</p>
+
+<h4>Устанавливаем Unicorn</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/01b/a1f/26f/01ba1f26f0eeecd3cfe3380416bff98b.png">http://habrastorage.org/getpro/habr/post_images/01b/a1f/26f/01ba1f26f0eeecd3cfe3380416bff98b.png</a>" title="&lsquo;Unicorn&rsquo; &lsquo;Unicorn&rsquo;" ></p>
+
+<p><a href="https://github.com/defunkt/unicorn">Unicorn</a> — продвинутый HTTP
+сервер. Установим его, добавив <code>group :production do gem 'unicorn' end</code> в Gemfile. (Не забудьте про <code>bundle install</code>)</p>
+
+<p>В папке &lsquo;/config/&rsquo; создаем файл unicon.rb c примерно таким содержимым:
+``` ruby unicorn.rb
+worker_processes 2</p>
+
+<p>working_directory &ldquo;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current&rdquo; # available in 0.94.0+</p>
+
+<h1>listen on both a Unix domain socket and a TCP port,</h1>
+
+<h1>we use a shorter backlog for quicker failover when busy</h1>
+
+<p>listen &ldquo;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/socket/.unicorn.sock&rdquo;, :backlog => 64
+listen 8080, :tcp_nopush => true</p>
+
+<h1>nuke workers after 30 seconds instead of 60 seconds (the default)</h1>
+
+<p>timeout 30</p>
+
+<h1>feel free to point this anywhere accessible on the filesystem</h1>
+
+<p>pid &ldquo;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/unicorn.pid&rdquo;</p>
+
+<h1>By default, the Unicorn logger will write to stderr.</h1>
+
+<h1>Additionally, ome applications/frameworks log to stderr or stdout,</h1>
+
+<h1>so prevent them from going to /dev/null when daemonized here:</h1>
+
+<p>stderr_path &ldquo;/var/www/apps/ИМЯ<em>ПРИЛОЖЕНИЯ/log/unicorn.stderr.log&rdquo;
+stdout_path &ldquo;/var/www/apps/ИМЯ</em>ПРИЛОЖЕНИЯ/log/unicorn.stdout.log&rdquo;</p>
+
+<h1>combine Ruby 2.0.0dev or REE with &ldquo;preload_app true&rdquo; for memory savings</h1>
+
+<h1><a href="http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow">http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow</a></h1>
+
+<p>preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and
+  GC.copy_on_write_friendly = true</p>
+
+<h1>Enable this flag to have unicorn test client connections by writing the</h1>
+
+<h1>beginning of the HTTP headers before calling the application.  This</h1>
+
+<h1>prevents calling the application for connections that have disconnected</h1>
+
+<h1>while queued.  This is only guaranteed to detect clients on the same</h1>
+
+<h1>host unicorn runs on, and unlikely to detect disconnects even on a</h1>
+
+<h1>fast LAN.</h1>
+
+<p>check_client_connection false</p>
+
+<p>before_fork do |server, worker|</p>
+
+<p>  # the following is highly recomended for Rails + &ldquo;preload_app true&rdquo;
+  # as there&rsquo;s no need for the master process to hold a connection</p>
+
+<p>  defined?(ActiveRecord::Base) and</p>
+
+<pre><code>ActiveRecord::Base.connection.disconnect!
+</code></pre>
+
+<p>  # The following is only recommended for memory/DB-constrained
+  # installations.  It is not needed if your system can house
+  # twice as many worker_processes as you have configured.
+  #
+  # # This allows a new master process to incrementally
+  # # phase out the old master process with SIGTTOU to avoid a
+  # # thundering herd (especially in the &ldquo;preload_app false&rdquo; case)
+  # # when doing a transparent upgrade.  The last worker spawned
+  # # will then kill off the old master process with a SIGQUIT.
+  old_pid = &ldquo;#{server.config[:pid]}.oldbin&rdquo;
+  if old_pid != server.pid</p>
+
+<pre><code>begin
+  sig = (worker.nr + 1) &gt;= server.worker_processes ? :QUIT : :TTOU
+  Process.kill(sig, File.read(old_pid).to_i)
+rescue Errno::ENOENT, Errno::ESRCH
+end
+</code></pre>
+
+<p>  end
+  #
+  # Throttle the master from forking too quickly by sleeping.  Due
+  # to the implementation of standard Unix signal handlers, this
+  # helps (but does not completely) prevent identical, repeated signals
+  # from being lost when the receiving process is busy.
+  # sleep 1
+end</p>
+
+<p>after_fork do |server, worker|
+  # per-process listener ports for debugging/admin/migrations
+  # addr = &ldquo;127.0.0.1:#{9293 + worker.nr}&rdquo;
+  # server.listen(addr, :tries => -1, :delay => 5, :tcp_nopush => true)</p>
+
+<p>  # the following is <em>required</em> for Rails + &ldquo;preload_app true&rdquo;,
+  defined?(ActiveRecord::Base) and</p>
+
+<pre><code>ActiveRecord::Base.establish_connection
+</code></pre>
+
+<p>  # if preload_app is true, then you may also want to check and
+  # restart any other shared sockets/descriptors such as Memcached,
+  # and Redis.  TokyoCabinet file handles are safe to reuse
+  # between any number of forked children (assuming your kernel
+  # correctly implements pread()/pwrite() system calls)
+end</p>
+
+<p>```</p>
+
+<p>Заменяем ИМЯ_ПРИЛОЖЕНИЯ на Ваше имя приложения, которое Вы потом
+зададите в настройках Capistrano.</p>
+
+<h4>Capistrano</h4>
+
+<p><img class="center <a" src="href="http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg">http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg</a>" title="&lsquo;Capistrano&rsquo; &lsquo;Capistrano&rsquo;" ></p>
+
+<p><a href="https://github.com/capistrano/capistrano">Capistrano</a> — весьма удобное
+средство для деплоя приложения, пусть и сначала таковым не кажется.
+Установим его с нужными дополнениями, добавив в Gemfile:<br/>
+<code>ruby Gemfile
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rvm'
+end
+</code></p>
+
+<p>Выполняем <code>bundle exec cap install</code>и добавляем в Capfile: <br/>
+<code>ruby Capfile
+require 'capistrano/deploy'
+require 'capistrano/rvm'
+require 'capistrano/bundler'
+require 'capistrano/rails'
+</code></p>
+
+<p>Уже сейчас, просто указав адрес сервера, репозитория и рабочую папку,
+Capistrano:</p>
+
+<ul>
+<li>Загрузит ваше приложение из репозитория на сервер в папку
+<code>рабочая_папка/имя_приложения/releases/дата_релиза/</code>, не удаляя
+старую версию (по умолчанию он хранит 5 последних версий
+приложений).</li>
+<li>Выполнит bundle install.</li>
+<li>Выполнит db:migrate.</li>
+<li>Выполнит assets:precompile.</li>
+<li>Создаст symlink из папки приложения в папку
+<code>рабочая_папка/имя_приложения/current</code></li>
+</ul>
+
+
+<p>Но нам этого мало. Нам нужно реализовать следующее:</p>
+
+<ul>
+<li>При первом деплое выполнить настройку nginx, unicorn, загрузить
+некоторые файлы, которые не будут меняться, создать upstart скрипт
+(с помощью foreman).</li>
+<li>Перед каждым деплоем автоматически выполнять git add, git commit,
+git push (сообщение к коммиту спрашивать у пользователя). После
+каждого деплоя создавать симлинки и перезапускать Unicorn.</li>
+</ul>
+
+
+<p>Нужные только в первый раз файлы будем хранить в папке shared (в папке
+проекта на локальной машине), не зря мы ее добавили в .gitignore.
+Сначала создадим там nginx.conf примерно с таким содержимым:</p>
+
+<p>``` bash nginx.conf
+user nginx web;</p>
+
+<p>pid /var/run/nginx.pid;
+error_log /var/www/log/nginx.error.log;</p>
+
+<p>events {
+  worker_connections 1024; # increase if you have lots of clients
+  accept_mutex off; # &ldquo;on&rdquo; if nginx worker_processes > 1
+  use epoll; # enable for Linux 2.6+
+  # use kqueue; # enable for FreeBSD, OSX
+}</p>
+
+<p>http {
+  # nginx will find this file in the config directory set at nginx build time
+  include mime.types;
+  types_hash_max_size 2048;
+  server_names_hash_bucket_size 64;
+  # fallback in case we can&rsquo;t determine a type
+  default_type application/octet-stream;</p>
+
+<p>  # click tracking!
+  access_log /var/www/log/nginx.access.log combined;</p>
+
+<p>  # you generally want to serve static files with nginx since neither
+  # Unicorn nor Rainbows! is optimized for it at the moment
+  sendfile on;</p>
+
+<p>  tcp_nopush on; # off may be better for <em>some</em> Comet/long-poll stuff
+  tcp_nodelay off; # on may be better for some Comet/long-poll stuff</p>
+
+<p>  # we haven&rsquo;t checked to see if Rack::Deflate on the app server is
+  # faster or not than doing compression via nginx.  It&rsquo;s easier
+  # to configure it all in one place here for static files and also
+  # to disable gzip for clients who don&rsquo;t get gzip/deflate right.
+  # There are other gzip settings that may be needed used to deal with
+  # bad clients out there, see <a href="http://wiki.nginx.org/NginxHttpGzipModule">http://wiki.nginx.org/NginxHttpGzipModule</a>
+  gzip on;
+  gzip_http_version 1.0;
+  gzip_proxied any;
+  gzip_min_length 0;
+  gzip_vary on;
+  gzip_disable &ldquo;MSIE [1-6].&rdquo;;
+  gzip_proxied expired no-cache no-store private auth;
+  gzip_comp_level 9;
+  gzip_types text/plain text/xml text/css</p>
+
+<pre><code>         text/comma-separated-values
+         text/javascript application/x-javascript
+         application/atom+xml;
+</code></pre>
+
+<p>  # this can be any application server, not just Unicorn/Rainbows!
+  upstream app_server {</p>
+
+<pre><code>server unix:/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/socket/.unicorn.sock fail_timeout=0;
+</code></pre>
+
+<p>  }</p>
+
+<p>  server {</p>
+
+<pre><code># PageSpeed
+pagespeed on;
+pagespeed FileCachePath /var/ngx_pagespeed_cache;
+location ~ "\.pagespeed\.([a-z]\.)?[a-z]{2}\.[^.]{10}\.[^.]+" { 
+  add_header "" ""; 
+}
+location ~ "^/ngx_pagespeed_static/" { }
+location ~ "^/ngx_pagespeed_beacon$" { }
+location /ngx_pagespeed_statistics { 
+  allow 127.0.0.1; allow 5.228.169.73; deny all; 
+}
+location /ngx_pagespeed_global_statistics { 
+  allow 127.0.0.1; allow 5.228.169.73; deny all; 
+}
+pagespeed MessageBufferSize 100000;
+location /ngx_pagespeed_message { 
+  allow 127.0.0.1; allow 5.228.169.73; deny all; 
+}
+location /pagespeed_console { 
+  allow 127.0.0.1; allow 5.228.169.73; deny all; 
+}
+
+
+
+
+
+
+charset utf-8;
+# enable one of the following if you're on Linux or FreeBSD
+listen 80 default deferred; # for Linux
+# listen 80 default accept_filter=httpready; # for FreeBSD
+
+# If you have IPv6, you'll likely want to have two separate listeners.
+# One on IPv4 only (the default), and another on IPv6 only instead
+# of a single dual-stack listener.  A dual-stack listener will make
+# for ugly IPv4 addresses in $remote_addr (e.g ":ffff:10.0.0.1"
+# instead of just "10.0.0.1") and potentially trigger bugs in
+# some software.
+# listen [::]:80 ipv6only=on; # deferred or accept_filter recommended
+
+client_max_body_size 4G;
+server_name _;
+
+# ~2 seconds is often enough for most folks to parse HTML/CSS and
+# retrieve needed images/icons/frames, connections are cheap in
+# nginx so increasing this is generally safe...
+keepalive_timeout 5;
+
+# path for static files
+root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+
+# Prefer to serve static files directly from nginx to avoid unnecessary
+# data copies from the application server.
+#
+# try_files directive appeared in in nginx 0.7.27 and has stabilized
+# over time.  Older versions of nginx (e.g. 0.6.x) requires
+# "if (!-f $request_filename)" which was less efficient:
+# http://bogomips.org/unicorn.git/tree/examples/nginx.conf?id=v3.3.1#n127
+try_files $uri/index.html $uri.html $uri @app;
+
+location ~ ^/(assets)/  {
+  root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+
+  expires max;
+  add_header Cache-Control public;
+}
+location @app {
+  # an HTTP header important enough to have its own Wikipedia entry:
+  #   http://en.wikipedia.org/wiki/X-Forwarded-For
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+  # enable this if you forward HTTPS traffic to unicorn,
+  # this helps Rack set the proper URL scheme for doing redirects:
+  # proxy_set_header X-Forwarded-Proto $scheme;
+
+  # pass the Host: header from the client right along so redirects
+  # can be set properly within the Rack application
+  proxy_set_header Host $http_host;
+
+  # we don't want nginx trying to do something clever with
+  # redirects, we set the Host: header above already.
+  proxy_redirect off;
+
+  # set "proxy_buffering off" *only* for Rainbows! when doing
+  # Comet/long-poll/streaming.  It's also safe to set if you're using
+  # only serving fast clients with Unicorn + nginx, but not slow
+  # clients.  You normally want nginx to buffer responses to slow
+  # clients, even with Rails 3.1 streaming because otherwise a slow
+  # client can become a bottleneck of Unicorn.
+  #
+  # The Rack application may also set "X-Accel-Buffering (yes|no)"
+  # in the response headers do disable/enable buffering on a
+  # per-response basis.
+  # proxy_buffering off;
+
+  proxy_pass http://app_server;
+}
+
+# Rails error pages
+error_page 500 502 503 504 /500.html;
+location = /500.html {
+  root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+}
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>Это мой конфиг для nginx, там необходимо заменить &lsquo;ИМЯ<em>ПРИЛОЖЕНИЯ&rsquo; на
+Ваше имя приложения, указанное в первой строчке config/deploy.rb (set
+:application, &lsquo;ИМЯ</em>ПРИЛОЖЕНИЯ&rsquo;).</p>
+
+<p>Теперь создаем там же (в /shared/) файл Procfile с таким содержанием:<br/>
+<code>
+web: bundle exec unicorn_rails -c /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/config/unicorn.rb -E production
+job1: bundle exec rake resque:work RAILS_ENV=production PIDFILE=/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/resque1.pid QUEUES=*
+job2: bundle exec rake resque:work RAILS_ENV=production PIDFILE=/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/resque2.pid QUEUES=*
+</code></p>
+
+<p>Это конфиг для приложения с двумя resque workerами. Если Вы не
+используете Resque, то просто оставьте только первую строчку.
+Там же создаём database.yml с настройками базы данных и application.yml,
+если пользуетесь гемом Figaro.</p>
+
+<p>Нвш Capistrano скрипт будет выполнять некоторые команды от имени
+суперпользователя на сервере. Чтобы разрешить ему делать это, выполняем
+команду <code>sudo visudo</code> на сервере и добавляем строчку:
+<code>
+deployer ALL=NOPASSWD: /usr/sbin/service, /bin/ln, /bin/rm, /bin/mv, /sbin/start, /sbin/stop, /sbin/restart, /sbin/status
+</code></p>
+
+<p>Осталось только настроить Capistrano. В файле &lsquo;config/deploy/production&rsquo;
+делаем изменения:
+ <code>server 'IP сервера', user: 'deployer', roles: %w{web app db}</code>
+В файл &lsquo;config/deploy.rb&rsquo; добавляем сверху:</p>
+
+<p>``` ruby deploy.rb
+set :repo_url, &lsquo;Адрес репозитория&rsquo;
+set :application, &lsquo;ИМЯ<em>ПРИЛОЖЕНИЯ&rsquo;
+application = &lsquo;ИМЯ</em>ПРИЛОЖЕНИЯ&rsquo;
+set :rvm_type, :user
+set :rvm_ruby_version, &lsquo;2.0.0-p353&rsquo;
+set :deploy_to, &lsquo;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ&rsquo;</p>
+
+<p>namespace :foreman do
+  desc &lsquo;Start server&rsquo;
+  task :start do</p>
+
+<pre><code>on roles(:all) do
+  sudo "start #{application}"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Stop server&rsquo;
+  task :stop do</p>
+
+<pre><code>on roles(:all) do
+  sudo "stop #{application}"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Restart server&rsquo;
+  task :restart do</p>
+
+<pre><code>on roles(:all) do
+  sudo "restart #{application}"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Server status&rsquo;
+  task :status do</p>
+
+<pre><code>on roles(:all) do
+  execute "initctl list | grep #{application}"
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>namespace :git do
+  desc &lsquo;Deploy&rsquo;
+  task :deploy do</p>
+
+<pre><code>ask(:message, "Commit message?")
+run_locally do
+  execute "git add -A"
+  execute "git commit -m '#{fetch(:message)}'"
+  execute "git push"
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Что всё это значит? Первые строчки — конфиг. Затем мы описываем задачи.
+Есть задача foreman, у которой есть 4 действия: start, stop, restart
+status. При выполнении &lsquo;cap production foreman:start&rsquo; на локальной
+машине на сервере будет выполнено &lsquo;sudo start ИМЯ_ПРИЛОЖЕНИЯ&rsquo;, но пока
+что это нам ничего не даст, ибо foreman еще не создал upstart скрипты.
+Идем дальше: есть задача git, у которой есть действие deploy. При
+выполнении &lsquo;cap production git:deploy&rsquo; пользователя спросят комментарий
+к коммиту и будет выполнено:</p>
+
+<p><code>
+git add -A
+git commit -m 'КОММЕНТАРИЙ'
+git push
+</code></p>
+
+<p>Совсем не сложно, правда? Но этими командами мы не будем пользоваться
+сами, они будут выполняться при выполнении других скриптов. Теперь
+внутри &lsquo;namespace :deploy do&rsquo; добавляем:</p>
+
+<p>``` ruby deploy.rb
+ desc &lsquo;Setup&rsquo;
+  task :setup do</p>
+
+<pre><code>on roles(:all) do
+  execute "mkdir  #{shared_path}/config/"
+  execute "mkdir  /var/www/apps/#{application}/run/"
+  execute "mkdir  /var/www/apps/#{application}/log/"
+  execute "mkdir  /var/www/apps/#{application}/socket/"
+  execute "mkdir #{shared_path}/system"
+  sudo "ln -s /var/log/upstart /var/www/log/upstart"
+
+  upload!('shared/database.yml', "#{shared_path}/config/database.yml")
+
+  upload!('shared/Procfile', "#{shared_path}/Procfile")
+
+
+  upload!('shared/nginx.conf', "#{shared_path}/nginx.conf")
+  sudo 'stop nginx'
+  sudo "rm -f /usr/local/nginx/conf/nginx.conf"
+  sudo "ln -s #{shared_path}/nginx.conf /usr/local/nginx/conf/nginx.conf"
+  sudo 'start nginx'
+
+  within release_path do
+    with rails_env: fetch(:rails_env) do
+      execute :rake, "db:create"
+    end
+  end
+
+
+
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Create symlink&rsquo;
+  task :symlink do</p>
+
+<pre><code>on roles(:all) do
+  execute "ln -s #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  execute "ln -s #{shared_path}/Procfile #{release_path}/Procfile"
+  execute "ln -s #{shared_path}/system #{release_path}/public/system"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Foreman init&rsquo;
+  task :foreman_init do</p>
+
+<pre><code>on roles(:all) do
+  foreman_temp = "/var/www/tmp/foreman"
+  execute  "mkdir -p #{foreman_temp}"
+  # Создаем папку current для того, чтобы foreman создавал upstart файлы с правильными путями
+  execute "ln -s #{release_path} #{current_path}"
+
+  within current_path do
+    execute "cd #{current_path}"
+    execute :bundle, "exec foreman export upstart #{foreman_temp} -a #{application} -u deployer -l /var/www/apps/#{application}/log -d #{current_path}"
+  end
+  sudo "mv #{foreman_temp}/* /etc/init/"
+  sudo "rm -r #{foreman_temp}"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  desc &lsquo;Restart application&rsquo;
+  task :restart do</p>
+
+<pre><code>on roles(:app), in: :sequence, wait: 5 do
+  sudo "restart #{application}"
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  after :finishing, &lsquo;deploy:cleanup&rsquo;
+  after :finishing, &lsquo;deploy:restart&rsquo;</p>
+
+<p>  after :updating, &lsquo;deploy:symlink&rsquo;</p>
+
+<p>  after :setup, &lsquo;deploy:foreman_init&rsquo;</p>
+
+<p>  after :foreman_init, &lsquo;foreman:start&rsquo;</p>
+
+<p>  before :foreman_init, &lsquo;rvm:hook&rsquo;</p>
+
+<p>  before :setup, &lsquo;deploy:starting&rsquo;
+  before :setup, &lsquo;deploy:updating&rsquo;
+  before :setup, &lsquo;bundler:install&rsquo;
+```</p>
+
+<p>Есть задача deploy и мы добавили 4 новых действия: setup (первичная
+настройка), foreman_init (создание upstart скрипта для приложения),
+symlink (создание символьных ссылок) и restart (перезагрузка
+приложения). Также мы указываем после/перед какими стадиями, что нужно
+выполнить.</p>
+
+<p>deploy:setup выполняет первичную настройку сервера: загружает файлы из
+папки shared на локальном компьютере в папку shared на сервере,
+настраивает nginx, создает нужные папки и запускает
+deploy:foreman_init, который в свою очередь создает upstart скрипты
+через foreman и копирует их в /etc/init, после чего мы можем управлять
+нашим приложением командами
+<code>sudo start/stop/restart/status ИМЯ_ПРИЛОЖЕНИЯ</code>. Перед deploy:setup
+выполняется три первых шага обычного деплоя приложения, а именно
+заливаются файлы на сервер и выполняется <code>bundle install</code>. После каждого
+деплоя создаются новый симлинки и перезагружается Unicorn. Осталось
+только в конец этого файла добавить <code>before :deploy, 'git:deploy'</code>и
+теперь перед каждым деплоем автоматически будут коммититься новые
+изменения.</p>
+
+<p>Еще раз:</p>
+
+<ul>
+<li>выполняем <code>cap production deploy:setup</code>при самом первом деплое
+Вашего приложения.</li>
+<li>выполняем <code>cap production deploy</code>при каждом деплое Вашего
+приложения.</li>
+</ul>
+
+
+<hr />
+
+<p>Вот именно так я всегда деплою свои приложения на VPS. Конечно, этот
+способ не есть истина в последней инстанции, но я постарался на примере
+объяснить как работает Capistrano, чтобы даже у новичка не было проблем
+с изменением скрипта под свои нужды. Так же я не утверждаю, что мои
+nginx.conf и unicorn.rb идеальны, но у меня с ними уже почти год все
+работает на несильно мощных VPS и не было проблем даже под нагрузкой.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ошибка Capistrano bundle: not found]]></title>

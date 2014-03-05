@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T10:40:28+04:00</updated>
+  <updated>2014-03-05T15:01:03+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,1362 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deploy приложения на RoR 4 с помощью Capistrano 3]]></title>
+    <link href="http://goooseman.ru/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3/"/>
+    <updated>2014-03-05T13:57:00+04:00</updated>
+    <id>http://goooseman.ru/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3</id>
+    <content type="html"><![CDATA[<p class="text-muted" markdown='1'>
+    Кросспост <a href="http://habrahabr.ru/post/213269/">моей записи на хабре</a>
+</p>
+
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg" title="Capistrano" alt="Capistrano"></p>
+
+<p>Представьте: Вы — веб-разработчик, который только недавно освоил Ruby on
+Rails. И тут Ваш первый проект подходит к стадии, когда его нужно
+выложить в интернет.
+Вы, конечно, можете залить его на Heroku, но тамошние цены немного
+кусаются. Остается только купить VPS, настроить его и выложить проект
+туда.
+«Что может быть проще? Найду какой-нибудь гайд, да следаю всё по нему» —
+подумаете Вы. Вот только гайдов, которые не просто выкладывают команды,
+но и объясняющие, что эти команды делают, — единицы, да и те используют
+уже устаревшую вторую версию Capistrano.</p>
+
+<p>Поэтому я решил написать свой гайд, в котором постараюсь подробно
+рассмотреть:</p>
+
+<ul>
+<li>Первичную настройку сервера</li>
+<li>Установку и настройку nginx (с модулем PageSpeed), postgresql, redis</li>
+<li>Установку rvm, rails</li>
+<li>Настройку гема foreman для управления процессами Вашего приложения</li>
+<li>Настройку сервера Unicorn</li>
+<li>Настройку гема Capistrano (v3.1) для автоматизации деплоя</li>
+</ul>
+
+
+<p>Я надеюсь, что этот гайд будет полезен не только новичкам, но и
+разработчикам со стажем.</p>
+
+<!--more-->
+
+
+<h4>Первичная настройка сервера</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/2d0/6b4/21c/2d06b421c7b265808e7d2c24f4624065.jpg" title="Первичная настройка сервера" alt="Первичная настройка сервера"></p>
+
+<p>Вы купили свой первый VPS, установили ОС (я использую ubuntu 12.04 LTS и
+все команды буду выкладывать именно под неё), зашли по SSH. Что делать
+дальше?</p>
+
+<p>Первым делом сменим пароль для пользователя root коммандой <code>passwd</code></p>
+
+<p>Создадим нового пользователя: <code>adduser deployer</code></p>
+
+<p>Разрешим ему пользоваться коммандой sudo: <code>visudo</code></p>
+
+<p>и дописываем: <code>deployer ALL=(ALL:ALL) ALL</code></p>
+
+<p>Изменим настройки ssh сервера (запретим логин под root, доступ по
+доменному имени и разрешим логин только под нашим новым пользователем).
+Добавляем в файл &lsquo;/etc/ssh/sshd_config&rsquo;:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PermitRootLogin no UseDNS no AllowUsers deployer</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Перезапустим ssh сервер коммандой: <code>reload ssh</code></p>
+
+<p>Чтобы не вводить каждый раз пароль при подключении по ssh, нам надо
+скопировать ssh ключ с Вашей машины на сервер. Самый простой способ
+сделать это — выполнить на локальной машине <code>ssh-copy-id deployer@123.123.123.123</code></p>
+
+<p>(На маке требуется установка ssh-copy-id, сделать можно через brew, на
+Windows не знаю автоматизированного средства для копирования ключей, но
+в интернете есть много интересного на эту тему).</p>
+
+<p>Так же, пока уж мы под рутом, можно создать SWAP файл, если у Вас мало
+RAM. Делается это так: <code>dd if=/dev/zero of=/swapfile bs=1024 count=512k mkswap /swapfile swapon /swapfile</code></p>
+
+<p>Далее в файле &lsquo;/etc/fstab&rsquo; добавляем строчку: <code>/swapfile none swap sw 0 0</code></p>
+
+<p>И далее выполняем: <code>echo 0 &gt; /proc/sys/vm/swappiness sudo chown root:root /swapfile sudo chmod 0600 /swapfile</code></p>
+
+<p>Можно перезагрузиться и проверить наличие SWAP файла коммандой <code>swapon -s</code></p>
+
+<h4>Установка и настройка nginx</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/541/7a6/785/5417a67857580be18180dbb0d30a1384.png" title="nginx" alt="nginx"></p>
+
+<p>На этот раз логинемся под нашим новым пользователем коммандой <code>ssh deployer@123.123.123.123</code> (на локальном компьютере).</p>
+
+<p>Лично я использую модуль PageSpeed, поэтому nginx собираю сам. Но
+сначала нам надо обновить репозитории, обновить систему, и скачать
+необходимые для успешной сборки пакеты:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get dist-upgrade
+</span><span class='line'>sudo apt-get install build-essential zlib1g-dev libpcre3 libpcre3-dev unzip
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь собираем:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://github.com/pagespeed/ngx_pagespeed/archive/v1.7.30.1-beta.zip
+</span><span class='line'>unzip v1.7.30.1-beta.zip
+</span><span class='line'><span class="nb">cd </span>ngx_pagespeed-1.7.30.1-beta
+</span><span class='line'>wget https://dl.google.com/dl/page-speed/psol/1.7.30.1.tar.gz
+</span><span class='line'>tar -xzvf 1.7.30.1.tar.gz
+</span><span class='line'>wget http://nginx.org/download/nginx-1.4.4.tar.gz
+</span><span class='line'>tar -xzvf nginx-1.4.4.tar.gz
+</span><span class='line'><span class="nb">cd </span>nginx-1.4.4
+</span><span class='line'>./configure --add-module<span class="o">=</span><span class="nv">$HOME</span>/ngx_pagespeed-1.7.30.1-beta
+</span><span class='line'>make
+</span><span class='line'>sudo checkinstall
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Для управления nginx напишем <a href="http://upstart.ubuntu.com/">upstart</a>
+скрипт. Создаём файл &lsquo;/etc/init/nginx.conf&rsquo; со следующим содержимым:</p>
+
+<figure class='code'><figcaption><span>etc/init/nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>description <span class="s2">&quot;nginx http daemon&quot;</span>
+</span><span class='line'>author <span class="s2">&quot;George Shammas &lt;georgyo@gmail.com&gt;&quot;</span>
+</span><span class='line'>
+</span><span class='line'>start on <span class="o">(</span>filesystem and net-device-up <span class="nv">IFACE</span><span class="o">=</span>lo<span class="o">)</span>
+</span><span class='line'>stop on runlevel <span class="o">[</span>!2345<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>env <span class="nv">DAEMON</span><span class="o">=</span>/usr/local/nginx/sbin/nginx
+</span><span class='line'>env <span class="nv">PID</span><span class="o">=</span>/var/run/nginx.pid
+</span><span class='line'>
+</span><span class='line'>expect fork
+</span><span class='line'>respawn
+</span><span class='line'>respawn limit 10 5
+</span><span class='line'><span class="c">#oom never</span>
+</span><span class='line'>
+</span><span class='line'>pre-start script
+</span><span class='line'>        <span class="nv">$DAEMON</span> -t
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>
+</span><span class='line'>                <span class="k">then </span><span class="nb">exit</span> <span class="nv">$?</span>
+</span><span class='line'>        <span class="k">fi</span>
+</span><span class='line'>end script
+</span><span class='line'>
+</span><span class='line'><span class="nb">exec</span> <span class="nv">$DAEMON</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь вы можете выполнять <code>sudo start/stop/restart/status nginx</code></p>
+
+<p>Наш nginx.conf лежит по адресу &lsquo;/usr/local/nginx/conf/nginx.conf&rsquo;, но
+пока мы его трогать не будем. Мы его зальем автоматически при первом
+деплое приложения.</p>
+
+<p>Для наших веб приложений мы создадим нового пользователя и новую группу,
+добавим себя в эту группу, и создадим папку:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo useradd -s /sbin/nologin -r nginx
+</span><span class='line'>sudo groupadd web
+</span><span class='line'>sudo usermod -a -G web nginx
+</span><span class='line'>sudo usermod -a -G web deployer
+</span><span class='line'>sudo mkdir /var/www
+</span><span class='line'>sudo chgrp -R web /var/www
+</span><span class='line'>sudo chmod -R 775 /var/www
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Для того, чтобы мы смогли писать в папку придется разлогиниться и зайти
+снова под нашим пользователем.</p>
+
+<h4>Установка и настройка PostgreSQL</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/c46/490/b80/c46490b8070528ded4adc5ddd2d2e480.png" title="PostgreSQL" alt="PostgreSQL"></p>
+
+<p>В репозиториях ubuntu лежит устаревшая версия, так что мы добавим
+сторонний репо. В файл &lsquo;/etc/apt/sources.list.d/pgdg.list&rsquo; добавим: <code> deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main</code></p>
+
+<p>Затем добавляем ключ репозитория и устанавливаем PostgreSQL:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
+</span><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>И создаем нового пользователя:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo -u postgres psql
+</span><span class='line'>
+</span><span class='line'>create user deployer with password <span class="s1">&#39;ваш пароль&#39;</span>;
+</span><span class='line'>alter role deployer superuser createrole createdb replication;
+</span><span class='line'>
+</span><span class='line'><span class="se">\q</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Чтобы иметь доступ с локального компьютера в файле
+&lsquo;/etc/postgresql/9.3/main/postgresql.conf&rsquo; изменим параметр
+<code>listen_addresses = 'localhost'</code>на <code>listen_addresses = '*'</code>и добавим в
+файл &lsquo;/etc/postgresql/9.3/main/pg_hba.conf&rsquo; строчку</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>host all deployer ваш.внешний.ip.адрес 255.255.255.0 md5
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Перезагружаем postgresql коммандой <code>sudo service postgresql restart</code></p>
+
+<h4>Установка и настройка Redis</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/f4e/5dc/854/f4e5dc8543844123d64fb68139951e31.png" title="Redis" alt="Redis"></p>
+
+<p>Если Вы используте gem <a href="https://github.com/resque/resque">resque</a>, то
+Вам нужно установить Redis. Ибо в репозитории устаревшая версия, я его
+собираю из исходников, к тому же это занимает немного времени:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo apt-get install tcl8.5
+</span><span class='line'>wget http://download.redis.io/redis-stable.tar.gz
+</span><span class='line'>tar xvzf redis-stable.tar.gz
+</span><span class='line'><span class="nb">cd </span>redis-stable
+</span><span class='line'>make
+</span><span class='line'>make <span class="nb">test</span>
+</span><span class='line'>sudo cp src/redis-server /usr/local/bin
+</span><span class='line'>sudo cp src/redis-cli /usr/local/bin
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Redis по умолчанию не защищен паролем и открыт всем, поэтому поставим
+пароль: в файле &lsquo;redis.conf&rsquo; добавляем параметр <code>requirepass</code>с нашим
+паролем. Redis легко брутфорсится, поэтому я делаю пароль не менее 100
+символов. Также, чтобы потом не вылетало ошибок, меняем параметр <code>dir</code>на
+<code>/var/www/other</code>, предварительно создав такую папку (
+<code>mkdir /var/www/other</code>).
+Копируем наш конфиг командой <code>sudo cp redis.conf /etc/redis/redis.conf</code></p>
+
+<p>Создаем upstart скрипт по адресу &lsquo;/etc/init/redis-server.conf&rsquo; со
+следующим содержанием:</p>
+
+<figure class='code'><figcaption><span>/etc/init/redis-server.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!upstart</span>
+</span><span class='line'>description <span class="s2">&quot;Redis Server&quot;</span>
+</span><span class='line'>
+</span><span class='line'>env <span class="nv">USER</span><span class="o">=</span>deployer
+</span><span class='line'>
+</span><span class='line'>start on runlevel <span class="o">[</span>2345<span class="o">]</span>
+</span><span class='line'>stop on runlevel <span class="o">[</span>016<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>respawn
+</span><span class='line'><span class="nb">exec </span>start-stop-daemon --start --make-pidfile --pidfile /var/run/redis-server.pid --chuid <span class="nv">$USER</span> --exec /usr/local/bin/redis-server /etc/redis/redis.conf &gt;&gt; /var/www/log/redis.log 2&gt;&amp;1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь мы можем управлять Redisом коммандами <code>sudo start/stop/restart/status redis-server</code>, предварительно создав папку для логов ( <code>mkdir /var/www/log</code>).</p>
+
+<h4>Установка RVM, Ruby, Rails, Bundler</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/fd7/5bf/168/fd75bf168d048c419cf083bad58c8e51.png" title="Ruby on Rails" alt="Ruby on Rails"></p>
+
+<p>Тут совсем ничего сложного:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo apt-get install git curl python-software-properties
+</span><span class='line'>
+</span><span class='line'>sudo add-apt-repository ppa:chris-lea/node.js
+</span><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install nodejs
+</span><span class='line'>
+</span><span class='line'>curl -L get.rvm.io | bash -s stable
+</span><span class='line'><span class="nb">source</span> ~/.rvm/scripts/rvm
+</span><span class='line'>rvm requirements
+</span><span class='line'>
+</span><span class='line'>rvm install 2.0.0
+</span><span class='line'>rvm use 2.0.0 --default
+</span><span class='line'>gem install rails --no-ri --no-rdoc
+</span><span class='line'>gem install bundler
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Создаем репозиторий на GitHub/BitBucket</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/3d1/b5c/563/3d1b5c56357a4371884a9d1b1a94ac13.png" title="Git" alt="Git"></p>
+
+<p>Мы будем использовать git на удаленном сервере для деплоя нашего
+приложения. Можно и настроить git сервер на нашем VPS, но зачем, если
+есть удобные бесплатные решения. Итак, создаем репозиторий на
+GitHub/BitBucket (у BitBucket приватные репозитории бесплатны), но не
+спешим заливать туда наш проект, сначала отредактируем .gitignore файл
+(он находится в корне приложения), чтобы в репо не попала никакая
+конфидициальная информация (особенно это важно, если репо публичный), да
+и заодно лишние файлы нам там не нужны:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/config/database.yml <span class="c"># доступ к базе данным</span>
+</span><span class='line'>/Procfile <span class="c"># про него я еще расскажу</span>
+</span><span class='line'>/config/deploy/ <span class="c"># файлы Capistrano</span>
+</span><span class='line'>/shared/ <span class="c"># файлы, которых нет в репозитории, но они будут скопированы на сервер при первом деплое приложения</span>
+</span><span class='line'>/public/system/ <span class="c"># если установлен Paperclip</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Теперь можно сделать первый коммит и запушить проект в git.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git init git remote add origin <span class="c">#АДРЕС РЕПО git add -A git commit -m &#39;first commit&#39; git push -u origin --all</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Также нам надо добавить ключ нашего сервера в админку Github/BitBucket,
+это обязательное условие, т.к. из репозитория изменения будут
+загружаться на сервер. Как это сделать можно узнать в Helpе сервиса.</p>
+
+<h4>gem foreman</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/26d/932/db9/26d932db99bae73a60f9cdfdb865dcb4.jpg" title="Доктор Форман из сериала Доктор Хаус" alt="Доктор Форман из сериала Доктор Хаус"></p>
+
+<p><a href="https://github.com/ddollar/foreman">foreman</a> — гем для управления
+процессами приложения. На локальной машине он позволяет запускать сразу
+все процессы, указанные в Procfile, одной коммандой <code>foreman start</code> и показывает их вывод.</p>
+
+<p>На сервере командой <code>foreman export upstart</code> он создает upstart скрипт для легкого управления приложением с помощью
+команд start/stop/restart. Но об этом потом. Пока просто установим его,
+создадим Procfile в корне приложения, и наполним его для локального
+использования. У меня он выглядит так.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: rails s
+</span><span class='line'>job1: bundle <span class="nb">exec </span>rake resque:work <span class="nv">PIDFILE</span><span class="o">=</span>./tmp/pids/resque2.pid <span class="nv">QUEUES</span><span class="o">=</span>send_email
+</span><span class='line'>job2: bundle <span class="nb">exec </span>rake resque:work <span class="nv">PIDFILE</span><span class="o">=</span>./tmp/pids/resque2.pid <span class="nv">QUEUES</span><span class="o">=</span>send_email
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Production конфигурацию мы напишем потом, когда речь зайдет о
+Capistrano.</p>
+
+<h4>Устанавливаем Unicorn</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/01b/a1f/26f/01ba1f26f0eeecd3cfe3380416bff98b.png" title="Unicorn" alt="Unicorn"></p>
+
+<p><a href="https://github.com/defunkt/unicorn">Unicorn</a> — продвинутый HTTP
+сервер. Установим его, добавив <code>group :production do gem 'unicorn' end</code> в Gemfile. (Не забудьте про <code>bundle install</code>)</p>
+
+<p>В папке &lsquo;/config/&rsquo; создаем файл unicon.rb c примерно таким содержимым:</p>
+
+<figure class='code'><figcaption><span>unicorn.rb </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">worker_processes</span> <span class="mi">2</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">working_directory</span> <span class="s2">&quot;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current&quot;</span> <span class="c1"># available in 0.94.0+</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># listen on both a Unix domain socket and a TCP port,</span>
+</span><span class='line'><span class="c1"># we use a shorter backlog for quicker failover when busy</span>
+</span><span class='line'><span class="n">listen</span> <span class="s2">&quot;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/socket/.unicorn.sock&quot;</span><span class="p">,</span> <span class="ss">:backlog</span> <span class="o">=&gt;</span> <span class="mi">64</span>
+</span><span class='line'><span class="n">listen</span> <span class="mi">8080</span><span class="p">,</span> <span class="ss">:tcp_nopush</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># nuke workers after 30 seconds instead of 60 seconds (the default)</span>
+</span><span class='line'><span class="n">timeout</span> <span class="mi">30</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># feel free to point this anywhere accessible on the filesystem</span>
+</span><span class='line'><span class="n">pid</span> <span class="s2">&quot;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/unicorn.pid&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># By default, the Unicorn logger will write to stderr.</span>
+</span><span class='line'><span class="c1"># Additionally, ome applications/frameworks log to stderr or stdout,</span>
+</span><span class='line'><span class="c1"># so prevent them from going to /dev/null when daemonized here:</span>
+</span><span class='line'><span class="n">stderr_path</span> <span class="s2">&quot;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/log/unicorn.stderr.log&quot;</span>
+</span><span class='line'><span class="n">stdout_path</span> <span class="s2">&quot;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/log/unicorn.stdout.log&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># combine Ruby 2.0.0dev or REE with &quot;preload_app true&quot; for memory savings</span>
+</span><span class='line'><span class="c1"># http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow</span>
+</span><span class='line'><span class="n">preload_app</span> <span class="kp">true</span>
+</span><span class='line'><span class="no">GC</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:copy_on_write_friendly</span><span class="o">=</span><span class="p">)</span> <span class="ow">and</span>
+</span><span class='line'>  <span class="no">GC</span><span class="o">.</span><span class="n">copy_on_write_friendly</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Enable this flag to have unicorn test client connections by writing the</span>
+</span><span class='line'><span class="c1"># beginning of the HTTP headers before calling the application.  This</span>
+</span><span class='line'><span class="c1"># prevents calling the application for connections that have disconnected</span>
+</span><span class='line'><span class="c1"># while queued.  This is only guaranteed to detect clients on the same</span>
+</span><span class='line'><span class="c1"># host unicorn runs on, and unlikely to detect disconnects even on a</span>
+</span><span class='line'><span class="c1"># fast LAN.</span>
+</span><span class='line'><span class="n">check_client_connection</span> <span class="kp">false</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">before_fork</span> <span class="k">do</span> <span class="o">|</span><span class="n">server</span><span class="p">,</span> <span class="n">worker</span><span class="o">|</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># the following is highly recomended for Rails + &quot;preload_app true&quot;</span>
+</span><span class='line'>  <span class="c1"># as there&#39;s no need for the master process to hold a connection</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">defined?</span><span class="p">(</span><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="p">)</span> <span class="ow">and</span>
+</span><span class='line'>    <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">disconnect!</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># The following is only recommended for memory/DB-constrained</span>
+</span><span class='line'>  <span class="c1"># installations.  It is not needed if your system can house</span>
+</span><span class='line'>  <span class="c1"># twice as many worker_processes as you have configured.</span>
+</span><span class='line'>  <span class="c1">#</span>
+</span><span class='line'>  <span class="c1"># # This allows a new master process to incrementally</span>
+</span><span class='line'>  <span class="c1"># # phase out the old master process with SIGTTOU to avoid a</span>
+</span><span class='line'>  <span class="c1"># # thundering herd (especially in the &quot;preload_app false&quot; case)</span>
+</span><span class='line'>  <span class="c1"># # when doing a transparent upgrade.  The last worker spawned</span>
+</span><span class='line'>  <span class="c1"># # will then kill off the old master process with a SIGQUIT.</span>
+</span><span class='line'>  <span class="n">old_pid</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">server</span><span class="o">.</span><span class="n">config</span><span class="o">[</span><span class="ss">:pid</span><span class="o">]</span><span class="si">}</span><span class="s2">.oldbin&quot;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">old_pid</span> <span class="o">!=</span> <span class="n">server</span><span class="o">.</span><span class="n">pid</span>
+</span><span class='line'>    <span class="k">begin</span>
+</span><span class='line'>      <span class="n">sig</span> <span class="o">=</span> <span class="p">(</span><span class="n">worker</span><span class="o">.</span><span class="n">nr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">server</span><span class="o">.</span><span class="n">worker_processes</span> <span class="p">?</span> <span class="ss">:QUIT</span> <span class="p">:</span> <span class="ss">:TTOU</span>
+</span><span class='line'>      <span class="no">Process</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">old_pid</span><span class="p">)</span><span class="o">.</span><span class="n">to_i</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">rescue</span> <span class="ss">Errno</span><span class="p">:</span><span class="ss">:ENOENT</span><span class="p">,</span> <span class="ss">Errno</span><span class="p">:</span><span class="ss">:ESRCH</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1">#</span>
+</span><span class='line'>  <span class="c1"># Throttle the master from forking too quickly by sleeping.  Due</span>
+</span><span class='line'>  <span class="c1"># to the implementation of standard Unix signal handlers, this</span>
+</span><span class='line'>  <span class="c1"># helps (but does not completely) prevent identical, repeated signals</span>
+</span><span class='line'>  <span class="c1"># from being lost when the receiving process is busy.</span>
+</span><span class='line'>  <span class="c1"># sleep 1</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">after_fork</span> <span class="k">do</span> <span class="o">|</span><span class="n">server</span><span class="p">,</span> <span class="n">worker</span><span class="o">|</span>
+</span><span class='line'>  <span class="c1"># per-process listener ports for debugging/admin/migrations</span>
+</span><span class='line'>  <span class="c1"># addr = &quot;127.0.0.1:#{9293 + worker.nr}&quot;</span>
+</span><span class='line'>  <span class="c1"># server.listen(addr, :tries =&gt; -1, :delay =&gt; 5, :tcp_nopush =&gt; true)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># the following is *required* for Rails + &quot;preload_app true&quot;,</span>
+</span><span class='line'>  <span class="n">defined?</span><span class="p">(</span><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="p">)</span> <span class="ow">and</span>
+</span><span class='line'>    <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">establish_connection</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># if preload_app is true, then you may also want to check and</span>
+</span><span class='line'>  <span class="c1"># restart any other shared sockets/descriptors such as Memcached,</span>
+</span><span class='line'>  <span class="c1"># and Redis.  TokyoCabinet file handles are safe to reuse</span>
+</span><span class='line'>  <span class="c1"># between any number of forked children (assuming your kernel</span>
+</span><span class='line'>  <span class="c1"># correctly implements pread()/pwrite() system calls)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Заменяем ИМЯ_ПРИЛОЖЕНИЯ на Ваше имя приложения, которое Вы потом
+зададите в настройках Capistrano.</p>
+
+<h4>Capistrano</h4>
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg" title="Capistrano" alt="Capistrano"></p>
+
+<p><a href="https://github.com/capistrano/capistrano">Capistrano</a> — весьма удобное
+средство для деплоя приложения, пусть и сначала таковым не кажется.
+Установим его с нужными дополнениями, добавив в Gemfile:</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rails&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-bundler&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rvm&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Выполняем <code>bundle exec cap install</code>и добавляем в Capfile:</p>
+
+<figure class='code'><figcaption><span>Capfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/deploy&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/rvm&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/bundler&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/rails&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Уже сейчас, просто указав адрес сервера, репозитория и рабочую папку,
+Capistrano:</p>
+
+<ul>
+<li>Загрузит ваше приложение из репозитория на сервер в папку
+<code>рабочая_папка/имя_приложения/releases/дата_релиза/</code>, не удаляя
+старую версию (по умолчанию он хранит 5 последних версий
+приложений).</li>
+<li>Выполнит bundle install.</li>
+<li>Выполнит db:migrate.</li>
+<li>Выполнит assets:precompile.</li>
+<li>Создаст symlink из папки приложения в папку
+<code>рабочая_папка/имя_приложения/current</code></li>
+</ul>
+
+
+<p>Но нам этого мало. Нам нужно реализовать следующее:</p>
+
+<ul>
+<li>При первом деплое выполнить настройку nginx, unicorn, загрузить
+некоторые файлы, которые не будут меняться, создать upstart скрипт
+(с помощью foreman).</li>
+<li>Перед каждым деплоем автоматически выполнять git add, git commit,
+git push (сообщение к коммиту спрашивать у пользователя). После
+каждого деплоя создавать симлинки и перезапускать Unicorn.</li>
+</ul>
+
+
+<p>Нужные только в первый раз файлы будем хранить в папке shared (в папке
+проекта на локальной машине), не зря мы ее добавили в .gitignore.
+Сначала создадим там nginx.conf примерно с таким содержимым:</p>
+
+<figure class='code'><figcaption><span>nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>user nginx web;
+</span><span class='line'>
+</span><span class='line'>pid /var/run/nginx.pid;
+</span><span class='line'>error_log /var/www/log/nginx.error.log;
+</span><span class='line'>
+</span><span class='line'>events <span class="o">{</span>
+</span><span class='line'>  worker_connections 1024; <span class="c"># increase if you have lots of clients</span>
+</span><span class='line'>  accept_mutex off; <span class="c"># &quot;on&quot; if nginx worker_processes &gt; 1</span>
+</span><span class='line'>  use epoll; <span class="c"># enable for Linux 2.6+</span>
+</span><span class='line'>  <span class="c"># use kqueue; # enable for FreeBSD, OSX</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>http <span class="o">{</span>
+</span><span class='line'>  <span class="c"># nginx will find this file in the config directory set at nginx build time</span>
+</span><span class='line'>  include mime.types;
+</span><span class='line'>  types_hash_max_size 2048;
+</span><span class='line'>  server_names_hash_bucket_size 64;
+</span><span class='line'>  <span class="c"># fallback in case we can&#39;t determine a type</span>
+</span><span class='line'>  default_type application/octet-stream;
+</span><span class='line'>
+</span><span class='line'>  <span class="c"># click tracking!</span>
+</span><span class='line'>  access_log /var/www/log/nginx.access.log combined;
+</span><span class='line'>
+</span><span class='line'>  <span class="c"># you generally want to serve static files with nginx since neither</span>
+</span><span class='line'>  <span class="c"># Unicorn nor Rainbows! is optimized for it at the moment</span>
+</span><span class='line'>  sendfile on;
+</span><span class='line'>
+</span><span class='line'>  tcp_nopush on; <span class="c"># off may be better for *some* Comet/long-poll stuff</span>
+</span><span class='line'>  tcp_nodelay off; <span class="c"># on may be better for some Comet/long-poll stuff</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c"># we haven&#39;t checked to see if Rack::Deflate on the app server is</span>
+</span><span class='line'>  <span class="c"># faster or not than doing compression via nginx.  It&#39;s easier</span>
+</span><span class='line'>  <span class="c"># to configure it all in one place here for static files and also</span>
+</span><span class='line'>  <span class="c"># to disable gzip for clients who don&#39;t get gzip/deflate right.</span>
+</span><span class='line'>  <span class="c"># There are other gzip settings that may be needed used to deal with</span>
+</span><span class='line'>  <span class="c"># bad clients out there, see http://wiki.nginx.org/NginxHttpGzipModule</span>
+</span><span class='line'>  gzip on;
+</span><span class='line'>  gzip_http_version 1.0;
+</span><span class='line'>  gzip_proxied any;
+</span><span class='line'>  gzip_min_length 0;
+</span><span class='line'>  gzip_vary on;
+</span><span class='line'>  gzip_disable <span class="s2">&quot;MSIE [1-6]\.&quot;</span>;
+</span><span class='line'>  gzip_proxied expired no-cache no-store private auth;
+</span><span class='line'>  gzip_comp_level 9;
+</span><span class='line'>  gzip_types text/plain text/xml text/css
+</span><span class='line'>             text/comma-separated-values
+</span><span class='line'>             text/javascript application/x-javascript
+</span><span class='line'>             application/atom+xml;
+</span><span class='line'>
+</span><span class='line'>  <span class="c"># this can be any application server, not just Unicorn/Rainbows!</span>
+</span><span class='line'>  upstream app_server <span class="o">{</span>
+</span><span class='line'>    server unix:/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/socket/.unicorn.sock <span class="nv">fail_timeout</span><span class="o">=</span>0;
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  server <span class="o">{</span>
+</span><span class='line'>    <span class="c"># PageSpeed</span>
+</span><span class='line'>    pagespeed on;
+</span><span class='line'>    pagespeed FileCachePath /var/ngx_pagespeed_cache;
+</span><span class='line'>    location ~ <span class="s2">&quot;\.pagespeed\.([a-z]\.)?[a-z]{2}\.[^.]{10}\.[^.]+&quot;</span> <span class="o">{</span>
+</span><span class='line'>      add_header <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span>;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    location ~ <span class="s2">&quot;^/ngx_pagespeed_static/&quot;</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'>    location ~ <span class="s2">&quot;^/ngx_pagespeed_beacon$&quot;</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'>    location /ngx_pagespeed_statistics <span class="o">{</span>
+</span><span class='line'>      allow 127.0.0.1; allow 5.228.169.73; deny all;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    location /ngx_pagespeed_global_statistics <span class="o">{</span>
+</span><span class='line'>      allow 127.0.0.1; allow 5.228.169.73; deny all;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    pagespeed MessageBufferSize 100000;
+</span><span class='line'>    location /ngx_pagespeed_message <span class="o">{</span>
+</span><span class='line'>      allow 127.0.0.1; allow 5.228.169.73; deny all;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    location /pagespeed_console <span class="o">{</span>
+</span><span class='line'>      allow 127.0.0.1; allow 5.228.169.73; deny all;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    charset utf-8;
+</span><span class='line'>    <span class="c"># enable one of the following if you&#39;re on Linux or FreeBSD</span>
+</span><span class='line'>    listen 80 default deferred; <span class="c"># for Linux</span>
+</span><span class='line'>    <span class="c"># listen 80 default accept_filter=httpready; # for FreeBSD</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># If you have IPv6, you&#39;ll likely want to have two separate listeners.</span>
+</span><span class='line'>    <span class="c"># One on IPv4 only (the default), and another on IPv6 only instead</span>
+</span><span class='line'>    <span class="c"># of a single dual-stack listener.  A dual-stack listener will make</span>
+</span><span class='line'>    <span class="c"># for ugly IPv4 addresses in $remote_addr (e.g &quot;:ffff:10.0.0.1&quot;</span>
+</span><span class='line'>    <span class="c"># instead of just &quot;10.0.0.1&quot;) and potentially trigger bugs in</span>
+</span><span class='line'>    <span class="c"># some software.</span>
+</span><span class='line'>    <span class="c"># listen [::]:80 ipv6only=on; # deferred or accept_filter recommended</span>
+</span><span class='line'>
+</span><span class='line'>    client_max_body_size 4G;
+</span><span class='line'>    server_name _;
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># ~2 seconds is often enough for most folks to parse HTML/CSS and</span>
+</span><span class='line'>    <span class="c"># retrieve needed images/icons/frames, connections are cheap in</span>
+</span><span class='line'>    <span class="c"># nginx so increasing this is generally safe...</span>
+</span><span class='line'>    keepalive_timeout 5;
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># path for static files</span>
+</span><span class='line'>    root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Prefer to serve static files directly from nginx to avoid unnecessary</span>
+</span><span class='line'>    <span class="c"># data copies from the application server.</span>
+</span><span class='line'>    <span class="c">#</span>
+</span><span class='line'>    <span class="c"># try_files directive appeared in in nginx 0.7.27 and has stabilized</span>
+</span><span class='line'>    <span class="c"># over time.  Older versions of nginx (e.g. 0.6.x) requires</span>
+</span><span class='line'>    <span class="c"># &quot;if (!-f $request_filename)&quot; which was less efficient:</span>
+</span><span class='line'>    <span class="c"># http://bogomips.org/unicorn.git/tree/examples/nginx.conf?id=v3.3.1#n127</span>
+</span><span class='line'>    try_files <span class="nv">$uri</span>/index.html <span class="nv">$uri</span>.html <span class="nv">$uri</span> @app;
+</span><span class='line'>
+</span><span class='line'>    location ~ ^/<span class="o">(</span>assets<span class="o">)</span>/  <span class="o">{</span>
+</span><span class='line'>      root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+</span><span class='line'>
+</span><span class='line'>      expires max;
+</span><span class='line'>      add_header Cache-Control public;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    location @app <span class="o">{</span>
+</span><span class='line'>      <span class="c"># an HTTP header important enough to have its own Wikipedia entry:</span>
+</span><span class='line'>      <span class="c">#   http://en.wikipedia.org/wiki/X-Forwarded-For</span>
+</span><span class='line'>      proxy_set_header X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span>;
+</span><span class='line'>
+</span><span class='line'>      <span class="c"># enable this if you forward HTTPS traffic to unicorn,</span>
+</span><span class='line'>      <span class="c"># this helps Rack set the proper URL scheme for doing redirects:</span>
+</span><span class='line'>      <span class="c"># proxy_set_header X-Forwarded-Proto $scheme;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c"># pass the Host: header from the client right along so redirects</span>
+</span><span class='line'>      <span class="c"># can be set properly within the Rack application</span>
+</span><span class='line'>      proxy_set_header Host <span class="nv">$http_host</span>;
+</span><span class='line'>
+</span><span class='line'>      <span class="c"># we don&#39;t want nginx trying to do something clever with</span>
+</span><span class='line'>      <span class="c"># redirects, we set the Host: header above already.</span>
+</span><span class='line'>      proxy_redirect off;
+</span><span class='line'>
+</span><span class='line'>      <span class="c"># set &quot;proxy_buffering off&quot; *only* for Rainbows! when doing</span>
+</span><span class='line'>      <span class="c"># Comet/long-poll/streaming.  It&#39;s also safe to set if you&#39;re using</span>
+</span><span class='line'>      <span class="c"># only serving fast clients with Unicorn + nginx, but not slow</span>
+</span><span class='line'>      <span class="c"># clients.  You normally want nginx to buffer responses to slow</span>
+</span><span class='line'>      <span class="c"># clients, even with Rails 3.1 streaming because otherwise a slow</span>
+</span><span class='line'>      <span class="c"># client can become a bottleneck of Unicorn.</span>
+</span><span class='line'>      <span class="c">#</span>
+</span><span class='line'>      <span class="c"># The Rack application may also set &quot;X-Accel-Buffering (yes|no)&quot;</span>
+</span><span class='line'>      <span class="c"># in the response headers do disable/enable buffering on a</span>
+</span><span class='line'>      <span class="c"># per-response basis.</span>
+</span><span class='line'>      <span class="c"># proxy_buffering off;</span>
+</span><span class='line'>
+</span><span class='line'>      proxy_pass http://app_server;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c"># Rails error pages</span>
+</span><span class='line'>    error_page 500 502 503 504 /500.html;
+</span><span class='line'>    <span class="nv">location</span> <span class="o">=</span> /500.html <span class="o">{</span>
+</span><span class='line'>      root /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/public;
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это мой конфиг для nginx, там необходимо заменить &lsquo;ИМЯ<em>ПРИЛОЖЕНИЯ&rsquo; на
+Ваше имя приложения, указанное в первой строчке config/deploy.rb (set
+:application, &lsquo;ИМЯ</em>ПРИЛОЖЕНИЯ&rsquo;).</p>
+
+<p>Теперь создаем там же (в /shared/) файл Procfile с таким содержанием:</p>
+
+<figure class='code'><figcaption><span>nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>web: bundle <span class="nb">exec </span>unicorn_rails -c /var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/current/config/unicorn.rb -E production
+</span><span class='line'>job1: bundle <span class="nb">exec </span>rake resque:work <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">PIDFILE</span><span class="o">=</span>/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/resque1.pid <span class="nv">QUEUES</span><span class="o">=</span>*
+</span><span class='line'>job2: bundle <span class="nb">exec </span>rake resque:work <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">PIDFILE</span><span class="o">=</span>/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ/run/resque2.pid <span class="nv">QUEUES</span><span class="o">=</span>*
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Это конфиг для приложения с двумя resque workerами. Если Вы не
+используете Resque, то просто оставьте только первую строчку.
+Там же создаём database.yml с настройками базы данных и application.yml,
+если пользуетесь гемом Figaro.</p>
+
+<p>Нвш Capistrano скрипт будет выполнять некоторые команды от имени
+суперпользователя на сервере. Чтобы разрешить ему делать это, выполняем
+команду <code>sudo visudo</code> на сервере и добавляем строчку:</p>
+
+<figure class='code'><figcaption><span>nginx.conf</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>deployer <span class="nv">ALL</span><span class="o">=</span>NOPASSWD: /usr/sbin/service, /bin/ln, /bin/rm, /bin/mv, /sbin/start, /sbin/stop, /sbin/restart, /sbin/status
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Осталось только настроить Capistrano. В файле &lsquo;config/deploy/production&rsquo;
+делаем изменения:
+ <code>server 'IP сервера', user: 'deployer', roles: %w{web app db}</code>
+В файл &lsquo;config/deploy.rb&rsquo; добавляем сверху:</p>
+
+<figure class='code'><figcaption><span>deploy.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:repo_url</span><span class="p">,</span> <span class="s1">&#39;Адрес репозитория&#39;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:application</span><span class="p">,</span> <span class="s1">&#39;ИМЯ_ПРИЛОЖЕНИЯ&#39;</span>
+</span><span class='line'><span class="n">application</span> <span class="o">=</span> <span class="s1">&#39;ИМЯ_ПРИЛОЖЕНИЯ&#39;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rvm_type</span><span class="p">,</span> <span class="ss">:user</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rvm_ruby_version</span><span class="p">,</span> <span class="s1">&#39;2.0.0-p353&#39;</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_to</span><span class="p">,</span> <span class="s1">&#39;/var/www/apps/ИМЯ_ПРИЛОЖЕНИЯ&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:foreman</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Start server&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:start</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;start </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Stop server&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:stop</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;stop </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Restart server&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:restart</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;restart </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Server status&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:status</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;initctl list | grep </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:git</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Deploy&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:deploy</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">ask</span><span class="p">(</span><span class="ss">:message</span><span class="p">,</span> <span class="s2">&quot;Commit message?&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">run_locally</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;git add -A&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;git commit -m &#39;</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:message</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;git push&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Что всё это значит? Первые строчки — конфиг. Затем мы описываем задачи.
+Есть задача foreman, у которой есть 4 действия: start, stop, restart
+status. При выполнении &lsquo;cap production foreman:start&rsquo; на локальной
+машине на сервере будет выполнено &lsquo;sudo start ИМЯ_ПРИЛОЖЕНИЯ&rsquo;, но пока
+что это нам ничего не даст, ибо foreman еще не создал upstart скрипты.
+Идем дальше: есть задача git, у которой есть действие deploy. При
+выполнении &lsquo;cap production git:deploy&rsquo; пользователя спросят комментарий
+к коммиту и будет выполнено:</p>
+
+<figure class='code'><figcaption><span>deploy.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">git</span> <span class="n">add</span> <span class="o">-</span><span class="n">A</span>
+</span><span class='line'><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s1">&#39;КОММЕНТАРИЙ&#39;</span>
+</span><span class='line'><span class="n">git</span> <span class="n">push</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Совсем не сложно, правда? Но этими командами мы не будем пользоваться
+сами, они будут выполняться при выполнении других скриптов. Теперь
+внутри &lsquo;namespace :deploy do&rsquo; добавляем:</p>
+
+<figure class='code'><figcaption><span>deploy.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">desc</span> <span class="s1">&#39;Setup&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:setup</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;mkdir  </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/config/&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;mkdir  /var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/run/&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;mkdir  /var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/log/&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;mkdir  /var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/socket/&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;mkdir </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/system&quot;</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;ln -s /var/log/upstart /var/www/log/upstart&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">upload!</span><span class="p">(</span><span class="s1">&#39;shared/database.yml&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/config/database.yml&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">upload!</span><span class="p">(</span><span class="s1">&#39;shared/Procfile&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/Procfile&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">upload!</span><span class="p">(</span><span class="s1">&#39;shared/nginx.conf&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/nginx.conf&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s1">&#39;stop nginx&#39;</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;rm -f /usr/local/nginx/conf/nginx.conf&quot;</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/nginx.conf /usr/local/nginx/conf/nginx.conf&quot;</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s1">&#39;start nginx&#39;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">within</span> <span class="n">release_path</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">with</span> <span class="n">rails_env</span><span class="p">:</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:rails_env</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>          <span class="n">execute</span> <span class="ss">:rake</span><span class="p">,</span> <span class="s2">&quot;db:create&quot;</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Create symlink&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:symlink</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/config/database.yml </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/config/database.yml&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/Procfile </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/Procfile&quot;</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">shared_path</span><span class="si">}</span><span class="s2">/system </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2">/public/system&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Foreman init&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:foreman_init</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:all</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">foreman_temp</span> <span class="o">=</span> <span class="s2">&quot;/var/www/tmp/foreman&quot;</span>
+</span><span class='line'>      <span class="n">execute</span>  <span class="s2">&quot;mkdir -p </span><span class="si">#{</span><span class="n">foreman_temp</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="c1"># Создаем папку current для того, чтобы foreman создавал upstart файлы с правильными путями</span>
+</span><span class='line'>      <span class="n">execute</span> <span class="s2">&quot;ln -s </span><span class="si">#{</span><span class="n">release_path</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">current_path</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">within</span> <span class="n">current_path</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">execute</span> <span class="s2">&quot;cd </span><span class="si">#{</span><span class="n">current_path</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>        <span class="n">execute</span> <span class="ss">:bundle</span><span class="p">,</span> <span class="s2">&quot;exec foreman export upstart </span><span class="si">#{</span><span class="n">foreman_temp</span><span class="si">}</span><span class="s2"> -a </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2"> -u deployer -l /var/www/apps/</span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">/log -d </span><span class="si">#{</span><span class="n">current_path</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;mv </span><span class="si">#{</span><span class="n">foreman_temp</span><span class="si">}</span><span class="s2">/* /etc/init/&quot;</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;rm -r </span><span class="si">#{</span><span class="n">foreman_temp</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s1">&#39;Restart application&#39;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:restart</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">on</span> <span class="n">roles</span><span class="p">(</span><span class="ss">:app</span><span class="p">),</span> <span class="k">in</span><span class="p">:</span> <span class="ss">:sequence</span><span class="p">,</span> <span class="ss">wait</span><span class="p">:</span> <span class="mi">5</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">sudo</span> <span class="s2">&quot;restart </span><span class="si">#{</span><span class="n">application</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">after</span> <span class="ss">:finishing</span><span class="p">,</span> <span class="s1">&#39;deploy:cleanup&#39;</span>
+</span><span class='line'>  <span class="n">after</span> <span class="ss">:finishing</span><span class="p">,</span> <span class="s1">&#39;deploy:restart&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">after</span> <span class="ss">:updating</span><span class="p">,</span> <span class="s1">&#39;deploy:symlink&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">after</span> <span class="ss">:setup</span><span class="p">,</span> <span class="s1">&#39;deploy:foreman_init&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">after</span> <span class="ss">:foreman_init</span><span class="p">,</span> <span class="s1">&#39;foreman:start&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:foreman_init</span><span class="p">,</span> <span class="s1">&#39;rvm:hook&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:setup</span><span class="p">,</span> <span class="s1">&#39;deploy:starting&#39;</span>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:setup</span><span class="p">,</span> <span class="s1">&#39;deploy:updating&#39;</span>
+</span><span class='line'>  <span class="n">before</span> <span class="ss">:setup</span><span class="p">,</span> <span class="s1">&#39;bundler:install&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Есть задача deploy и мы добавили 4 новых действия: setup (первичная
+настройка), foreman_init (создание upstart скрипта для приложения),
+symlink (создание символьных ссылок) и restart (перезагрузка
+приложения). Также мы указываем после/перед какими стадиями, что нужно
+выполнить.</p>
+
+<p>deploy:setup выполняет первичную настройку сервера: загружает файлы из
+папки shared на локальном компьютере в папку shared на сервере,
+настраивает nginx, создает нужные папки и запускает
+deploy:foreman_init, который в свою очередь создает upstart скрипты
+через foreman и копирует их в /etc/init, после чего мы можем управлять
+нашим приложением командами
+<code>sudo start/stop/restart/status ИМЯ_ПРИЛОЖЕНИЯ</code>. Перед deploy:setup
+выполняется три первых шага обычного деплоя приложения, а именно
+заливаются файлы на сервер и выполняется <code>bundle install</code>. После каждого
+деплоя создаются новый симлинки и перезагружается Unicorn. Осталось
+только в конец этого файла добавить <code>before :deploy, 'git:deploy'</code>и
+теперь перед каждым деплоем автоматически будут коммититься новые
+изменения.</p>
+
+<p>Еще раз:</p>
+
+<ul>
+<li>выполняем <code>cap production deploy:setup</code>при самом первом деплое
+Вашего приложения.</li>
+<li>выполняем <code>cap production deploy</code>при каждом деплое Вашего
+приложения.</li>
+</ul>
+
+
+<hr />
+
+<p>Вот именно так я всегда деплою свои приложения на VPS. Конечно, этот
+способ не есть истина в последней инстанции, но я постарался на примере
+объяснить как работает Capistrano, чтобы даже у новичка не было проблем
+с изменением скрипта под свои нужды. Так же я не утверждаю, что мои
+nginx.conf и unicorn.rb идеальны, но у меня с ними уже почти год все
+работает на несильно мощных VPS и не было проблем даже под нагрузкой.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Баг в AngularJS Bootsrap-UI]]></title>

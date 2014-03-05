@@ -202,6 +202,94 @@
       </p>
     
     
+      <h1 itemprop="name" class="entry-title"><a href="/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3/">Deploy приложения на RoR 4 с помощью Capistrano 3</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p class="text-muted" markdown='1'>
+    Кросспост <a href="http://habrahabr.ru/post/213269/">моей записи на хабре</a>
+</p>
+
+
+<p><img class="center" src="http://habrastorage.org/getpro/habr/post_images/0a6/3aa/2f6/0a63aa2f640920d345e0d82d27fe3466.jpg" title="Capistrano" alt="Capistrano"></p>
+
+<p>Представьте: Вы — веб-разработчик, который только недавно освоил Ruby on
+Rails. И тут Ваш первый проект подходит к стадии, когда его нужно
+выложить в интернет.
+Вы, конечно, можете залить его на Heroku, но тамошние цены немного
+кусаются. Остается только купить VPS, настроить его и выложить проект
+туда.
+«Что может быть проще? Найду какой-нибудь гайд, да следаю всё по нему» —
+подумаете Вы. Вот только гайдов, которые не просто выкладывают команды,
+но и объясняющие, что эти команды делают, — единицы, да и те используют
+уже устаревшую вторую версию Capistrano.</p>
+
+<p>Поэтому я решил написать свой гайд, в котором постараюсь подробно
+рассмотреть:</p>
+
+<ul>
+<li>Первичную настройку сервера</li>
+<li>Установку и настройку nginx (с модулем PageSpeed), postgresql, redis</li>
+<li>Установку rvm, rails</li>
+<li>Настройку гема foreman для управления процессами Вашего приложения</li>
+<li>Настройку сервера Unicorn</li>
+<li>Настройку гема Capistrano (v3.1) для автоматизации деплоя</li>
+</ul>
+
+
+<p>Я надеюсь, что этот гайд будет полезен не только новичкам, но и
+разработчикам со стажем.</p>
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3/">Читать дальше</a>
+    </footer>
+  
+
+<p class="meta text-muted">
+
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/categories/capistrano/'>Capistrano</a>, <a class='category' href='/categories/habrahabr/'>Habrahabr</a>, <a class='category' href='/categories/rails/'>Rails</a>, <a class='category' href='/categories/ruby/'>Ruby</a>, <a class='category' href='/categories/web/'>Web</a>
+  
+</span>
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2014-03-05T13:57:00+04:00" datetime="2014-03-05T13:57:00+04:00" pubdate data-updated="true">5<span>-ое</span> марта 2014 г.</time>
+
+</p>
+
+        </article>
+      
+      
+        <article class="post panel panel-default">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+
+        
+      </p>
+    
+    
       <h1 itemprop="name" class="entry-title"><a href="/2014/03/04/bagh-v-angularjs-bootstrap-ui/">Баг в AngularJS Bootsrap-UI</a></h1>
     
   </header>
@@ -753,60 +841,6 @@ Apple официально разрешает самому пользовате�
 
         </article>
       
-      
-        <article class="post panel panel-default">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-
-        
-      </p>
-    
-    
-      <h1 itemprop="name" class="entry-title"><a href="/2013/10/29/candybox-2/">CandyBox 2</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Где-то в начале года я узнал о такой прекрасной игре, как CandyBox.<br/>
-Игра сделана на JavaScript, вся графика &ndash; ASCII, но затягивает с удивительной скоростью. Прошел, понравилось, попробовал HardMode. Забил. Забыл.<br/>
-<img class="center" src="http://d.pr/i/ovx9+"><br/>
-И на прошлой неделе вышла <a href="http://candybox2.net/">вторая версия</a>. В ней наконец-то сделали autosave и менее линейную модель. Всем, кто видел первую часть играть обязательно. Я прошел за 3 дня. И снова забыл. (хотя обещают Arena мод, и сами участники могут создавать уровни).</p>
-</div>
-  
-  
-
-<p class="meta text-muted">
-
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/categories/ighry/'>Игры</a>
-  
-</span>
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time itemprop="datePublished" content="2013-10-29T18:32:00+04:00" datetime="2013-10-29T18:32:00+04:00" pubdate data-updated="true">29<span>-ое</span> октября 2013 г.</time>
-
-</p>
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -830,6 +864,8 @@ Apple официально разрешает самому пользовате�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/2014/03/05/deploy-prilozhieniia-na-ror-4-s-pomoshchiu-capistrano-3/">Deploy приложения на RoR 4 с помощью Capistrano 3</a>
+    
     <a class="list-group-item " href="/2014/03/04/bagh-v-angularjs-bootstrap-ui/">Баг в AngularJS Bootsrap-UI</a>
     
     <a class="list-group-item " href="/2014/02/28/nie-vykhodi-iz-komnaty-dot-dot-dot/">Не выходи из комнаты&#8230;</a>
@@ -837,8 +873,6 @@ Apple официально разрешает самому пользовате�
     <a class="list-group-item " href="/2014/02/28/trudnosti-favicon/">Трудности Favicon</a>
     
     <a class="list-group-item " href="/2014/01/12/luchshaia-tiekhpoddierzhka/">Лучшая техподдержка</a>
-    
-    <a class="list-group-item " href="/2014/01/08/oshchibka-capistrano-bundle-not-found/">Ошибка Capistrano Bundle: Not Found</a>
     
   </div>
 </section>
@@ -862,7 +896,7 @@ Apple официально разрешает самому пользовате�
     <h3 class="panel-title">Популярные категории</h3>
   </div>
   <div id="recent_posts" class="list-group">
-  	<a class='list-group-item category-list' href='/categories/drughoie/'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/apple/'>Apple   (10 постов)</a><a class='list-group-item category-list' href='/categories/os-x/'>OS X   (9 постов)</a><a class='list-group-item category-list' href='/categories/rossiia/'>Россия   (9 постов)</a><a class='list-group-item category-list' href='/categories/moskva/'>Москва   (6 постов)</a>
+  	<a class='list-group-item category-list' href='/categories/drughoie/'>Другое   (20 постов)</a><a class='list-group-item category-list' href='/categories/apple/'>Apple   (10 постов)</a><a class='list-group-item category-list' href='/categories/os-x/'>OS X   (9 постов)</a><a class='list-group-item category-list' href='/categories/rossiia/'>Россия   (9 постов)</a><a class='list-group-item category-list' href='/categories/web/'>Web   (7 постов)</a>
   </div>
     
 </section>
