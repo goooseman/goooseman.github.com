@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T15:01:03+04:00</updated>
+  <updated>2014-03-05T19:39:57+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Это ж гениально!]]></title>
+    <link href="http://goooseman.ru/2014/03/05/eto-zh-ghienialno/"/>
+    <updated>2014-03-05T19:34:00+04:00</updated>
+    <id>http://goooseman.ru/2014/03/05/eto-zh-ghienialno</id>
+    <content type="html"><![CDATA[<iframe src="http://goooseman.ru//player.vimeo.com/video/88073857" width="500" height="333" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+<p>Блять, это же гениально! Клип из айфоновских смайликов Emoji!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Deploy приложения на RoR 4 с помощью Capistrano 3]]></title>
