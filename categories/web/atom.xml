@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Web | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/web/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T10:35:54+04:00</updated>
+  <updated>2014-03-05T10:40:28+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -211,56 +211,184 @@ angular.module(&lsquo;ui.bootstrap.carousel&rsquo;, [&lsquo;ui.bootstrap.transit
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[CandyBox 2]]></title>
-    <link href="http://goooseman.ru/2013/10/29/candybox-2/"/>
-    <updated>2013-10-29T18:32:00+04:00</updated>
-    <id>http://goooseman.ru/2013/10/29/candybox-2</id>
-    <content type="html"><![CDATA[<p>Где-то в начале года я узнал о такой прекрасной игре, как CandyBox.<br/>
-Игра сделана на JavaScript, вся графика &ndash; ASCII, но затягивает с удивительной скоростью. Прошел, понравилось, попробовал HardMode. Забил. Забыл.<br/>
-<img class="center <a" src="href="http://d.pr/i/ovx9+">http://d.pr/i/ovx9+</a>"><br/>
-И на прошлой неделе вышла <a href="http://candybox2.net/">вторая версия</a>. В ней наконец-то сделали autosave и менее линейную модель. Всем, кто видел первую часть играть обязательно. Я прошел за 3 дня. И снова забыл. (хотя обещают Arena мод, и сами участники могут создавать уровни).</p>
+    <title type="html"><![CDATA[Ошибка Capistrano bundle: not found]]></title>
+    <link href="http://goooseman.ru/2014/01/08/oshchibka-capistrano-bundle-not-found/"/>
+    <updated>2014-01-08T23:48:00+04:00</updated>
+    <id>http://goooseman.ru/2014/01/08/oshchibka-capistrano-bundle-not-found</id>
+    <content type="html"><![CDATA[<p><img class="center <a" src="href="http://d.pr/i/Ftgm+">http://d.pr/i/Ftgm+</a>"><br/>
+Для деплоя своих проектов на Rails я использую третью версию Capistrano. На серверах я использую rvm для установки ruby и на локалке использую следующий набор гемов:<br/>
+<code>ruby Gemfile
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rvm'
+</code><br/>
+И тут два дня назад деплой ломается одновременно на обоих моих проектах. На попытке сделать <code>assets:precompile</code> вылетает такая ошибка:<br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DEBUG [6c391f27] Command: cd /var/www/apps/aliya/releases/20140108194955 &amp;&amp; ( RAILS_ENV=production bundle exec rake assets:precompile )
+</span><span class='line'>DEBUG [6c391f27]    bash: bundle: command not found
+</span><span class='line'>cap aborted!
+</span><span class='line'>rake stdout: Nothing written
+</span><span class='line'>rake stderr: Nothing written&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>Tasks: TOP => deploy:assets:precompile
+</span><span class='line'>(See full trace by running task with &mdash;trace)</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<!-- more -->
+
+
+<p>Я связал это с выходом новой версии ruby (2.1) и решил прописать в <code>deploy.rb</code> нужную версию:<br/>
+<code>ruby deploy.rb
+set :rvm_type, :user
+set :rvm_ruby_version, '2.0.0-p353'
+</code><br/>
+Но это не помогло. Тогда я прописал в тот же файл значение переменной $PATH. Для этого заходим по SSH на сервер, выполняем <code>echo $PATH</code> и прописываем его на локалке:<br/>
+``` ruby deploy.rb
+set :default_env, {</p>
+
+<pre><code>:PATH =&gt; '/home/deployer/.rvm/gems/ruby-2.0.0-p353/bin:/home/deployer/.rvm/gems/ruby-2.0.0-p353@global/bin:/home/deployer/.rvm/rubies/ruby-2.0.0-p353/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/deployer/.rvm/bin'
+</code></pre>
+
+<p>}
+```<br/>
+Бинго! Всё работает как раньше.</p>
+
+<p>P.S. Самое интересное, что если прописать $PATH, но не указывать версию ruby, то все равно получаем ошибку, но уже раньше, на <code>bundle install</code><br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cap aborted!
+</span><span class='line'>bundle stdout: Nothing written
+</span><span class='line'>bundle stderr: Nothing written&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>Tasks: TOP => deploy:updated => bundler:install
+</span><span class='line'>(See full trace by running task with &mdash;trace)
+</span><span class='line'>DEBUG [c90cd2c7]    /home/deployer/.rvm/scripts/set: line 19: exec: bundle: not found</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Инфографика по статистике моего блога]]></title>
-    <link href="http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu/"/>
-    <updated>2013-04-16T09:54:00+04:00</updated>
-    <id>http://goooseman.ru/2013/04/16/infoghrafika-po-moiemu-bloghu</id>
-    <content type="html"><![CDATA[<p>Нашел <a href="https://create.visual.ly/graphic/google-analytics/">интересный сервис</a>, который собирает интересную инфографику по Вашему сайту, опираясь на данные Google Analytics. И даже умеет ее вам раз в неделю присылать на почту.</p>
+    <title type="html"><![CDATA[Новый Safari и Yandex.Maps 2.1β]]></title>
+    <link href="http://goooseman.ru/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b/"/>
+    <updated>2013-11-11T11:45:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/11/novyi-safari-i-yandex-dot-maps-2-dot-1b</id>
+    <content type="html"><![CDATA[<p>Я разрабатываю один проект и долго не мог понять, почему при загрузке сайта в Safari (Mavericks) я получаю сообщение &ldquo;A problem occured with this webpage so it was reloaded&rdquo; (&ldquo;При работе с этой веб-страницей произошел сбой, поэтому она была перезагружена&rdquo;), и вылетает crash log Safari.<br/>
+<img class="center <a" src="href="http://d.pr/i/YU0p+">http://d.pr/i/YU0p+</a>"></p>
 
-<!--more-->
-
-
-<p>Вот инфографика по моему блогу:</p>
-
-<p><img class="<a" src="href="http://d.pr/i/VUNv+">http://d.pr/i/VUNv+</a>"></p>
-
-<p>Правда, чтобы получить такую инфорграфику, приходится регистрироваться. Но оно того стоит: на сайте есть еще много интересной инфографики, вот например весьма спорная информация, под названием &ldquo;Падение Apple&rdquo;:</p>
-
-<div class='visually_embed' data-category='Computers' rel='infographic'>
-            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/the-fall-of-apple_516c71bd41617.jpg' alt='The Fall of Apple' />
-            <div class='visually_embed_bar'>
-                <span class='visually_embed_cycle'><a href="http://visual.ly/fall-apple/?utm_source=visually_embed"></a> </span>
-            </div>
-            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/fall-apple?utm_source=visually_embed'></a>
-            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
-            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
-        </div>
+<!-- more -->
 
 
-<p>Или про глобальное потепление:</p>
+<p>При повторной перезагрузке я получаю сообщение &ldquo;A problem repeatedly occured with &hellip;&rdquo; (&ldquo;Повторилась проблема с &hellip;&rdquo;).<br/>
+<img class="center <a" src="href="http://d.pr/i/JPRF+">http://d.pr/i/JPRF+</a>"><br/>
+Самое интересное, что если открыть консоль, то ничего не падает.<br/>
+<img class="center <a" src="href="http://d.pr/i/rCSv+">http://d.pr/i/rCSv+</a>"><br/>
+Как Вы могли уже догадаться из скриншотов, проблема на моём сайте оказалась в использовании бета версии Яндекс.Карт за порядковым номером 2.1. Надеюсь, к релизу пофиксят.</p>
 
-<div class='visually_embed' data-category='Computers' rel='infographic'>
-            <img class='visually_embed_infographic' src='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576_w587.jpg' rel='http://thumbnails.visually.netdna-cdn.com/when-sea-levels-attack_50290a5ae4576.jpg' alt='When Sea Levels Attack!' />
-            <div class='visually_embed_bar'>
-                <span class='visually_embed_cycle'><a href="http://visual.ly/when-sea-levels-attack/?utm_source=visually_embed"></a> </span>
-            </div>
-            <a id='visually_embed_view_more' target='_blank' href='http://visual.ly/when-sea-levels-attack?utm_source=visually_embed'></a>
-            <link rel='stylesheet' type='text/css' href='http://visual.ly/embeder/style.css' />
-            <script type='text/javascript' src='http://visual.ly/embeder/embed.js'></script>
-        </div>
+<p>UPD: Уже исправили</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Использование fabric.js как инструмент для кропа изображений]]></title>
+    <link href="http://goooseman.ru/2013/11/09/ispol%27zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii/"/>
+    <updated>2013-11-09T14:27:00+04:00</updated>
+    <id>http://goooseman.ru/2013/11/09/ispol'zovaniie-fabric-dot-js-kak-instrumient-dlia-kropa-izobrazhienii</id>
+    <content type="html"><![CDATA[<p>Задача: сделать инструмент, с помощью которого юзер может обрезать свое изображение по определнной маске.<br/>
+Например, есть вот такая рамка:<br/>
+<img class="center <a" src="href="http://d.pr/i/E3LK+">http://d.pr/i/E3LK+</a>"><br/>
+Юзер может перетягивать свое изображение под этой маской, менять его размер и по нажатии на кнопку, все, что внутри фигуры сохраняется в .png файл.</p>
 
+<!-- more -->
+
+
+<p>Я буду использовать библиотеку для работы с html5 canvas fabric.js. Ничего более простого я придумать не смог.<br/>
+Маска должна быть в .svg, <a href="http://d.pr/f/HxLv">вот</a>, например, моя.<br/>
+Создаем два canvas: один статичный (маска то не изменяемая), второй нет (на нем будет фото). Pointer-events мы используем для того, что статичный canvas будет находится над другим (фото должно быть под маской), но pointer-events должны быть только у нижнего.<br/>
+``` html</p>
+
+<div class="photo-canvas">
+    <canvas id="photo-canvas"></canvas>
+</div>
+
+
+<div class="photo-canvas" style="pointer-events: none;">
+    <canvas id="static-photo-canvas"></canvas>
+</div>
+
+
+<p><code>  
+</code> css
+.photo-canvas {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+}
+<code>  
+Подключаем fabric.js и пишем js:  
+</code> javascript
+// Создаем холсты
+photoCanvas = new fabric.Canvas(&lsquo;photo-canvas&rsquo;);
+staticPhotoCanvas = new fabric.StaticCanvas(&lsquo;static-photo-canvas&rsquo;);</p>
+
+<p>// Задаем их размеры
+photoCanvas.setHeight($(&lsquo;.photo-canvas&rsquo;).height());
+photoCanvas.setWidth($(&lsquo;.photo-canvas&rsquo;).width());
+staticPhotoCanvas.setHeight($(&lsquo;.photo-canvas&rsquo;).height());
+staticPhotoCanvas.setWidth($(&lsquo;.photo-canvas&rsquo;).width());</p>
+
+<p>// Загружаем маску на статичный холст и устанавливаем ее по центру холста
+fabric.loadSVGFromURL(&lsquo;/assets/first.svg&rsquo;, function(objects, options) {</p>
+
+<pre><code>var mask = fabric.util.groupSVGElements(objects, options);
+staticPhotoCanvas.add(mask);
+mask.center().setCoords();
+staticPhotoCanvas.renderAll();
+</code></pre>
+
+<p>});</p>
+
+<p>// Загружаем изображение на динамический холст, задаем высота и устанавливаем ее по центру
+fabric.Image.fromURL(&lsquo;/assets/Cat.jpg&rsquo;, function(img) {</p>
+
+<pre><code>img.scaleToHeight(500);
+photoCanvas.add(img);
+img.center().setCoords();
+photoCanvas.renderAll();
+</code></pre>
+
+<p>});
+<code>  
+Мы добавили нашу маску на статичный canvas, и изображение - на динамический. Теперь код кнопки "Обрезать":  
+</code> javascript
+$(&lsquo;#crop-button&rsquo;).click(function(event) {</p>
+
+<pre><code>// Обрезаем холст
+photoCanvas.clipTo = function (ctx) {
+     staticPhotoCanvas.item(0).render(ctx);
+};
+photoCanvas.renderAll();
+
+// Сохраняем .png файл в переменную
+var dataUrl = photoCanvas.toDataURL('png'); 
+</code></pre>
+
+<p>});
+```<br/>
+То есть мы обрезали наш canvas с фотографией по контору векторной маски и сохранили его в png файл, который хранится в переменной dataUrl.<br/>
+Результат работ:<br/>
+<img class="center <a" src="href="http://d.pr/i/LiuH+">http://d.pr/i/LiuH+</a>"><br/>
+P.S. Если нужно создать canvas в модальном окне Bootstrap 3, то лучше создавать холст на событии &lsquo;shown.bs.modal&rsquo;. Иначе он не будет принимать pointer events.</p>
 ]]></content>
   </entry>
   
