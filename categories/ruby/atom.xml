@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Ruby | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/ruby/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T19:39:57+04:00</updated>
+  <updated>2014-03-08T08:03:34+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -134,7 +134,7 @@ sudo checkinstall
 
 <p>``` bash etc/init/nginx.conf
 description &ldquo;nginx http daemon&rdquo;
-author &ldquo;George Shammas <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x67;&#x65;&#x6f;&#x72;&#103;&#121;&#x6f;&#64;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#x67;&#x65;&#111;&#114;&#103;&#121;&#111;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;</p>
+author &ldquo;George Shammas <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#58;&#103;&#101;&#111;&#x72;&#103;&#121;&#x6f;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;">&#103;&#101;&#111;&#114;&#x67;&#121;&#111;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo;</p>
 
 <p>start on (filesystem and net-device-up IFACE=lo)
 stop on runlevel [!2345]</p>

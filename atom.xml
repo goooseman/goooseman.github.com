@@ -4,7 +4,7 @@
   <title><![CDATA[Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-05T19:39:57+04:00</updated>
+  <updated>2014-03-08T08:03:34+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -2898,10 +2898,10 @@ fi
 
 
 <p>Идея метода в следующем: мы рисуем полоски паралельные друд другу и образовываем ими квадрат. Полоски цифр одного числа помещаем на разные грани квадрата, а цифры другого числа, перпендикулярны первым полоскам. Смотрим на рисунок:<br/>
-<img src="http://www.funpicplanet.com/uploadedpics/8724734How_Japanese_Kids_Learn_To_Multiply_In_Primary_School.jpg"><br/>
+<img class="center" src="http://95.85.35.239/ftp/20140308080156.png" title="'Умножение и японские дети'" ><br/>
 Чтобы высчитать результат, надо сначало подсчитать количество пересечений полосок в верхнем левом углу. Это сотни. Затем считаем сумму пересечений верхнего правого и нижнего левого углов. Это десятки. Ну и количество пересечений нижнего правого угла &ndash; единицы. <br/>
 Перемножать небольшие двузначные числа очень даже удобно. Но, если взять хотя бы большие двузначные числа&hellip;<br/>
-<img src="http://goooseman.ru/images/blog/math.jpeg"> <br/>
+<img class="center" src="http://95.85.35.239/ftp/math.jpeg" title="'Умножение и японские дети'" > <br/>
 Теперь переходим к трехзначным числам:</p>
 
 <div class="video-container">
