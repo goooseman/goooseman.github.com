@@ -4,7 +4,7 @@
   <title><![CDATA[Категория: Habrahabr | Ctrl + Cmd]]></title>
   <link href="http://goooseman.ru/categories/habrahabr/atom.xml" rel="self"/>
   <link href="http://goooseman.ru/"/>
-  <updated>2014-03-08T08:03:34+04:00</updated>
+  <updated>2014-03-08T08:14:11+04:00</updated>
   <id>http://goooseman.ru/</id>
   <author>
     <name><![CDATA[goooseman]]></name>
@@ -134,7 +134,7 @@ sudo checkinstall
 
 <p>``` bash etc/init/nginx.conf
 description &ldquo;nginx http daemon&rdquo;
-author &ldquo;George Shammas <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x67;&#101;&#x6f;&#114;&#103;&#x79;&#111;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#111;&#x6d;">&#x67;&#101;&#111;&#x72;&#x67;&#121;&#x6f;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo;</p>
+author &ldquo;George Shammas <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#103;&#101;&#x6f;&#x72;&#x67;&#121;&#111;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#109;">&#103;&#101;&#111;&#x72;&#x67;&#x79;&#x6f;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>&rdquo;</p>
 
 <p>start on (filesystem and net-device-up IFACE=lo)
 stop on runlevel [!2345]</p>
